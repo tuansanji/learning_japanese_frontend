@@ -1,0 +1,12 @@
+.course-page {
+  &__video {
+    bottom: 50px;
+
+    margin-top: 50px;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    position: relative;
+    top: 0;
+    width: 77%;
+  }
+}
