@@ -1,11 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
-function StateItem() {
+function NameItem({ name, timeLine = 12, lessonName, upload }) {
+  const params = useParams();
+  const { level, way, stage, lesson } = params;
   return (
     <div
       aria-label="card-item-v2"
-      className="flex flex-col w-full p-5 bg-white shadow-sm rounded-lg relative hover:bottom-[2rem]"
+      className="flex flex-col  p-5 bg-white shadow-sm rounded-lg relative hover:bottom-[2rem] w-[20%]"
     >
       <div className="relative flex-shrink-0 mb-5 h-[150px]">
         <img
@@ -18,7 +20,7 @@ function StateItem() {
       <div className="flex items-center justify-between flex-1 gap-x-5">
         <div className="flex flex-col">
           <h2 className="mb-3 text-2xl font-bold">
-            <span className="text-[orange] ">12</span> Bài học
+            <span className="text-[orange] ">{name}</span>
           </h2>
           <div className="flex items-center gap-x-3">
             <svg
@@ -42,7 +44,7 @@ function StateItem() {
               />
             </svg>
             <span className="text-gray-400">Thời lượng</span>
-            <span className="text-[red]"> 12 tiếng</span>
+            <span className="text-[red]"> {timeLine}</span>
           </div>
           <div className="flex items-center gap-x-3">
             <svg
@@ -65,16 +67,22 @@ function StateItem() {
                 d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
               />
             </svg>
-            <span className="text-gray-400">Giá</span>
-            <span className="text-[red]"> 20</span>
+            <span className="text-gray-400">Upload:</span>
+            <span className="text-[red]"> {upload}</span>
           </div>
         </div>
         <div className="flex items-center p-3 px bg-gray-300 gap-x-1 rounded-xl hover:bg-green-500 hover:text-[#fff]">
-          <Link to="/course/n1/state-1/lesson-1">HỌC NGAY</Link>
+          <Link
+            to={`/courses/${level}/${way}/${stage}/${lesson}/${name
+              .split(" ")
+              .join("+")}`}
+          >
+            HỌC NGAY
+          </Link>
         </div>
       </div>
     </div>
   );
 }
 
-export default StateItem;
+export default NameItem;

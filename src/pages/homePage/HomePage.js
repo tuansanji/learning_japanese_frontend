@@ -3,10 +3,12 @@ import axios from "axios";
 
 import Introduce from "../../component/content/Introduce/Introduce";
 import { courseHomePage } from "../../data/courseHomePage/courseHomePage";
+import CoursePage from "../coursePage/CoursePage";
 
 function HomePage() {
   return (
     <>
+      <CoursePage />
       {courseHomePage.map((course, index) => (
         <div key={index}>
           <Introduce

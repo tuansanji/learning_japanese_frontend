@@ -1,7 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useNavigate, Link } from "react-router-dom";
+import { getCourse } from "../../redux/apiRequest";
 
 function CourseItemPage({ img, lesson, hour, state, hourLearn, title, level }) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   return (
     <div className=" w-[960px] h-[145px] top-[95px] border border-[#000000] rounded-[10px] text-[12px] mx-auto my-[4rem] ">
       <div className="flex gap-[5rem] h-[100%] px-[5rem]">
@@ -27,7 +33,10 @@ function CourseItemPage({ img, lesson, hour, state, hourLearn, title, level }) {
             {title}
           </div>
           <Link
-            to={`/course/${level}`}
+            // onClick={() => {
+            //   getCourse(dispatch, level);
+            // }}
+            to={`/courses/${level}`}
             className="w-[90%] bg-green-400 p-4 rounded-[10px] text-[#fff] hover:w-[100%] hover:h-[30%] hover:text-[#333] hover:text-[1.4rem] transition-all text-center"
           >
             xem chi tiết khóa học

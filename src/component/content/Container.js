@@ -2,13 +2,15 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import HomePage from "../../pages/homePage/HomePage";
-import CoursePage from "../../pages/coursePage/CoursePage";
 import ViewlearnPage from "../../pages/viewLearnPage/ViewlearnPage";
-import CourseStatePage from "../../pages/coursePage/CourseStatePage";
-import StatePage from "../../pages/coursePage/StatePage";
+import LevelPage from "../../pages/coursePage/LevelPage";
+import StagePage from "../../pages/coursePage/StagePage";
 import Login from "../header/Auth/Login";
 import Register from "../header/Auth/Register";
 import UserInfor from "../header/Auth/ProfileUser";
+import WayPage from "../../pages/coursePage/WayPage";
+import StateItem from "../../pages/coursePage/NameItem";
+import LessonPage from "../../pages/coursePage/LessonPage";
 import { useEffect } from "react";
 
 function Container({ level = "n1" }) {
@@ -28,14 +30,18 @@ function Container({ level = "n1" }) {
     <div className="container_main">
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/course" element={<CoursePage />} />
-        <Route path={`/course/${level}`} element={<CourseStatePage />} />
+        <Route path={`/courses/:level`} element={<LevelPage />} />
         <Route
-          path={`/course/${level}/state-1/lesson-1`}
-          element={<StatePage />}
+          path={`/courses/:level/:way`}
+          element={<WayPage level={level} />}
+        />
+        <Route path={`/courses/:level/:way/:stage`} element={<StagePage />} />
+        <Route
+          path={`/courses/:level/:way/:stage/:lesson`}
+          element={<LessonPage />}
         />
         <Route
-          path={`/course/${level}/state-1/lesson-1/v1`}
+          path={`/courses/:level/:way/:stage/:lesson/:name`}
           element={<ViewlearnPage />}
         />
         <Route path="/auth/login" element={<Login />}></Route>
