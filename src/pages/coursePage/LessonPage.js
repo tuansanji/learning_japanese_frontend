@@ -10,7 +10,7 @@ function LessonPages() {
   useEffect(() => {
     const handleGetLesson = async () => {
       const lessonListDB = await axios.get(
-        `${process.env.BACKEND_URL}/courses/${level}/${way}/${stage}/${lesson}`
+        `${process.env.REACT_APP_BACKEND_URL}/courses/${level}/${way}/${stage}/${lesson}`
       );
       setLessonList(lessonListDB.data);
     };

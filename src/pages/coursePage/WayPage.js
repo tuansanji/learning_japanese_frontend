@@ -11,7 +11,7 @@ function WayPage() {
   useEffect(() => {
     const handleGetWay = async () => {
       const stage = await axios.get(
-        `${process.env.BACKEND_URL}/courses/${params.level}/${params.way}`
+        `${process.env.REACT_APP_BACKEND_URL}/courses/${params.level}/${params.way}`
       );
       let arr = [];
       await stage.data.forEach((way) => {

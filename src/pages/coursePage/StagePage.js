@@ -18,7 +18,7 @@ function StagePage() {
   useEffect(() => {
     const handleGetStage = async () => {
       const stageList = await axios.get(
-        `${process.env.BACKEND_URL}/courses/${level}/${way}/${stage}`
+        `${process.env.REACT_APP_BACKEND_URL}/courses/${level}/${way}/${stage}`
       );
 
       let arr = [];

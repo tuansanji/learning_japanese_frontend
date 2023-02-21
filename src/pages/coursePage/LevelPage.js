@@ -18,7 +18,7 @@ function LevelPage() {
   useEffect(() => {
     const handleGetLevel = async () => {
       const way = await axios.get(
-        `${process.env.BACKEND_URL}/courses/${params.level}`
+        `${process.env.REACT_APP_BACKEND_URL}/courses/${params.level}`
       );
       let arr = [];
       await way.data.forEach((level) => {
