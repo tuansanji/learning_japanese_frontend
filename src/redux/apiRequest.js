@@ -26,7 +26,10 @@ import {
 export const loginUser = async (user, dispatch, navigate) => {
   dispatch(loginStart());
   try {
-    const res = await axios.post("http://localhost:5002/auth/login", user);
+    const res = await axios.post(
+      `${process.env.REACT_APP_BACKEND_URL}/auth/login`,
+      user
+    );
     dispatch(loginSuccess(res.data));
     navigate("/");
   } catch (err) {
@@ -37,7 +40,10 @@ export const loginUser = async (user, dispatch, navigate) => {
 export const registerUser = async (user, dispatch, navigate) => {
   dispatch(registerStart());
   try {
-    const res = await axios.post("http://localhost:5002/auth/register", user);
+    const res = await axios.post(
+      `${process.env.REACT_APP_BACKEND_URL}/auth/register`,
+      user
+    );
     dispatch(registerSuccess(res.data));
     navigate("/auth/login");
   } catch (error) {
@@ -47,9 +53,12 @@ export const registerUser = async (user, dispatch, navigate) => {
 export const getAllUsers = async (accessToken, dispatch) => {
   dispatch(getAllUsersStart());
   try {
-    const res = await axios.get("http://localhost:5002/user/all", {
-      headers: { token: `Bearer ${accessToken}` },
-    });
+    const res = await axios.get(
+      `${process.env.REACT_APP_BACKEND_URL}/user/all`,
+      {
+        headers: { token: `Bearer ${accessToken}` },
+      }
+    );
 
     dispatch(getAllUsersSuccess(res.data));
   } catch (error) {
@@ -59,9 +68,12 @@ export const getAllUsers = async (accessToken, dispatch) => {
 
 export const deleteUser = async (accessToken, id, dispatch, navigate) => {
   try {
-    const res = await axios.delete(`http://localhost:5002/user/delete/${id}`, {
-      headers: { token: `Bearer ${accessToken}` },
-    });
+    const res = await axios.delete(
+      `${process.env.REACT_APP_BACKEND_URL}/user/delete/${id}`,
+      {
+        headers: { token: `Bearer ${accessToken}` },
+      }
+    );
     dispatch(deleteUser());
   } catch (error) {
     console.log(error);
@@ -72,7 +84,7 @@ export const logOutUser = async (accessToken, id, dispatch, navigate) => {
   dispatch(logOutStart());
   try {
     const res = await axios.post(
-      "http://localhost:5002/auth/logout",
+      `${process.env.REACT_APP_BACKEND_URL}/auth/logout`,
       id,
 
       { headers: { token: `Bearer ${accessToken}` } }
@@ -88,7 +100,9 @@ export const logOutUser = async (accessToken, id, dispatch, navigate) => {
 export const getCourse = async (dispatch, level) => {
   dispatch(getCourseStart({ level: level }));
   try {
-    const course = await axios.get(`http://localhost:5002/courses/${level}`);
+    const course = await axios.get(
+      `${process.env.REACT_APP_BACKEND_URL}/courses/${level}`
+    );
 
     dispatch(
       getCourseSuccess({
@@ -105,7 +119,9 @@ export const getLevelCourse = async (dispatch, level) => {
   dispatch(resetCurrentSection());
 
   try {
-    const courses = await axios.get(`http://localhost:5002/courses/${level}`);
+    const courses = await axios.get(
+      `${process.env.REACT_APP_BACKEND_URL}/courses/${level}`
+    );
     let arr = [];
     courses.data.forEach((level) => arr.push(level.way));
     dispatch(getCurrentSection({ name: level, data: [...new Set(arr)] }));
@@ -118,7 +134,7 @@ export const getWayCourse = async (dispatch, level, way) => {
   dispatch(resetCurrentSection());
   try {
     const courses = await axios.get(
-      `http://localhost:5002/courses/${level}/${way}`
+      `${process.env.REACT_APP_BACKEND_URL}/courses/${level}/${way}`
     );
     let arr = [];
     courses.data.forEach((way) => way.stage && arr.push(way.stage));
@@ -137,7 +153,7 @@ export const getStageCourse = async (dispatch, level, way, stage) => {
   dispatch(resetCurrentSection());
   try {
     const courses = await axios.get(
-      `http://localhost:5002/courses/${level}/${way}/${stage}`
+      `${process.env.REACT_APP_BACKEND_URL}/courses/${level}/${way}/${stage}`
     );
 
     dispatch(
@@ -155,7 +171,7 @@ export const getLessonCourse = async (dispatch, level, way, stage, lesson) => {
   dispatch(resetCurrentSection());
   try {
     const courses = await axios.get(
-      `http://localhost:5002/courses/${level}/${way}/${stage}/${lesson}`
+      `${process.env.REACT_APP_BACKEND_URL}/courses/${level}/${way}/${stage}/${lesson}`
     );
 
     dispatch(
