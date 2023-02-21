@@ -9,8 +9,9 @@ function LessonPages() {
   const { level, way, stage, lesson } = params;
   useEffect(() => {
     const handleGetLesson = async () => {
+      await console.log(1234);
       const lessonListDB = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/courses/${level}/${way}/${stage}/${lesson}`
+        `https://japanese-backend.onrender.com/courses/${level}/${way}/${stage}/${lesson}`
       );
       setLessonList(lessonListDB.data);
     };

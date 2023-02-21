@@ -18,7 +18,7 @@ function StagePage() {
   useEffect(() => {
     const handleGetStage = async () => {
       const stageList = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/courses/${level}/${way}/${stage}`
+        `https://japanese-backend.onrender.com/courses/${level}/${way}/${stage}`
       );
 
       let arr = [];

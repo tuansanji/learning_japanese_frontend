@@ -17,7 +17,7 @@ function ViewlearnPage() {
   useEffect(() => {
     const handleGetName = async () => {
       const learnList = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/courses/${level}/${way}/${stage}/${lesson}/${name}`
+        `https://japanese-backend.onrender.com/courses/${level}/${way}/${stage}/${lesson}/${name}`
       );
       setLearn(learnList.data[0]);
     };
