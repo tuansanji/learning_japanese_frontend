@@ -41,9 +41,7 @@ function LevelPage() {
              transition-all relative"
                 >
                   <Link
-                    to={`https://janpanese-fontend.onrender.com/courses/${
-                      params.level
-                    }/${way.split(" ").join("+")}`}
+                    to={`/courses/${params.level}/${way.split(" ").join("+")}`}
                   >
                     <img
                       src="https://files.fullstack.edu.vn/f8-prod/courses/7.png"
