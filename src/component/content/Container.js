@@ -29,24 +29,42 @@ function Container({ level = "n1" }) {
   return (
     <div className="container_main">
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path={`/courses/:level`} element={<LevelPage />} />
         <Route
-          path={`/courses/:level/:way`}
+          path="https://janpanese-fontend.onrender.com"
+          element={<HomePage />}
+        />
+        <Route
+          path={`https://janpanese-fontend.onrender.com/courses/:level`}
+          element={<LevelPage />}
+        />
+        <Route
+          path={`https://janpanese-fontend.onrender.com/courses/:level/:way`}
           element={<WayPage level={level} />}
         />
-        <Route path={`/courses/:level/:way/:stage`} element={<StagePage />} />
+        <Route
+          path={`https://janpanese-fontend.onrender.com/courses/:level/:way/:stage`}
+          element={<StagePage />}
+        />
         <Route
           path={`/courses/:level/:way/:stage/:lesson`}
           element={<LessonPage />}
         />
         <Route
-          path={`/courses/:level/:way/:stage/:lesson/:name`}
+          path={`https://janpanese-fontend.onrender.com/courses/:level/:way/:stage/:lesson/:name`}
           element={<ViewlearnPage />}
         />
-        <Route path="/auth/login" element={<Login />}></Route>
-        <Route path="/auth/register" element={<Register />}></Route>
-        <Route path="/user/infor" element={<UserInfor />}></Route>
+        <Route
+          path="https://janpanese-fontend.onrender.com/auth/login"
+          element={<Login />}
+        ></Route>
+        <Route
+          path="https://janpanese-fontend.onrender.com/auth/register"
+          element={<Register />}
+        ></Route>
+        <Route
+          path="https://janpanese-fontend.onrender.com/user/infor"
+          element={<UserInfor />}
+        ></Route>
       </Routes>
     </div>
   );
