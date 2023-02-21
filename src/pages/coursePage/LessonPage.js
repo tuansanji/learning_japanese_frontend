@@ -11,7 +11,7 @@ function LessonPages() {
     const handleGetLesson = async () => {
       await console.log(1234);
       const lessonListDB = await axios.get(
-        `https://japanese-backend.onrender.com/courses/${level}/${way}/${stage}/${lesson}`
+        `${process.env.REACT_APP_BACKEND_URL}/courses/${level}/${way}/${stage}/${lesson}`
       );
       setLessonList(lessonListDB.data);
     };
