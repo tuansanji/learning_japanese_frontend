@@ -3,7 +3,7 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     screens: {
-      tablet: "640px",
+      tablet: "799px",
       // => @media (min-width: 640px) { ... }
 
       laptop: "1024px",
@@ -11,6 +11,17 @@ module.exports = {
 
       phone: "400px",
       // => @media (min-width: 1280px) { ... }
+      xl: { max: "1279px" },
+      // => @media (max-width: 1279px) { ... }
+
+      lg: { max: "1023px" },
+      // => @media (max-width: 1023px) { ... }
+
+      md: { max: "796px" },
+      // => @media (max-width: 767px) { ... }
+
+      sm: { max: "639px" },
+      // => @media (max-width: 639px) { ... }
     },
     extend: {
       animation: {

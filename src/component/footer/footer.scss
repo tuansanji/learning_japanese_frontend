@@ -60,7 +60,7 @@
               display: flex;
               align-items: center;
               justify-content: space-between;
-              padding: 4rem 6.5rem;
+              // padding: 4rem 6.5rem;
               margin-top: -5.5rem;
               position: relative;
               z-index: 1;
@@ -107,7 +107,7 @@
       &__row {
         display: flex;
         justify-content: space-between;
-        flex-wrap: wrap;
+
         margin-right: -15px;
         margin-left: -15px;
         .column {

@@ -37,7 +37,7 @@ function Login() {
   });
 
   return (
-    <div className="flex items-center justify-center mt-[4rem]">
+    <div className="flex items-center justify-center mt-[4rem] mx-[2rem] rounded-2xl overflow-hidden">
       <form
         onSubmit={formik.handleSubmit}
         autoComplete="off"
@@ -84,7 +84,7 @@ function Login() {
           )}
         </div>
         <div className="flex items-center justify-end mb-5 text-slate-400">
-          <p>Bạn chưa có tài khoản?</p>
+          <p className="mr-2">Bạn chưa có tài khoản?</p>
           <Link to="/auth/register" className="text-blue-500 underline">
             Đăng ký
           </Link>

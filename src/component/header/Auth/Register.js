@@ -39,7 +39,7 @@ function Register() {
     validationSchema: validationSchema,
   });
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center mt-[4rem] mx-[2rem] rounded-2xl overflow-hidden">
       {" "}
       <form
         onSubmit={formik.handleSubmit}
@@ -129,7 +129,7 @@ function Register() {
             )}
         </div>
         <div className="flex items-center justify-end mb-5 text-slate-400">
-          <p>Bạn đã có tại khoản?</p>
+          <p className="mr-2">Bạn đã có tại khoản? </p>
           <Link to="/auth/login" className="text-blue-500 underline">
             Đăng nhập ngay
           </Link>

@@ -9,61 +9,34 @@ import { Menu } from "antd";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import "./menuNav.scss";
-
 function MenuNav() {
   const navigate = useNavigate();
   const items = [
     {
-      label: <Link to="/course">Khóa Học</Link>,
+      label: "Khóa học",
       key: "courses",
       icon: <BookOutlined />,
       children: [
         {
-          type: "group",
-          label: "Khóa học Dũng Mori",
-          children: [
-            {
-              label: "N1",
-              key: "dung-mori-n1",
-            },
+          label: "N1",
+          key: "n1",
+        },
 
-            {
-              label: "N2",
-              key: "dung-mori-n2",
-            },
-            {
-              label: "N3",
-              key: "dung-mori-n3",
-            },
-            {
-              label: "N4",
-              key: "dung-mori-n4",
-            },
-          ],
+        {
+          label: "N2",
+          key: "n2",
         },
         {
-          type: "group",
-          label: "Khóa học Riki",
-          children: [
-            {
-              label: "N1",
-              key: "riki-n1",
-            },
-
-            {
-              label: "N2",
-              key: "riki-n2",
-            },
-            {
-              label: "N3",
-              key: "riki-n3",
-            },
-            {
-              label: "N4",
-              key: "riki-n4",
-            },
-          ],
+          label: "N3",
+          key: "n3",
+        },
+        {
+          label: "N4",
+          key: "n4",
+        },
+        {
+          label: "N5",
+          key: "n5",
         },
       ],
     },
@@ -93,29 +66,30 @@ function MenuNav() {
       ],
     },
     {
-      label: "Liên Hệ",
+      label: <a href="#footer">liên hệ</a>,
       key: "contact",
       icon: <MailOutlined />,
     },
     {
       disabled: true,
       label: (
-        <a href="/admin" target="_blank" rel="noopener noreferrer">
+        <span target="_blank" rel="noopener noreferrer" disabled>
           ADMIN
-        </a>
+        </span>
       ),
-      key: "alipay",
+      key: "admin",
     },
   ];
-  const [current, setCurrent] = useState("mail");
+  const [current, setCurrent] = useState("");
   const onClick = (e) => {
-    console.log("click ", e);
     setCurrent(e.key);
-    navigate(
-      e.keyPath.length > 1
-        ? `/${e.keyPath[1]} /${e.keyPath[0]}`
-        : `/${e.keyPath[0]}`
-    );
+    if (e.key !== "contact" && e.key !== "admin") {
+      navigate(`/${e.keyPath[1]}/${e.keyPath[0]}`);
+      window.scrollTo({
+        top: 0,
+        behavior: `smooth`,
+      });
+    }
   };
   return (
     <Menu

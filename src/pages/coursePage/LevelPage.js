@@ -27,7 +27,7 @@ function LevelPage() {
       setWayList([...new Set(arr)]);
     };
     handleGetLevel();
-  }, []);
+  }, [params.level]);
 
   return (
     <div className="">

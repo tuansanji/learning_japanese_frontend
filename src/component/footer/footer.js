@@ -1,5 +1,9 @@
 import React from "react";
-
+import { Link } from "react-router-dom";
+import FacebookIcon from "@material-ui/icons/Facebook";
+import GitHubIcon from "@material-ui/icons/GitHub";
+import EmailIcon from "@material-ui/icons/Email";
+import PhoneIcon from "@material-ui/icons/Phone";
 import "./footer.scss";
 
 function Footer() {
@@ -10,11 +14,14 @@ function Footer() {
           <div className="title__container">
             <div className="row">
               <div className="col">
-                <div className="wrap">
+                <div
+                  className="wrap md:flex md:justify-center  px-[6rem] py-[4rem]
+                md:px-[3.5rem] "
+                >
                   <div className="wrap__title">
                     <h2 className="font-mono">
-                      Cùng Học Tiếng Nhật Với
-                      <span> Sanji Rose</span>
+                      Learn
+                      <span> Japanese</span>
                     </h2>
                   </div>
                 </div>
@@ -22,98 +29,102 @@ function Footer() {
             </div>
           </div>
         </div>
-        <div className="content">
-          <div className="content__row">
+        <div className="content flex  justify-center">
+          <div className="content__row flex  w-[80%] sm:flex-col-reverse">
             <div className="column column-1">
               <div className="table">
-                <div className="logo">Sanji</div>
                 <div className="text">
-                  <p></p>
+                  <div className="title">
+                    <h5>Công ty</h5>
+                  </div>
                   <div className="contact">
                     <ul>
                       <li>
-                        <span>Address :</span> 338 nguyễn duy trinh - thành phố
-                        thủ đức -thành phố hồ chí minh
+                        <span>Address :</span> Thủ đức - HCM
                       </li>
                       <li>
                         <span>Phone :</span> 0968763453
                       </li>
                       <li>
-                        <span>Mail :</span> hoangtuan17012015@gmail.com
+                        <span>Mail :</span>sanji@gmail.com
                       </li>
                     </ul>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="column column-2">
+            <div className="column column-2 xl:hidden">
               <div className="table">
                 <div className="title">
-                  <h5>tiêu đề</h5>
+                  <h5>Khóa học</h5>
                   <div className="text">
                     <ul>
-                      <li>
-                        <a href="#">Garena (4)</a>
+                      <li
+                        onClick={() => {
+                          window.scrollTo({
+                            top: 0,
+                            behavior: `smooth`,
+                          });
+                        }}
+                      >
+                        <Link to={`/courses/n1`}>Dũng Mori - N1</Link>
                       </li>
-                      <li>
-                        <a href="#">Riot (2)</a>
+                      <li
+                        onClick={() => {
+                          window.scrollTo({
+                            top: 0,
+                            behavior: `smooth`,
+                          });
+                        }}
+                      >
+                        <Link to={`/courses/n2`}>Dũng Mori - N2</Link>
                       </li>
-                      <li>
-                        <a href="#">Fifa (11)</a>{" "}
+                      <li
+                        onClick={() => {
+                          window.scrollTo({
+                            top: 0,
+                            behavior: `smooth`,
+                          });
+                        }}
+                      >
+                        <Link to={`/courses/n3`}>Dũng Mori - N3</Link>
                       </li>
-                      <li>
-                        <a href="#">Fortnite (1)</a>
+                      <li
+                        onClick={() => {
+                          window.scrollTo({
+                            top: 0,
+                            behavior: `smooth`,
+                          });
+                        }}
+                      >
+                        <Link to={`/courses/n4`}>Dũng Mori - N4</Link>
                       </li>
-                      <li>
-                        <a href="#">CS:GO (1)</a>
-                      </li>
-                      <li>
-                        <a href="#">Dota 2 (2)</a>
+                      <li
+                        onClick={() => {
+                          window.scrollTo({
+                            top: 0,
+                            behavior: `smooth`,
+                          });
+                        }}
+                      >
+                        <Link to={`/courses/n5`}>Dũng Mori - N5</Link>
                       </li>
                     </ul>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="column column-3">
+
+            <div className="column column-4 ">
               <div className="table">
                 <div className="title">
-                  <h5>tiêu đề</h5>
-                </div>
-                <div className="text">
-                  <ul>
-                    <li>
-                      <a href="#">cái này thêm sau</a>
-                    </li>
-                    <li>
-                      <a href="#">cái này thêm sau</a>
-                    </li>
-                    <li>
-                      <a href="#">cái này thêm sau</a>{" "}
-                    </li>
-                    <li>
-                      <a href="#">cái này thêm sau</a>
-                    </li>
-                    <li>
-                      <a href="#">cái này thêm sau</a>
-                    </li>
-                    <li>
-                      <a href="#">cái này thêm sau</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div className="column column-4">
-              <div className="table">
-                <div className="title">
-                  <h5>tiêu đề</h5>
+                  <h5>Liên hệ</h5>
                 </div>
                 <div className="list__contact">
                   <ul>
                     <li>
                       <a href="https://www.facebook.com/ngheoketaupl/">
-                        thêm sau
+                        <FacebookIcon></FacebookIcon>
                       </a>
                     </li>
                     <li>
@@ -121,16 +132,18 @@ function Footer() {
                         href="https://github.com/tuansanji/HoangMinhTuan_CIJS77/tree/master/final_project_2"
                         style={{ backgroundColor: "brown" }}
                       >
-                        thêm sau
+                        <GitHubIcon></GitHubIcon>
                       </a>
                     </li>
                     <li>
                       <a href="#" style={{ backgroundColor: "red" }}>
-                        thêm sau
+                        <EmailIcon></EmailIcon>
                       </a>
                     </li>
                     <li>
-                      <a href="#">thêm sau</a>
+                      <a href="#">
+                        <PhoneIcon></PhoneIcon>
+                      </a>
                     </li>
                   </ul>
                 </div>
