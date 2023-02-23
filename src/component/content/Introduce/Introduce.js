@@ -1,12 +1,13 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import "./introduce.scss";
 
 function Introduce({ address, title, titleSub, description, isBtn, img }) {
   return (
-    <div className="introduce  laptop:w-[1170px] tablet:w-[768px] px-[15px] mx-auto">
+    <div className="introduce  laptop:w-[80%] lg:w-[90%] px-[15px] mx-auto">
       <div className={`row flex  mt-[60px] mx-[-15px] ${address}`}>
-        <div className="tablet:w-[50%] tablet:float-left relative px-[15px]">
+        <div className="tablet:w-[50%] tablet:float-left relative px-[15px] sm:w-[100%]">
           <div className=" animate-title flex relative rotate-0 origin-bottom-left">
             <svg
               width="17"
@@ -38,69 +39,69 @@ function Introduce({ address, title, titleSub, description, isBtn, img }) {
             <p className="text-[14px]">{description}</p>
             <ul className="flex mt-10">
               <li className="pt-4 pr-4  border-r-2 border-[#293142]">
-                <a
-                  href={undefined}
+                <Link
+                  to="/courses"
                   className="tab_inner p-[1rem]  bg-[#96D962] cursor-default"
                 >
                   jlpt
-                </a>
+                </Link>
               </li>
               <li className="pl-4 pt-4 p-[1rem] border-r-2 border-[#293142]">
-                <a
-                  href={undefined}
+                <Link
+                  to="/courses"
                   className="tab_inner hover:bg-[#96D962]  cursor-default"
                 >
                   kaiwa
-                </a>
+                </Link>
               </li>
               <li className="pt-4 pl-4 p-[1rem]  border-r-0 border-[#293142]">
-                <a
-                  href={undefined}
+                <Link
+                  to="/courses"
                   className="tab_inner hover:bg-[#96D962] cursor-default"
                 >
                   eju
-                </a>
+                </Link>
               </li>
             </ul>
             <div className="block">
               <div className="flex mt-[3rem]  items-center flex-wrap">
                 <div className="text-[14px] mr-[1.4rem] font-sans">
-                  <a
-                    href=""
-                    className="mt-[3rem] border border-[#41A336] text-[#41A336] tab_link "
+                  <Link
+                    to="/courses/n1"
+                    className="mt-[3rem]  py-1 px-2   sm:px-[3px]  border border-[#41A336] text-[#41A336] tab_link "
                   >
                     N1
-                  </a>
-                  <a
-                    href=""
-                    className="mt-[3rem] border border-[#41A336] text-[#41A336] tab_link "
+                  </Link>
+                  <Link
+                    to="/courses/n2"
+                    className="mt-[3rem] border  py-1 px-2   sm:px-[3px] border-[#41A336] text-[#41A336] tab_link "
                   >
                     N2
-                  </a>
-                  <a
-                    href=""
-                    className="mt-[3rem] border border-[#41A336] text-[#41A336] tab_link "
+                  </Link>
+                  <Link
+                    to="/courses/n3"
+                    className="mt-[3rem] border py-1 px-2   sm:px-[3px] border-[#41A336] text-[#41A336] tab_link "
                   >
                     N3
-                  </a>
-                  <a
-                    href=""
-                    className="mt-[3rem] border  border-[#41A336] text-[#41A336] tab_link "
+                  </Link>
+                  <Link
+                    to="/courses/n4"
+                    className="mt-[3rem] border  py-1 px-2   sm:px-[3px]  border-[#41A336] text-[#41A336] tab_link "
                   >
                     N4
-                  </a>
-                  <a
-                    href=""
-                    className="mt-[3rem] border border-[#41A336] text-[#41A336] tab_link "
+                  </Link>
+                  <Link
+                    to="/courses/n5"
+                    className="mt-[3rem] border py-1 px-2   sm:px-[3px]  border-[#41A336] text-[#41A336] tab_link "
                   >
                     N5
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
             <div className="">
               {isBtn && (
-                <a href="" className="tab_btn ">
+                <a href="/courses" className="tab_btn ">
                   Xem chi tiết
                 </a>
               )}
@@ -108,9 +109,9 @@ function Introduce({ address, title, titleSub, description, isBtn, img }) {
           </div>
         </div>
 
-        <div className="tablet:w-[50%] tablet:float-left relative px-[15px]">
+        <div className="tablet:w-[50%] sm:hidden tablet:float-left relative px-[15px]">
           <div className="preview">
-            <div className="preview_inside">
+            <div className="preview_inside xl:h-[100%]">
               <img
                 src={img}
                 alt=""

@@ -7,11 +7,11 @@ function NameItem({ name, timeLine = 12, lessonName, upload }) {
   return (
     <div
       aria-label="card-item-v2"
-      className="flex flex-col  p-5 bg-white shadow-sm rounded-lg relative hover:bottom-[2rem] w-[20%]"
+      className="flex flex-col  p-5 bg-white shadow-sm rounded-lg relative hover:bottom-[2rem] "
     >
       <div className="relative flex-shrink-0 mb-5 h-[150px]">
         <img
-          src="https://source.unsplash.com/random"
+          src="http://tiengnhatgiaotiep.edu.vn/images/2017/04/19/hoc-tieng-nhat.jpg"
           alt=""
           className="object-cover w-full h-full rounded-lg"
         />
@@ -19,8 +19,8 @@ function NameItem({ name, timeLine = 12, lessonName, upload }) {
       </div>
       <div className="flex items-center justify-between flex-1 gap-x-5">
         <div className="flex flex-col">
-          <h2 className="mb-3 text-2xl font-bold">
-            <span className="text-[orange] ">{name}</span>
+          <h2 className="mb-3 text-[2.5rem] font-bold">
+            <span className="text-[#333] ">{name}</span>
           </h2>
           <div className="flex items-center gap-x-3">
             <svg

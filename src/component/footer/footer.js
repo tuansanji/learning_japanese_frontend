@@ -29,7 +29,7 @@ function Footer() {
             </div>
           </div>
         </div>
-        <div className="content flex  justify-center">
+        <div className="content flex  justify-center relative top-[2rem] sm:top-[-2.5rem]">
           <div className="content__row flex  w-[80%] sm:flex-col-reverse">
             <div className="column column-1">
               <div className="table">

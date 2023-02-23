@@ -116,70 +116,62 @@ export const getCourse = async (dispatch, level) => {
 };
 
 export const getLevelCourse = async (dispatch, level) => {
-  dispatch(resetCurrentSection());
-
   try {
     const courses = await axios.get(
       `${process.env.REACT_APP_BACKEND_URL}/courses/${level}`
     );
     let arr = [];
-    courses.data.forEach((level) => arr.push(level.way));
-    dispatch(getCurrentSection({ name: level, data: [...new Set(arr)] }));
+    await courses.data.forEach((level) => arr.push(level.way));
+    return arr;
   } catch (error) {
     console.log("get level failed");
   }
 };
 
 export const getWayCourse = async (dispatch, level, way) => {
-  dispatch(resetCurrentSection());
   try {
     const courses = await axios.get(
       `${process.env.REACT_APP_BACKEND_URL}/courses/${level}/${way}`
     );
     let arr = [];
     courses.data.forEach((way) => way.stage && arr.push(way.stage));
-    dispatch(
-      getCurrentSection({
-        name: way.split("+").join(" "),
-        data: [...new Set(arr)],
-      })
-    );
+    return arr;
   } catch (error) {
     console.log(error);
   }
 };
 
 export const getStageCourse = async (dispatch, level, way, stage) => {
-  dispatch(resetCurrentSection());
   try {
     const courses = await axios.get(
       `${process.env.REACT_APP_BACKEND_URL}/courses/${level}/${way}/${stage}`
     );
-
-    dispatch(
-      getCurrentSection({
-        name: stage.split("+").join(" "),
-        data: courses.data,
-      })
-    );
+    let arr = [];
+    await courses.data.forEach((way) => way && arr.push(way.lesson));
+    return arr;
   } catch (error) {
     console.log(error);
   }
 };
 
-export const getLessonCourse = async (dispatch, level, way, stage, lesson) => {
-  dispatch(resetCurrentSection());
+export const getLessonCourse = async (level, way, stage, lesson) => {
   try {
     const courses = await axios.get(
       `${process.env.REACT_APP_BACKEND_URL}/courses/${level}/${way}/${stage}/${lesson}`
     );
 
-    dispatch(
-      getCurrentSection({
-        name: lesson.split("+").join(" "),
-        data: courses.data,
-      })
+    return courses.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getCurrentLesson = async (level, way, stage, lesson, name) => {
+  try {
+    const learnList = await axios.get(
+      `${process.env.REACT_APP_BACKEND_URL}/courses/${level}/${way}/${stage}/${lesson}/${name}`
     );
+    return learnList.data;
   } catch (error) {
     console.log(error);
   }
