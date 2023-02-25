@@ -6,9 +6,12 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { getStageCourse } from "../../redux/apiRequest";
+import ReactPlayer from "react-player";
 
 import LessonItem from "./LessonItem";
 import Loading from "../../component/Loading";
+import Support from "./Support";
+import ScrollableTabsButtonAuto from "./Suport2";
 
 function StagePage() {
   const dispatch = useDispatch([]);
@@ -27,9 +30,10 @@ function StagePage() {
         console.log("get stage failed");
       });
   }, [stage]);
-
+  console.log(stageList);
   return (
     <>
+      {/* <Support />
       {loading ? (
         <Loading />
       ) : (
@@ -39,7 +43,7 @@ function StagePage() {
               <LessonItem key={index} lesson={lesson} />
             ))}
         </div>
-      )}
+      )} */}
     </>
   );
 }

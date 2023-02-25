@@ -1,66 +1,62 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { getWayCourse } from "../../redux/apiRequest";
+import ReactPlayer from "react-player";
 
 import Loading from "../../component/Loading";
+import ScrollableTabsButtonAuto from "./Suport2";
+import { getLessonCurrent } from "../../redux/slice/courseSlice";
 
 function WayPage() {
   const params = useParams();
   const dispatch = useDispatch();
+
   const [stageList, setStageList] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const lessonCurrent = useSelector(
+    (state) => state.courses.lessonCurrent?.lessonCurrent
+  );
   useEffect(() => {
     getWayCourse(dispatch, params.level, params.way)
       .then((stage) => {
         setStageList([...new Set(stage)]);
         setLoading(false);
+        getLessonCurrent(JSON.parse(localStorage.getItem("lesson"))) &&
+          dispatch(
+            getLessonCurrent(JSON.parse(localStorage.getItem("lesson")))
+          );
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [params.way]);
+  }, [params.way, params.level]);
 
   return (
-    <div
-      className="
-  "
-    >
-      {loading ? (
-        <Loading />
-      ) : (
-        <div className="flex w-[80%] gap-5 mx-auto mt-[10rem] flex-wrap ssm:flex-col">
-          {stageList &&
-            stageList.map((stage, index) => (
-              <section
-                key={index}
-                className="laptop:w-[25%] lg:w-[33%] md:w-[33%] sm:w-[80%] ssm:w-[90%]  sm:mx-auto px-3 "
-              >
-                <div className="mb-8 relative">
-                  <div
-                    className=" w-full  overflow-hidden rounded-[13px] hover:bottom-6 
-        transition-all relative"
-                  >
-                    <Link
-                      to={`/courses/${params.level}/${params.way}/${stage
-                        .split(" ")
-                        .join("+")}`}
-                    >
-                      <img
-                        src="https://jes.edu.vn/wp-content/uploads/2017/12/hoc-tieng-nhat-kho-khong.jpg"
-                        alt=""
-                        className="h-full"
-                      />
-                    </Link>
-                  </div>
-                  <div className="line">
-                    <h2 className="lineUp">{stage}</h2>
-                  </div>
-                </div>
-              </section>
-            ))}
+    <div className="course-page flex w-full md:flex-col justify-center md:items-center  ">
+      <div className="course-page__video flex flex-col items-center  laptop:w-[60%]  lg:w-[50%] md:w-full">
+        {loading ? (
+          <Loading />
+        ) : (
+          <ReactPlayer
+            width="100%"
+            height="500px"
+            url={lessonCurrent && lessonCurrent.pathVideo}
+            playing={true}
+            controls={true}
+          />
+        )}
+
+        <div className="mt-10">
+          <p className="animate-charcter text-[3rem] ">
+            {lessonCurrent && lessonCurrent.name}
+          </p>
         </div>
-      )}
+      </div>
+
+      <div className=" h-full w-[30%]"></div>
+      <ScrollableTabsButtonAuto stage={stageList} />
     </div>
   );
 }

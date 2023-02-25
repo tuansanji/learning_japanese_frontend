@@ -14,8 +14,6 @@ import {
   getCourseFailure,
   getCourseStart,
   getCourseSuccess,
-  getCurrentSection,
-  resetCurrentSection,
 } from "./slice/courseSlice";
 import {
   getAllUsersError,
@@ -75,6 +73,7 @@ export const deleteUser = async (accessToken, id, dispatch, navigate) => {
       }
     );
     dispatch(deleteUser());
+    return res;
   } catch (error) {
     console.log(error);
   }
@@ -148,7 +147,8 @@ export const getStageCourse = async (dispatch, level, way, stage) => {
     );
     let arr = [];
     await courses.data.forEach((way) => way && arr.push(way.lesson));
-    return arr;
+
+    return courses.data;
   } catch (error) {
     console.log(error);
   }

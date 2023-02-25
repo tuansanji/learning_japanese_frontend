@@ -115,3 +115,75 @@ span.MuiTypography-body1.MuiTypography-displayBlock {
     transform: translateY(0%);
   }
 }
+
+.wrapper {
+  .children {
+    -webkit-animation: menuLearn 0.2s ease-in;
+    animation: menuLearn 0.2s ease-in;
+
+    .title {
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    .content {
+      .content_1 {
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+
+        span.icon {
+          transition: all 0.5s ease-in-out;
+          svg {
+            top: 50%;
+            right: 50%;
+            &:last-child {
+              display: none;
+            }
+            &:first-child {
+              display: inline-block;
+            }
+          }
+          &.up {
+            svg {
+              &:first-child {
+                display: none;
+              }
+              &:last-child {
+                display: inline-block;
+              }
+            }
+          }
+        }
+      }
+      .content_2 {
+        .item {
+          transition: all 0.1s ease-out;
+
+          &.active {
+            background-color: #bfc7f0;
+            h3,
+            span {
+              font-size: 1.4rem;
+              font-weight: 600;
+              color: #333;
+            }
+          }
+          &.learn {
+            .learn_icon {
+              color: #5db85c;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@keyframes menuLearn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

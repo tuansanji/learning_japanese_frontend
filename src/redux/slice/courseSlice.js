@@ -35,6 +35,11 @@ export const courseSlice = createSlice({
       loading: false,
       error: false,
     },
+    lessonCurrent: {
+      lessonCurrent: null,
+      isFetching: false,
+      error: false,
+    },
   },
   reducers: {
     getCourseStart: (state, action) => {
@@ -49,6 +54,9 @@ export const courseSlice = createSlice({
       state[action.payload.level].isFetching = false;
       state[action.payload.level].error = true;
     },
+    getLessonCurrent: (state, action) => {
+      state.lessonCurrent.lessonCurrent = action.payload;
+    },
   },
 });
 
@@ -58,4 +66,5 @@ export const {
   getCourseFailure,
   getCurrentSection,
   resetCurrentSection,
+  getLessonCurrent,
 } = courseSlice.actions;
