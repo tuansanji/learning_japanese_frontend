@@ -179,11 +179,33 @@ span.MuiTypography-body1.MuiTypography-displayBlock {
     }
   }
 }
+
+.minhtuan {
+  transition: all 0.4s ease-in-out;
+  animation: anim-lineUp 0.6s ease-in;
+}
 @keyframes menuLearn {
   0% {
     opacity: 0;
   }
   100% {
     opacity: 1;
+  }
+}
+@keyframes anim-lineUp {
+  0% {
+    opacity: 0;
+    transform: translateY(80%);
+  }
+  20% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0%);
   }
 }

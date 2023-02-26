@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import MenuIcon from "@material-ui/icons/Menu";
 
 import Support from "./Support";
 import { getStageCourse } from "../../redux/apiRequest";
@@ -58,7 +59,7 @@ export default function ScrollableTabsButtonAuto({ stage }) {
   const [stageCourse, setStageCourse] = useState([]);
   const [value, setValue] = React.useState(0);
   const [listCurrent, setListCurrent] = useState([]);
-
+  const [openMenu, setOpenMenu] = useState(false);
   useEffect(() => {
     getStageCourse(dispatch, params.level, params.way, stage[value]).then(
       (list) => {
@@ -75,7 +76,17 @@ export default function ScrollableTabsButtonAuto({ stage }) {
     setValue(newValue);
   };
   return (
-    <div className={` w-[400px] fixed z-[99] h-full  right-0`}>
+    <div
+      className={`tablet:w-[400px] ${
+        openMenu ? "md:w-[100%]" : "w-0"
+      } fixed z-[99] h-full  right-0 minhtuan md:top-[12rem] `}
+    >
+      <button
+        className="tablet:hidden fixed  top-[6rem]  right-0 py-[1rem] cursor-pointer hover:bg-slate-100 w-[6rem]"
+        onClick={() => setOpenMenu(!openMenu)}
+      >
+        <MenuIcon className=" " style={{ fontSize: "4rem" }} />
+      </button>
       <AppBar position="static" color="default" className="text-5">
         <Tabs
           value={value}

@@ -3,17 +3,23 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getWayCourse } from "../../redux/apiRequest";
 import ReactPlayer from "react-player";
-
 import Loading from "../../component/Loading";
 import ScrollableTabsButtonAuto from "./Suport2";
 import { getLessonCurrent } from "../../redux/slice/courseSlice";
-
+import { Document, Page } from "react-pdf";
+// import pdf from "../../assets/pdf/baimot.pdf";
 function WayPage() {
   const params = useParams();
   const dispatch = useDispatch();
 
   const [stageList, setStageList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+
+  function onDocumentLoadSuccess({ numPages }) {
+    setNumPages(numPages);
+  }
 
   const lessonCurrent = useSelector(
     (state) => state.courses.lessonCurrent?.lessonCurrent
@@ -53,9 +59,27 @@ function WayPage() {
             {lessonCurrent && lessonCurrent.name}
           </p>
         </div>
+        <div className="w-full">
+          <embed
+            src={process.env.PUBLIC_URL + "/baimot.pdf"}
+            width="100%"
+            height="1000"
+            type="application/pdf"
+          />
+        </div>
       </div>
-
-      <div className=" h-full w-[30%]"></div>
+      <div>
+        {/* <Document
+          file={process.env.PUBLIC_URL + "/baimot.pdf"}
+          onLoadSuccess={onDocumentLoadSuccess}
+        >
+          <Page pageNumber={pageNumber} />
+        </Document> */}
+        {/* <p>
+          Page {pageNumber} of {numPages}
+        </p> */}
+      </div>
+      <div className=" h-full w-[30%] md:hidden"></div>
       <ScrollableTabsButtonAuto stage={stageList} />
     </div>
   );

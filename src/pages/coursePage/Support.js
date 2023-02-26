@@ -5,7 +5,6 @@ import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import { getLessonCurrent } from "../../redux/slice/courseSlice";
 import { useEffect } from "react";
-
 function Support({ listCurrent, stageCourse }) {
   const dispatch = useDispatch();
 
@@ -21,22 +20,38 @@ function Support({ listCurrent, stageCourse }) {
 
     element.nextElementSibling.classList.toggle("hidden");
   };
-
   useEffect(() => {
-    document.addEventListener("DOMContentLoaded", function () {
-      // Lấy đối tượng content_2 và tất cả các thẻ con có lớp active
-      const content2 = document.querySelector(".content_2");
-      console.log(content2);
-      const activeElements = content2.querySelectorAll(".active");
+    const activeElement = document.querySelector(".content_2 .active");
 
-      // Nếu có ít nhất một thẻ con có lớp active, loại bỏ lớp hidden
-      if (activeElements.length > 0) {
+    setTimeout(() => {
+      if (activeElement) {
+        const content2Element = activeElement.closest(".content_2");
+        if (content2Element) {
+          activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
+          content2Element.classList.remove("hidden");
+        }
+      }
+    }, 100);
+  }, []);
+  useEffect(() => {
+    const content2Elements = document.querySelectorAll(".content_2");
+    content2Elements.forEach((content2) => {
+      const activeElement = content2.querySelector(".content_2 .active");
+      if (activeElement) {
+        activeElement.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+
         content2.classList.remove("hidden");
+      } else {
+        content2.classList.add("hidden");
       }
     });
-  }, []);
+  }, [listCurrent, stageCourse]);
+
   return (
-    <div className="wrapper  bg-[#FFFFFF] h-full mt-0 w-full z-[99] border-l-[1px] border-[#e7e7e7]">
+    <div className="wrapper  bg-[#FFFFFF] h-[83vh] top-0 bottom-0 mt-0 w-full z-[99] border-l-[1px] border-[#e7e7e7]">
       <div className="children bg-[#ffff] flex flex-col h-full w-full">
         <div className="title bg-[#FFFFFF] items-center flex justify-between py-[12px] px-[16px]">
           <h1 className="font-bold text-[2rem] leading-[22.4px] font-[system-family] ">
@@ -68,7 +83,7 @@ function Support({ listCurrent, stageCourse }) {
                     <KeyboardArrowUpIcon style={{ fontSize: "3rem" }} />
                   </span>
                 </div>
-                <div className="content_2 hidden ">
+                <div className="content_2  ">
                   {stageCourse
                     .filter((stage) => stage.lesson === item)
                     .map((lesson, index) => (
