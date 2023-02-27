@@ -34,6 +34,10 @@ function WayPage() {
     (state) => state.courses?.listStageCurrent
   );
   useEffect(() => {
+    const footer = document.querySelector("#footer");
+    footer.style.display = "none";
+  }, []);
+  useEffect(() => {
     if (stageCourseList) {
       let lessonList = stageCourseList.filter(
         (stage) =>
@@ -52,6 +56,10 @@ function WayPage() {
       dispatch(getLessonCurrent(currentLessonList[newIndex]));
       const activeElement = document.querySelector(".content_2 .active");
       activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
+      // window.scrollTo({
+      //   top: 0,
+      //   behavior: `smooth`,
+      // });
     }
   };
 
@@ -64,6 +72,10 @@ function WayPage() {
       dispatch(getLessonCurrent(currentLessonList[newIndex]));
       const activeElement = document.querySelector(".content_2 .active");
       activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
+      // window.scrollTo({
+      //   top: 0,
+      //   behavior: `smooth`,
+      // });
     }
   };
 
@@ -88,7 +100,12 @@ function WayPage() {
 
   return (
     <div className="course-page flex w-full md:flex-col justify-center md:items-center  ">
-      <div className="course-page__video flex flex-col items-center  laptop:w-[60%]  lg:w-[50%] md:w-full">
+      <div
+        className={`course-page__video flex flex-col items-center  ${
+          openMenu ? "laptop:w-[75%] " : "w-full"
+        } 
+        overflow-y-auto h-full fixed left-0 lg:w-[50%] md:w-full hongay`}
+      >
         {loading ? (
           <Loading />
         ) : (
@@ -126,7 +143,7 @@ function WayPage() {
           Page {pageNumber} of {numPages}
         </p> */}
       </div>
-      <div className=" h-full w-[30%] md:hidden"></div>
+      {/* <div className=" h-full w-[30%] md:hidden"></div> */}
       <ScrollableTabsButtonAuto stage={stageList} openMenu={openMenu} />
       <div className="menu_sub z-[9999]">
         <button

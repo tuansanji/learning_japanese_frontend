@@ -61,7 +61,6 @@ export default function ScrollableTabsButtonAuto({ stage, openMenu }) {
     getStageCourse(dispatch, params.level, params.way, stage[value]).then(
       (list) => {
         dispatch(getCurrentStageList(list));
-        // setStageCourse(list);
       }
     );
   }, [value, stage]);
@@ -78,8 +77,8 @@ export default function ScrollableTabsButtonAuto({ stage, openMenu }) {
   return (
     <div
       className={` ${
-        openMenu ? "md:w-[100%] tablet:w-[400px]" : "w-0"
-      } fixed z-[99] h-full  right-0 minhtuan ] `}
+        openMenu ? "right-0" : "right-[-26%]"
+      } fixed z-[99] h-full   minhtuan md:w-[100%] tablet:w-[25%] `}
     >
       <AppBar position="static" color="default" className="text-5">
         <Tabs
