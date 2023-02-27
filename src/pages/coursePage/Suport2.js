@@ -66,7 +66,7 @@ export default function ScrollableTabsButtonAuto({ stage, openMenu }) {
   }, [value, stage]);
   useEffect(() => {
     let arr = [];
-    stageCourse.forEach((way) => way && arr.push(way.lesson));
+    stageCourse && stageCourse.forEach((way) => way && arr.push(way.lesson));
     setListCurrent([...new Set(arr)]);
   }, [stageCourse]);
   const handleChange = (event, newValue) => {

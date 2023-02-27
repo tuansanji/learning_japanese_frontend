@@ -42,7 +42,7 @@ export const courseSlice = createSlice({
       error: false,
       currentStage: null,
     },
-    listStageCurrent: null,
+    listStageCurrent: [],
   },
   reducers: {
     getCourseStart: (state, action) => {

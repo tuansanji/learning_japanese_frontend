@@ -38,7 +38,7 @@ function WayPage() {
     footer.style.display = "none";
   }, []);
   useEffect(() => {
-    if (stageCourseList !== null) {
+    if (lessonCurrent && stageCourseList) {
       let lessonList = stageCourseList.filter(
         (stage) =>
           stage.stage === lessonCurrent.stage &&
