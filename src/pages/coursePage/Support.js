@@ -23,7 +23,8 @@ function Support({ listCurrent, stageCourse }) {
     element.nextElementSibling.classList.toggle("hidden");
   };
   useEffect(() => {
-    dispatch(getCurrentIndex(JSON.parse(localStorage.getItem("index"))));
+    localStorage.getItem("index") &&
+      dispatch(getCurrentIndex(JSON.parse(localStorage.getItem("index"))));
 
     const activeElement = document.querySelector(".content_2 .active");
     setTimeout(() => {
@@ -37,7 +38,8 @@ function Support({ listCurrent, stageCourse }) {
     }, 100);
   }, []);
   useEffect(() => {
-    dispatch(getCurrentIndex(JSON.parse(localStorage.getItem("index"))));
+    localStorage.getItem("index") &&
+      dispatch(getCurrentIndex(JSON.parse(localStorage.getItem("index"))));
     //
     const content2Elements = document.querySelectorAll(".content_2");
     content2Elements.forEach((content2) => {
