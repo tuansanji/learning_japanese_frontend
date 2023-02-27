@@ -37,9 +37,12 @@ export const courseSlice = createSlice({
     },
     lessonCurrent: {
       lessonCurrent: null,
+      currentIndex: null,
       isFetching: false,
       error: false,
+      currentStage: null,
     },
+    listStageCurrent: [],
   },
   reducers: {
     getCourseStart: (state, action) => {
@@ -55,7 +58,18 @@ export const courseSlice = createSlice({
       state[action.payload.level].error = true;
     },
     getLessonCurrent: (state, action) => {
+      localStorage.setItem("lesson", JSON.stringify(action.payload));
       state.lessonCurrent.lessonCurrent = action.payload;
+    },
+    getCurrentIndex: (state, action) => {
+      localStorage.setItem("index", JSON.stringify(action.payload));
+      state.lessonCurrent.currentIndex = action.payload;
+    },
+    getCurrentStage: (state, action) => {
+      state.lessonCurrent.currentStage = action.payload;
+    },
+    getCurrentStageList: (state, action) => {
+      state.listStageCurrent = action.payload;
     },
   },
 });
@@ -67,4 +81,7 @@ export const {
   getCurrentSection,
   resetCurrentSection,
   getLessonCurrent,
+  getCurrentIndex,
+  getCurrentStage,
+  getCurrentStageList,
 } = courseSlice.actions;

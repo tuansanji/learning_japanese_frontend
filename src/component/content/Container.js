@@ -38,7 +38,7 @@ function Container() {
       </Routes>
 
       <button
-        className="fixed bottom-10 right-10 border rounded-[50%] z-[9000] "
+        className="fixed bottom-[6rem] right-10 border rounded-[50%] z-[9000] "
         onClick={() => {
           window.scrollTo({
             top: 0,

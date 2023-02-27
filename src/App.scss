@@ -115,7 +115,9 @@ span.MuiTypography-body1.MuiTypography-displayBlock {
     transform: translateY(0%);
   }
 }
-
+.MuiSvgIcon-fontSizeSmall {
+  font-size: 3.35rem !important;
+}
 .wrapper {
   .children {
     -webkit-animation: menuLearn 0.2s ease-in;
@@ -207,5 +209,72 @@ span.MuiTypography-body1.MuiTypography-displayBlock {
   100% {
     opacity: 1;
     transform: translateY(0%);
+  }
+}
+
+.menu_sub {
+  align-items: center;
+  background-color: #f0f0f0;
+  bottom: 0;
+  box-shadow: 0 -2px 3px rgb(0 0 0 / 10%);
+  display: flex;
+  height: 50px;
+  justify-content: center;
+  left: 0;
+  position: fixed;
+  right: 0;
+
+  .prev {
+    border-radius: 6px;
+    color: #404040;
+    font-size: 1.4rem;
+    font-weight: 500;
+    padding: 8px 12px;
+    transition: 0.3s ease;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .next {
+    border: 1px solid red;
+    color: red;
+    margin-left: 12px;
+  }
+  .infor {
+    align-items: center;
+    bottom: 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: flex-end;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 30%;
+    .title {
+      word-wrap: break-word;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      display: -webkit-box;
+      font-size: 1.4rem;
+      overflow: hidden;
+    }
+    .btn {
+      align-items: center;
+      background-color: #fff;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      flex-shrink: 0;
+      font-size: 1.6rem;
+      height: 38px;
+      justify-content: center;
+      margin: 0 8px;
+      width: 38px;
+    }
   }
 }

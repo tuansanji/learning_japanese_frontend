@@ -3,15 +3,17 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import { getLessonCurrent } from "../../redux/slice/courseSlice";
+import {
+  getCurrentIndex,
+  getLessonCurrent,
+} from "../../redux/slice/courseSlice";
 import { useEffect } from "react";
 function Support({ listCurrent, stageCourse }) {
   const dispatch = useDispatch();
 
-  const handleGetLesson = (lesson) => {
+  const handleGetLesson = (lesson, index) => {
     dispatch(getLessonCurrent(lesson));
-
-    localStorage.setItem("lesson", JSON.stringify(lesson));
+    dispatch(getCurrentIndex(index));
   };
   const handleOpenMenuSub = (e) => {
     const element = e.target.closest(".content_1");
@@ -21,8 +23,9 @@ function Support({ listCurrent, stageCourse }) {
     element.nextElementSibling.classList.toggle("hidden");
   };
   useEffect(() => {
-    const activeElement = document.querySelector(".content_2 .active");
+    dispatch(getCurrentIndex(JSON.parse(localStorage.getItem("index"))));
 
+    const activeElement = document.querySelector(".content_2 .active");
     setTimeout(() => {
       if (activeElement) {
         const content2Element = activeElement.closest(".content_2");
@@ -34,6 +37,8 @@ function Support({ listCurrent, stageCourse }) {
     }, 100);
   }, []);
   useEffect(() => {
+    dispatch(getCurrentIndex(JSON.parse(localStorage.getItem("index"))));
+    //
     const content2Elements = document.querySelectorAll(".content_2");
     content2Elements.forEach((content2) => {
       const activeElement = content2.querySelector(".content_2 .active");
@@ -51,7 +56,7 @@ function Support({ listCurrent, stageCourse }) {
   }, [listCurrent, stageCourse]);
 
   return (
-    <div className="wrapper  bg-[#FFFFFF] h-[83vh] top-0 bottom-0 mt-0 w-full z-[99] border-l-[1px] border-[#e7e7e7]">
+    <div className="wrapper  bg-[#FFFFFF] h-[74vh] top-0 bottom-0 mt-0 w-full z-[99] border-l-[1px] border-[#e7e7e7]">
       <div className="children bg-[#ffff] flex flex-col h-full w-full">
         <div className="title bg-[#FFFFFF] items-center flex justify-between py-[12px] px-[16px]">
           <h1 className="font-bold text-[2rem] leading-[22.4px] font-[system-family] ">
@@ -90,7 +95,7 @@ function Support({ listCurrent, stageCourse }) {
                       <div
                         key={lesson._id}
                         onClick={(e) => {
-                          handleGetLesson(lesson);
+                          handleGetLesson(lesson, index);
                         }}
                         className={`item ${
                           JSON.parse(localStorage.getItem("lesson")) &&

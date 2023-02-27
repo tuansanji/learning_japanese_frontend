@@ -4,12 +4,15 @@ import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import MenuIcon from "@material-ui/icons/Menu";
 
 import Support from "./Support";
 import { getStageCourse } from "../../redux/apiRequest";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import {
+  getCurrentStage,
+  getCurrentStageList,
+} from "../../redux/slice/courseSlice";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -44,26 +47,21 @@ function a11yProps(index) {
   };
 }
 
-// const useStyles = makeStyles((theme) => ({
-//   root: {
-//     flexGrow: 1,
-//     width: "100%",
-//     backgroundColor: theme.palette.background.paper,
-//   },
-// }));
-
-export default function ScrollableTabsButtonAuto({ stage }) {
+export default function ScrollableTabsButtonAuto({ stage, openMenu }) {
   const dispatch = useDispatch();
   const params = useParams();
 
-  const [stageCourse, setStageCourse] = useState([]);
-  const [value, setValue] = React.useState(0);
+  // const [stageCourse, setStageCourse] = useState([]);
+  const [value, setValue] = useState(0);
   const [listCurrent, setListCurrent] = useState([]);
-  const [openMenu, setOpenMenu] = useState(false);
+
+  const stageCourse = useSelector((state) => state.courses?.listStageCurrent);
+
   useEffect(() => {
     getStageCourse(dispatch, params.level, params.way, stage[value]).then(
       (list) => {
-        setStageCourse(list);
+        dispatch(getCurrentStageList(list));
+        // setStageCourse(list);
       }
     );
   }, [value, stage]);
@@ -73,20 +71,16 @@ export default function ScrollableTabsButtonAuto({ stage }) {
     setListCurrent([...new Set(arr)]);
   }, [stageCourse]);
   const handleChange = (event, newValue) => {
+    // dispatch(getCurrentStage(event.target.innerHTML));
     setValue(newValue);
   };
+
   return (
     <div
-      className={`tablet:w-[400px] ${
-        openMenu ? "md:w-[100%]" : "w-0"
-      } fixed z-[99] h-full  right-0 minhtuan md:top-[12rem] `}
+      className={` ${
+        openMenu ? "md:w-[100%] tablet:w-[400px]" : "w-0"
+      } fixed z-[99] h-full  right-0 minhtuan ] `}
     >
-      <button
-        className="tablet:hidden fixed  top-[6rem]  right-0 py-[1rem] cursor-pointer hover:bg-slate-100 w-[6rem]"
-        onClick={() => setOpenMenu(!openMenu)}
-      >
-        <MenuIcon className=" " style={{ fontSize: "4rem" }} />
-      </button>
       <AppBar position="static" color="default" className="text-5">
         <Tabs
           value={value}
