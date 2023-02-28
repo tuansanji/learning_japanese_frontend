@@ -1,0 +1,10 @@
+name: fontend
+type: web
+buildCommand: npm run build
+startCommand: npm run start
+env:
+  - key: NODE_ENV
+    value: production
+routes:
+  - src: /.*
+    dest: /index.html
