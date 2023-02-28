@@ -77,7 +77,6 @@ span.MuiTypography-body1.MuiTypography-displayBlock {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: textclip 2s linear infinite;
-  display: inline-block;
 }
 
 @keyframes textclip {
@@ -182,7 +181,7 @@ span.MuiTypography-body1.MuiTypography-displayBlock {
   }
 }
 
-.minhtuan {
+.menuCourses {
   transition: all 0.4s ease-in-out;
   animation: anim-lineUp 0.6s ease-in;
 }
@@ -211,9 +210,7 @@ span.MuiTypography-body1.MuiTypography-displayBlock {
     transform: translateY(0%);
   }
 }
-.hongay {
-  transition: all 0.4s ease-in-out;
-}
+
 .menu_sub {
   align-items: center;
   background-color: #f0f0f0;
@@ -221,12 +218,12 @@ span.MuiTypography-body1.MuiTypography-displayBlock {
   box-shadow: 0 -2px 3px rgb(0 0 0 / 10%);
   display: flex;
   height: 50px;
-  justify-content: center;
+
   left: 0;
   position: fixed;
   right: 0;
 
-  .prev {
+  .btn_control {
     border-radius: 6px;
     color: #404040;
     font-size: 1.4rem;
@@ -279,4 +276,7 @@ span.MuiTypography-body1.MuiTypography-displayBlock {
       width: 38px;
     }
   }
+}
+.course-page__video {
+  transition: all 0.4s ease-in-out;
 }

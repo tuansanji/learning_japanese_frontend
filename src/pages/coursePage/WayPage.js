@@ -11,20 +11,24 @@ import {
   getCurrentIndex,
   getLessonCurrent,
 } from "../../redux/slice/courseSlice";
-import { Document, Page } from "react-pdf";
-import MenuIcon from "@material-ui/icons/Menu";
 import SyncAltIcon from "@material-ui/icons/SyncAlt";
+import PDFViewer from "./TestPdf";
+
 function WayPage() {
   const params = useParams();
   const dispatch = useDispatch();
+
   const [openMenu, setOpenMenu] = useState(true);
   const [stageList, setStageList] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
+
   const [currentLessonList, setcurrentLessonList] = useState([]);
+  const [isVideoFinished, setIsVideoFinished] = useState(false);
+  const [isVideoReady, setIsVideoReady] = useState(false);
+  const [videoDuration, setVideoDuration] = useState(null);
   const prevBtn = useRef();
   const nextBtn = useRef();
+  const video = useRef();
 
   const lessonCurrent = useSelector(
     (state) => state.courses.lessonCurrent?.lessonCurrent
@@ -35,7 +39,9 @@ function WayPage() {
   );
   useEffect(() => {
     const footer = document.querySelector("#footer");
+    const btnBackToTop = document.querySelector("#btn_BackToTop");
     footer.style.display = "none";
+    btnBackToTop.style.display = "none";
   }, []);
   useEffect(() => {
     if (lessonCurrent && stageCourseList) {
@@ -56,13 +62,28 @@ function WayPage() {
       dispatch(getLessonCurrent(currentLessonList[newIndex]));
       const activeElement = document.querySelector(".content_2 .active");
       activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
-      // window.scrollTo({
-      //   top: 0,
-      //   behavior: `smooth`,
-      // });
+    }
+  };
+  const handleProgress = (state) => {
+    const playedSeconds = state.playedSeconds;
+
+    if (isVideoReady && (playedSeconds / videoDuration) * 100 >= 80) {
+      setIsVideoFinished(true);
+      let arr = JSON.parse(localStorage.getItem("arrVideoFinished")) || [];
+
+      localStorage.setItem(
+        "arrVideoFinished",
+        JSON.stringify([...new Set([...arr, lessonCurrent._id])])
+      );
     }
   };
 
+  const handleReady = () => {
+    setIsVideoReady(true);
+  };
+  const handleDuration = (duration) => {
+    setVideoDuration(duration);
+  };
   const handleNextLesson = () => {
     let currentIndex = JSON.parse(localStorage.getItem("index"));
 
@@ -72,16 +93,8 @@ function WayPage() {
       dispatch(getLessonCurrent(currentLessonList[newIndex]));
       const activeElement = document.querySelector(".content_2 .active");
       activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
-      // window.scrollTo({
-      //   top: 0,
-      //   behavior: `smooth`,
-      // });
     }
   };
-
-  function onDocumentLoadSuccess({ numPages }) {
-    setNumPages(numPages);
-  }
 
   useEffect(() => {
     getWayCourse(dispatch, params.level, params.way)
@@ -99,12 +112,12 @@ function WayPage() {
   }, [params.way, params.level]);
 
   return (
-    <div className="course-page flex w-full md:flex-col justify-center md:items-center  ">
+    <div className="course-page flex w-full md:flex-col md:items-center  ">
       <div
         className={`course-page__video flex flex-col items-center  ${
           openMenu ? "laptop:w-[75%] " : "w-full"
         } 
-        overflow-y-auto h-full fixed left-0 lg:w-[50%] md:w-full hongay`}
+        overflow-y-auto h-full fixed left-0 lg:w-[100%] md:w-full top-[6rem]`}
       >
         {loading ? (
           <Loading />
@@ -117,8 +130,12 @@ function WayPage() {
                 ? lessonCurrent.pathVideo
                 : "https://youtu.be/KI6UWLiGUUQ"
             }
+            onProgress={handleProgress}
+            onReady={handleReady}
+            onDuration={handleDuration}
             playing={true}
             controls={true}
+            ref={video}
           />
         )}
 
@@ -127,35 +144,23 @@ function WayPage() {
             {lessonCurrent && lessonCurrent.name}
           </p>
         </div>
-        <div className="w-full">
+
+        <div className="w-full ">
           <embed
-            src={process.env.PUBLIC_URL + "/baimot.pdf"}
+            src={"http://118.27.25.228/Ljapanese/PDF/N1/C1/TV/DCH/1.pdf"}
             width="100%"
             height="1000"
             type="application/pdf"
           />
         </div>
       </div>
-      <div>
-        {/* <Document
-          file={process.env.PUBLIC_URL + "/baimot.pdf"}
-          onLoadSuccess={onDocumentLoadSuccess}
-        >
-          <Page pageNumber={pageNumber} />
-        </Document> */}
-        {/* <p>
-          Page {pageNumber} of {numPages}
-        </p> */}
-      </div>
-      {/* <div className=" h-full w-[30%] md:hidden"></div> */}
+
       <ScrollableTabsButtonAuto stage={stageList} openMenu={openMenu} />
-      <div className="menu_sub z-[9999]">
+      <div className="menu_sub z-[9999] tablet:justify-center">
         <button
           ref={prevBtn}
           disabled={JSON.parse(localStorage.getItem("index")) === 0}
-          className={`prev 
-          
-          
+          className={`btn_control md:!text-[1.2rem] ssm:!text-[1rem] 
     ${JSON.parse(localStorage.getItem("index")) === 0 && "opacity-40"}`}
           onClick={() => {
             handlePrevLesson();
@@ -166,9 +171,7 @@ function WayPage() {
         <button
           ref={nextBtn}
           onClick={handleNextLesson}
-          className={`prev 
-          
-          
+          className={`btn_control md:!text-[1.2rem] ssm:!text-[1rem]
           ${
             JSON.parse(localStorage.getItem("index")) ===
               currentLessonList.length - 1 && "opacity-40"
@@ -177,7 +180,7 @@ function WayPage() {
           bài tiếp theo <ArrowForwardIosIcon />
         </button>
         <div className="infor">
-          <p className="animate-charcter text-[2rem] mr-[1rem]">
+          <p className="animate-charcter text-[2rem] mr-[1rem] md:text-[1.4rem] sm:hidden">
             {` ${Number(localStorage.getItem("index")) + 1}. 
             ${lessonCurrent && lessonCurrent.name} `}
           </p>

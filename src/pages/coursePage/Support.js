@@ -105,6 +105,15 @@ function Support({ listCurrent, stageCourse }) {
                             JSON.parse(localStorage.getItem("lesson"))._id
                             ? "active"
                             : ""
+                        } ${
+                          JSON.parse(
+                            localStorage.getItem("arrVideoFinished")
+                          ) &&
+                          JSON.parse(
+                            localStorage.getItem("arrVideoFinished")
+                          ).includes(lesson._id)
+                            ? "learn"
+                            : ""
                         } bg-[#FFFFFF] hover:bg-slate-200 flex flex-row py-[10px] pr-0 pl-[2px] relative `}
                       >
                         <div className=" cursor-pointer flex-1 ml-7 relative">

@@ -24,16 +24,16 @@ function LevelPage() {
       {isloading ? (
         <Loading />
       ) : (
-        <div className=" flex w-[80%] mx-auto gap-6 mt-[10rem] ">
+        <div className=" flex flex-wrap  mt-[6rem] mx-auto ">
           {wayList &&
             wayList.map((way, index) => (
               <section
                 key={index}
-                className="laptop:w-[25%] md:w-[33%] sm:w-[80%] sm:mx-auto px-3 "
+                className="w-[25%] lg:w-[28rem] md:w-[24rem] sm:w-[50%] px-[2.5rem] mt-[3rem] "
               >
                 <div className="mb-8 relative">
                   <div
-                    className=" w-full  overflow-hidden rounded-[13px] hover:bottom-6
+                    className="shadow-2xl   w-full  overflow-hidden rounded-[13px] hover:bottom-6
        transition-all relative"
                   >
                     <Link
@@ -42,11 +42,16 @@ function LevelPage() {
                         .join("+")}`}
                     >
                       <img
-                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Japan_mourning_flag.svg/220px-Japan_mourning_flag.svg.png"
+                        src="https://thanhgiang.net/wp-content/uploads/2019/01/hoc-tieng-nhat-moi-ngay.jpg"
                         alt=""
                         className="h-full w-full align-middle"
                       />
-                      <p className="absolute bottom-[3rem] right-[3rem] lg:right-[2rem] mt-[1rem] text-[4.2rem] xl:text-[3.5rem] md:text-[2.5rem] leading-[1.4] font-bold capitalize animate-charcter">
+
+                      <p
+                        className="
+                                  text-center border-b-2 border-[#333] leading-[1.4] mt-4 text-[2.5rem] sm:text-[2rem] ssm:text-[1.6rem] pb-2
+                      font-bold capitalize animate-charcter"
+                      >
                         {way}
                       </p>
                     </Link>

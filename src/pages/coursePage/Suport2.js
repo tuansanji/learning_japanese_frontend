@@ -9,10 +9,7 @@ import Support from "./Support";
 import { getStageCourse } from "../../redux/apiRequest";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import {
-  getCurrentStage,
-  getCurrentStageList,
-} from "../../redux/slice/courseSlice";
+import { getCurrentStageList } from "../../redux/slice/courseSlice";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -51,11 +48,19 @@ export default function ScrollableTabsButtonAuto({ stage, openMenu }) {
   const dispatch = useDispatch();
   const params = useParams();
 
-  // const [stageCourse, setStageCourse] = useState([]);
   const [value, setValue] = useState(0);
   const [listCurrent, setListCurrent] = useState([]);
-
   const stageCourse = useSelector((state) => state.courses?.listStageCurrent);
+
+  useEffect(() => {
+    let stageCurrent =
+      stage &&
+      localStorage.getItem("lesson") &&
+      stage.indexOf(JSON.parse(localStorage.getItem("lesson")).stage);
+    if (stageCurrent >= 0) {
+      setValue(stageCurrent);
+    }
+  }, [stage]);
 
   useEffect(() => {
     getStageCourse(dispatch, params.level, params.way, stage[value]).then(
@@ -64,23 +69,27 @@ export default function ScrollableTabsButtonAuto({ stage, openMenu }) {
       }
     );
   }, [value, stage]);
+
   useEffect(() => {
     let arr = [];
     stageCourse && stageCourse.forEach((way) => way && arr.push(way.lesson));
     setListCurrent([...new Set(arr)]);
   }, [stageCourse]);
   const handleChange = (event, newValue) => {
-    // dispatch(getCurrentStage(event.target.innerHTML));
     setValue(newValue);
   };
 
   return (
     <div
       className={` ${
-        openMenu ? "right-0" : "right-[-26%]"
-      } fixed z-[99] h-full   minhtuan md:w-[100%] tablet:w-[25%] `}
+        openMenu
+          ? "right-0"
+          : "right-[-26%] lg:right-[-360px] sm:right-[-100%] "
+      } fixed z-[99] h-full   menuCourses lg:w-[350px] md:top-[6rem] sm:w-[100%] tablet:w-[25%] `}
     >
       <AppBar position="static" color="default" className="text-5">
+        <span className="absolute left-[1rem]">({stage && stage.length})</span>
+
         <Tabs
           value={value}
           onChange={handleChange}
