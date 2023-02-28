@@ -1,7 +1,7 @@
 name: fontend
 type: web
 buildCommand: npm run build
-startCommand: npm run start
+startCommand: npm start
 env:
   - key: NODE_ENV
     value: production
