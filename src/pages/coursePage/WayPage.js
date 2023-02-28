@@ -112,7 +112,11 @@ function WayPage() {
           <ReactPlayer
             width="100%"
             height="500px"
-            url={lessonCurrent && lessonCurrent.pathVideo}
+            url={
+              lessonCurrent
+                ? lessonCurrent.pathVideo
+                : "https://youtu.be/KI6UWLiGUUQ"
+            }
             playing={true}
             controls={true}
           />
