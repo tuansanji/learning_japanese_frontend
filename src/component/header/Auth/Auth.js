@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { getAllUsers, logOutUser } from "../../../redux/apiRequest";
-import { Descriptions } from "antd";
-import UserInfor from "./ProfileUser";
 import { DownOutlined, SmileOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
+
+import { logOutUser } from "../../../redux/apiRequest";
+import { createAxios } from "../../../redux/createInstance";
+import { logOutSuccess } from "../../../redux/slice/authSlice";
 
 function Auth() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.login?.currentUser);
+  let axiosJWT = createAxios(user, dispatch, logOutSuccess);
   const items = [
     {
       key: "1",
@@ -23,7 +25,13 @@ function Auth() {
       label: (
         <Link
           onClick={() => {
-            logOutUser(user.accessToken, user.id, dispatch, navigate);
+            logOutUser(
+              user.accessToken,
+              user._id,
+              dispatch,
+              navigate,
+              axiosJWT
+            );
           }}
         >
           Đăng xuất

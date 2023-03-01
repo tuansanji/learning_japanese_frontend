@@ -53,15 +53,18 @@ export default function ScrollableTabsButtonAuto({ stage, openMenu }) {
   const stageCourse = useSelector((state) => state.courses?.listStageCurrent);
 
   useEffect(() => {
-    let stageCurrent =
-      stage &&
-      localStorage.getItem("lesson") &&
-      stage.indexOf(JSON.parse(localStorage.getItem("lesson")).stage);
-    if (stageCurrent >= 0) {
-      setValue(stageCurrent);
+    let stageCurrent;
+    if (JSON.parse(localStorage.getItem("lesson")) != null) {
+      stageCurrent =
+        stage &&
+        stage.indexOf(JSON.parse(localStorage.getItem("lesson")).stage);
+      if (stageCurrent >= 0) {
+        setValue(stageCurrent);
+      } else {
+        setValue(0);
+      }
     }
   }, [stage]);
-
   useEffect(() => {
     getStageCourse(dispatch, params.level, params.way, stage[value]).then(
       (list) => {

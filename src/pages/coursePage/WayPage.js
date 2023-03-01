@@ -37,12 +37,22 @@ function WayPage() {
   const stageCourseList = useSelector(
     (state) => state.courses?.listStageCurrent
   );
+
   useEffect(() => {
-    const footer = document.querySelector("#footer");
-    const btnBackToTop = document.querySelector("#btn_BackToTop");
-    footer.style.display = "none";
-    btnBackToTop.style.display = "none";
-  }, []);
+    getWayCourse(dispatch, params.level, params.way)
+      .then((stage) => {
+        setStageList([...new Set(stage)]);
+        setLoading(false);
+        getLessonCurrent(JSON.parse(localStorage.getItem("lesson"))) !== null &&
+          dispatch(
+            getLessonCurrent(JSON.parse(localStorage.getItem("lesson")))
+          );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [params.way, params.level]);
+
   useEffect(() => {
     if (lessonCurrent && stageCourseList) {
       let lessonList = stageCourseList.filter(
@@ -54,6 +64,17 @@ function WayPage() {
     }
   }, [stageCourseList, lessonCurrent]);
 
+  useEffect(() => {
+    const footer = document.querySelector("#footer");
+    const btnBackToTop = document.querySelector("#btn_BackToTop");
+    footer.style.display = "none";
+    btnBackToTop.style.display = "none";
+
+    return () => {
+      footer.style.display = "block";
+      btnBackToTop.style.display = "block";
+    };
+  }, []);
   const handlePrevLesson = () => {
     let currentIndex = JSON.parse(localStorage.getItem("index"));
     if (currentIndex > 0) {
@@ -96,21 +117,6 @@ function WayPage() {
     }
   };
 
-  useEffect(() => {
-    getWayCourse(dispatch, params.level, params.way)
-      .then((stage) => {
-        setStageList([...new Set(stage)]);
-        setLoading(false);
-        getLessonCurrent(JSON.parse(localStorage.getItem("lesson"))) &&
-          dispatch(
-            getLessonCurrent(JSON.parse(localStorage.getItem("lesson")))
-          );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [params.way, params.level]);
-
   return (
     <div className="course-page flex w-full md:flex-col md:items-center  ">
       <div
@@ -139,9 +145,9 @@ function WayPage() {
           />
         )}
 
-        <div className="mt-10">
+        <div className="my-10">
           <p className="animate-charcter text-[3rem] ">
-            {lessonCurrent && lessonCurrent.name}
+            {lessonCurrent && `${lessonCurrent.name} - ${lessonCurrent.stage}`}
           </p>
         </div>
 
@@ -182,7 +188,7 @@ function WayPage() {
         <div className="infor">
           <p className="animate-charcter text-[2rem] mr-[1rem] md:text-[1.4rem] sm:hidden">
             {` ${Number(localStorage.getItem("index")) + 1}. 
-            ${lessonCurrent && lessonCurrent.name} `}
+            ${lessonCurrent && lessonCurrent.name}  `}
           </p>
           <button
             className="btn "

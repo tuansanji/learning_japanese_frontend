@@ -29,6 +29,7 @@ export const loginUser = async (user, dispatch, navigate) => {
       user
     );
     dispatch(loginSuccess(res.data));
+
     navigate("/");
   } catch (err) {
     dispatch(loginError(err.response.data));
@@ -79,10 +80,16 @@ export const deleteUser = async (accessToken, id, dispatch, navigate) => {
   }
 };
 
-export const logOutUser = async (accessToken, id, dispatch, navigate) => {
+export const logOutUser = async (
+  accessToken,
+  id,
+  dispatch,
+  navigate,
+  axiosJWT
+) => {
   dispatch(logOutStart());
   try {
-    const res = await axios.post(
+    const res = await axiosJWT.post(
       `${process.env.REACT_APP_BACKEND_URL}/auth/logout`,
       id,
 
@@ -134,6 +141,7 @@ export const getWayCourse = async (dispatch, level, way) => {
     );
     let arr = [];
     courses.data.forEach((way) => way.stage && arr.push(way.stage));
+
     return arr;
   } catch (error) {
     console.log(error);
