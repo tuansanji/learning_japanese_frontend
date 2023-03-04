@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../../redux/apiRequest";
 import { useFormik } from "formik";
 import * as yup from "yup";
-
+import { GoogleLogin } from "react-google-login";
+import axios from "axios";
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -38,6 +39,14 @@ function Login() {
 
   return (
     <div className="flex items-center justify-center mt-[4rem] mx-[2rem] rounded-2xl overflow-hidden">
+      {/* <GoogleLogin
+        clientId="YOUR_CLIENT_ID"
+        buttonText="Đăng nhập bằng Gmail"
+        onSuccess={responseGoogle}
+        onFailure={responseGoogle}
+        cookiePolicy={"single_host_origin"}
+      /> */}
+      {/* <a href="http://localhost:5002/auth/google"> google</a> */}
       <form
         onSubmit={formik.handleSubmit}
         autoComplete="off"
@@ -89,6 +98,7 @@ function Login() {
             Đăng ký
           </Link>
         </div>
+        <Link to="/user/forgot-password"> Quên mật khẩu</Link>
         <button
           type="submit"
           className="inline-flex w-full items-center justify-center px-8 py-4 font-sans font-semibold tracking-wide text-white bg-blue-500 rounded-lg h-[60px]"
@@ -96,9 +106,7 @@ function Login() {
           Đăng Nhập
         </button>
         {messageLogin ? (
-          <p className=" text-[1.8rem] text-[red] mt-7">
-            Sai mật khẩu hoặc tài khoản
-          </p>
+          <p className=" text-[1.8rem] text-[red] mt-7">{messageLogin}</p>
         ) : null}
       </form>
     </div>

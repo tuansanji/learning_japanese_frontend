@@ -1,46 +1,111 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PoweroffOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Button, Space } from "antd";
+import { Button } from "antd";
+import axios from "axios";
 
 import "./userInfor.scss";
 import { deleteUser, getAllUsers, logOutUser } from "../../../redux/apiRequest";
+import { createAxios } from "../../../redux/createInstance";
+import { logOutSuccess } from "../../../redux/slice/authSlice";
 function UserInfor() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [imagePreview, setImagePreview] = useState(null);
   const user = useSelector((state) => {
     return state.auth.login.currentUser;
   });
-  const handleChangeProfile = (e) => {
-    // đang mặc định chỉ thay đổi ảnh thôi(k làm kịp mấy cái kia)
+  let axiosJWT = createAxios(user, dispatch, logOutSuccess);
 
-    const file = e.target.files[0];
-    file.preview = URL.createObjectURL(file);
+  const handleImagePreview = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setImagePreview(event.target.result);
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
   };
+  function dataURLtoBlob(dataURL) {
+    const arr = dataURL.split(",");
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], { type: mime });
+  }
+  const handleUploadImage = async () => {
+    if (!imagePreview) {
+      console.log("No image selected.");
+      return;
+    }
 
+    try {
+      const formData = new FormData();
+      const imgBlob = dataURLtoBlob(imagePreview);
+      formData.append("avatar", imgBlob);
+
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/auth/user/edit`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      );
+
+      console.log("Avatar uploaded successfully");
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+      console.log("Failed to upload avatar");
+      console.log(error.response.data.message);
+    }
+  };
   const handleLogOutUser = () => {
-    logOutUser(user.accessToken, user.id, dispatch, navigate);
+    logOutUser(user.accessToken, user._id, dispatch, navigate, axiosJWT);
   };
   return (
     <>
       {user && (
         <div className="container emp-profile mx-auto ">
-          <form method="post">
+          <div>
             <div className="row">
               <div className="col-md-4">
                 <div className="flex flex-col justify-center mb-5">
-                  <img src={user.thumb} className="w-[100px] " alt="" />
-                  <div className="">
+                  {imagePreview ? (
+                    <img
+                      src={imagePreview}
+                      className="w-[200px] "
+                      alt="Avatar preview"
+                    />
+                  ) : (
+                    <img src={user.thumb} className="w-[100px] " alt="" />
+                  )}
+                  <div className=" my-5">
                     Change Photo
                     <input
+                      id="avatar-upload"
                       type="file"
-                      name="file"
-                      onChange={(e) => {
-                        handleChangeProfile(e);
-                      }}
+                      accept="image/*"
+                      onChange={handleImagePreview}
                     />
                   </div>
+                  {imagePreview && (
+                    <Button
+                      className="bg-green-500 w-[100px] flex items-center"
+                      type=" primary"
+                      onClick={handleUploadImage}
+                    >
+                      Xác nhận
+                    </Button>
+                  )}
                 </div>
               </div>
               <div className="col-md-6">
@@ -118,7 +183,7 @@ function UserInfor() {
                 </div>
               </div>
             </div>
-          </form>
+          </div>
           <div className="btn__user-switch">
             <Button
               className="bg-green-500 flex items-center"
@@ -140,16 +205,18 @@ function UserInfor() {
             </Button> */}
 
             {user.isAdmin && (
-              <Button
-                className="bg-green-500 flex items-center"
-                type="primary"
-                icon={<DeleteOutlined />}
-                onClick={() => {
-                  getAllUsers(user.accessToken, dispatch);
-                }}
-              >
-                Lấy danh sách User
-              </Button>
+              <Link to={`/auth/admin`}>
+                <Button
+                  className="bg-green-500 flex items-center"
+                  type="primary"
+                  icon={<DeleteOutlined />}
+                  onClick={() => {
+                    getAllUsers(user.accessToken, dispatch);
+                  }}
+                >
+                  Admin
+                </Button>
+              </Link>
             )}
           </div>
         </div>

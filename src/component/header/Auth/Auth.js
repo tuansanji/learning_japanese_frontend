@@ -1,18 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { DownOutlined, SmileOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
-
+import Cookies from "js-cookie";
 import { logOutUser } from "../../../redux/apiRequest";
 import { createAxios } from "../../../redux/createInstance";
 import { logOutSuccess } from "../../../redux/slice/authSlice";
+import axios from "axios";
+axios.defaults.withCredentials = true;
 
 function Auth() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.login?.currentUser);
   let axiosJWT = createAxios(user, dispatch, logOutSuccess);
+
+  // const [userGmail, setUser] = useState(null);
+
+  // useEffect(() => {
+  //   axios
+  //     .get(`${process.env.REACT_APP_BACKEND_URL}/auth/user/api`, {
+  //       withCredentials: true,
+  //     })
+  //     .then((response) => {
+  //       setUser(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // }, []);
+  // console.log(userGmail);
   const items = [
     {
       key: "1",

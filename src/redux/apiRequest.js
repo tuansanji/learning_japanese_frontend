@@ -59,7 +59,8 @@ export const getAllUsers = async (accessToken, dispatch) => {
       }
     );
 
-    dispatch(getAllUsersSuccess(res.data));
+    dispatch(getAllUsersSuccess());
+    return res.data;
   } catch (error) {
     dispatch(getAllUsersError());
   }
@@ -67,16 +68,57 @@ export const getAllUsers = async (accessToken, dispatch) => {
 
 export const deleteUser = async (accessToken, id, dispatch, navigate) => {
   try {
-    const res = await axios.delete(
-      `${process.env.REACT_APP_BACKEND_URL}/user/delete/${id}`,
+    const res = await axios.post(
+      `${process.env.REACT_APP_BACKEND_URL}/user/delete`,
+
+      { id: id },
       {
         headers: { token: `Bearer ${accessToken}` },
       }
     );
-    dispatch(deleteUser());
-    return res;
+
+    // dispatch(deleteUser());
+    return res.data;
   } catch (error) {
-    console.log(error);
+    console.log("delete user error");
+  }
+};
+
+export const deleteManyUser = async (accessToken, arr) => {
+  try {
+    const res = await axios.post(
+      `${process.env.REACT_APP_BACKEND_URL}/user/delete/many`,
+
+      { arr: arr },
+      {
+        headers: { token: `Bearer ${accessToken}` },
+      }
+    );
+
+    // dispatch(deleteUser());
+    return res.data;
+  } catch (error) {
+    console.log("delete user error");
+  }
+};
+
+export const editUserRequest = async (accessToken, user) => {
+  try {
+    const res = await axios.patch(
+      `${process.env.REACT_APP_BACKEND_URL}/user/edit`,
+      {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        money: user.money,
+      },
+      {
+        headers: { token: `Bearer ${accessToken}` },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.log("edit user error");
   }
 };
 

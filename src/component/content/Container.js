@@ -10,8 +10,10 @@ import GuidePage from "../../pages/guidePage/GuidePage";
 
 import CoursePage from "../../pages/coursePage/CoursePage";
 import GuidePages from "../../pages/guidePage/GuidePages";
-
+import ADMIN from "../header/Auth/Admin";
 import NavigationIcon from "@material-ui/icons/Navigation";
+import ResetPassword from "../header/Auth/ChangePassword";
+import ForgotPassword from "../header/Auth/ForgotPassword";
 
 function Container() {
   return (
@@ -27,6 +29,15 @@ function Container() {
         <Route path="/auth/login" element={<Login />}></Route>
         <Route path="/auth/register" element={<Register />}></Route>
         <Route path="/user/infor" element={<UserInfor />}></Route>
+        <Route path="/auth/admin" element={<ADMIN />}></Route>
+        <Route
+          path="/user/change-password/:token"
+          element={<ResetPassword />}
+        ></Route>
+        <Route
+          path="/user/forgot-password"
+          element={<ForgotPassword />}
+        ></Route>
       </Routes>
 
       <button
