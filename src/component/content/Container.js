@@ -23,7 +23,10 @@ function Container() {
         <Route path="/guide" element={<GuidePages />} />
         <Route path="/guide/:question" element={<GuidePage />} />
         <Route path={`/courses`} element={<CoursePage />} />
-        <Route path={`/courses/:level`} element={<LevelPage />} />
+        <Route
+          path={`${process.env.REACT_APP_FONTEND_URL}/courses/:level`}
+          element={<LevelPage />}
+        />
         <Route path={`/courses/:level/:way`} element={<WayPage />} />
 
         <Route path="/auth/login" element={<Login />}></Route>
