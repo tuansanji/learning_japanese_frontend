@@ -46,7 +46,7 @@ export const registerUser = async (user, dispatch, navigate) => {
     dispatch(registerSuccess(res.data));
     navigate("/auth/login");
   } catch (error) {
-    dispatch(registerError());
+    dispatch(registerError(error.response.data));
   }
 };
 export const getAllUsers = async (accessToken, dispatch) => {
@@ -142,6 +142,34 @@ export const logOutUser = async (
   } catch (error) {
     console.log(error);
     dispatch(logOutFail());
+  }
+};
+
+export const postCourse = async (accessToken, course) => {
+  const res = await axios.post(
+    `${process.env.REACT_APP_BACKEND_URL}/courses`,
+    {
+      course,
+    },
+    {
+      headers: { token: `Bearer ${accessToken}` },
+    }
+  );
+  return res;
+};
+
+export const getAllCourses = async (accessToken) => {
+  try {
+    const courses = await axios.get(
+      `${process.env.REACT_APP_BACKEND_URL}/courses`,
+      {
+        headers: { token: `Bearer ${accessToken}` },
+      }
+    );
+
+    return courses.data;
+  } catch (error) {
+    console.log(error);
   }
 };
 

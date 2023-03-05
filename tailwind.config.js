@@ -26,6 +26,9 @@ module.exports = {
       ssm: { max: "399px" },
     },
     extend: {
+      boxShadow: {
+        desc: "rgba(0, 0, 0, 0.4) 0px 0px 10px",
+      },
       animation: {
         title: "ribbon-shaking 1.5s ease-in-out infinite",
       },

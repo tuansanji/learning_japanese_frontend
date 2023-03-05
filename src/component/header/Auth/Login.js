@@ -9,6 +9,7 @@ import axios from "axios";
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const messageLogin = useSelector((state) => {
     return state.auth.login.msg;
   });
@@ -94,11 +95,20 @@ function Login() {
         </div>
         <div className="flex items-center justify-end mb-5 text-slate-400">
           <p className="mr-2">Bạn chưa có tài khoản?</p>
-          <Link to="/auth/register" className="text-blue-500 underline">
+          <Link
+            to="/auth/register"
+            className="hover:opacity-50 text-blue-500 underline"
+          >
             Đăng ký
           </Link>
         </div>
-        <Link to="/user/forgot-password"> Quên mật khẩu</Link>
+        <Link
+          className="relative top-[-1rem] text-blue-500 hover:opacity-50"
+          to="/user/forgot-password"
+        >
+          Quên mật khẩu ?
+        </Link>
+
         <button
           type="submit"
           className="inline-flex w-full items-center justify-center px-8 py-4 font-sans font-semibold tracking-wide text-white bg-blue-500 rounded-lg h-[60px]"

@@ -2,13 +2,16 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../../../redux/apiRequest";
 
 function Register() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const messageRegister = useSelector((state) => {
+    return state.auth.register.msg;
+  });
   const validationSchema = yup.object().shape({
     username: yup
       .string()
@@ -140,6 +143,9 @@ function Register() {
         >
           Đăng kí
         </button>
+        {messageRegister ? (
+          <p className=" text-[1.8rem] text-[red] mt-7">{messageRegister}</p>
+        ) : null}
       </form>
     </div>
   );

@@ -13,6 +13,7 @@ export const authSlice = createSlice({
       isFetching: false,
       error: false,
       success: false,
+      msg: null,
     },
   },
   reducers: {
@@ -33,15 +34,17 @@ export const authSlice = createSlice({
     registerStart: (state) => {
       state.register.isFetching = true;
     },
-    registerError: (state) => {
+    registerError: (state, action) => {
       state.register.isFetching = false;
       state.register.error = true;
       state.register.success = false;
+      state.register.msg = action.payload;
     },
     registerSuccess: (state) => {
       state.register.error = false;
       state.register.isFetching = false;
       state.register.success = true;
+      state.register.msg = null;
     },
     logOutStart: (state) => {
       state.login.isFetching = true;

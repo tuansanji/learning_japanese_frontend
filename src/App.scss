@@ -290,3 +290,16 @@ span.MuiTypography-body1.MuiTypography-displayBlock {
 .my-ok-button-class {
   background-color: red;
 }
+//css lại nut button ant
+.form_input {
+  svg {
+    vertical-align: baseline !important;
+  }
+}
+
+.ant-descriptions-item-content {
+  max-width: 20rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

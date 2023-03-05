@@ -48,7 +48,7 @@ const MenuUser = ({ currentUser }) => {
     email: "",
     money: "",
   });
- 
+
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const user = useSelector((state) => state.auth.login?.currentUser);
   const dispatch = useDispatch();
@@ -154,7 +154,6 @@ const MenuUser = ({ currentUser }) => {
             size={size}
             extra={
               <div className="flex gap-[2rem]">
-                
                 {editUser && (
                   <Popconfirm
                     placement="top"
@@ -319,7 +318,7 @@ const MenuUser = ({ currentUser }) => {
     ...item,
     ellipsis,
   }));
- 
+
   // Phần xử lí khi người dùng nháy vào phần mở rộng
   const handleExpand = (expanded, record) => {
     // "expanded" (boolean) và "record" (đối tượng dữ liệu của hàng được mở rộng)
@@ -374,6 +373,7 @@ const MenuUser = ({ currentUser }) => {
   };
   return (
     <>
+      <h1>USER</h1>
       <Form
         layout="inline"
         className="components-table-demo-control-bar"
