@@ -12,12 +12,12 @@ function LevelPage() {
     (state) => state.courses[params.level].isFetching
   );
 
-  // useEffect(() => {
-  //   getCourse(dispatch, params.level);
-  //   getLevelCourse(dispatch, params.level)
-  //     .then((arr) => setWayList([...new Set(arr)]))
-  //     .catch((err) => console.log(err));
-  // }, [params.level]);
+  useEffect(() => {
+    getCourse(dispatch, params.level);
+    getLevelCourse(dispatch, params.level)
+      .then((arr) => setWayList([...new Set(arr)]))
+      .catch((err) => console.log(err));
+  }, [params.level]);
 
   return (
     <div className="">
@@ -36,7 +36,7 @@ function LevelPage() {
                     className="shadow-2xl   w-full  overflow-hidden rounded-[13px] hover:bottom-6
        transition-all relative"
                   >
-                    {/* <Link
+                    <Link
                       to={`/courses/${params.level}/${way
                         .split(" ")
                         .join("+")}`}
@@ -54,7 +54,7 @@ function LevelPage() {
                       >
                         {way}
                       </p>
-                    </Link> */}
+                    </Link>
                   </div>
                 </div>
               </section>
