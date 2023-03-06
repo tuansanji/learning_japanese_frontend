@@ -15,6 +15,7 @@ import {
   getCourseStart,
   getCourseSuccess,
 } from "./slice/courseSlice";
+import { toastErr, toastSuccess } from "./slice/toastSlice";
 import {
   getAllUsersError,
   getAllUsersStart,
@@ -137,11 +138,12 @@ export const logOutUser = async (
 
       { headers: { token: `Bearer ${accessToken}` } }
     );
-    dispatch(logOutSuccess(res.data));
+    dispatch(logOutSuccess());
+    dispatch(toastSuccess(res.data));
     navigate("/auth/login");
   } catch (error) {
-    console.log(error);
     dispatch(logOutFail());
+    dispatch(toastErr(error.response.data));
   }
 };
 

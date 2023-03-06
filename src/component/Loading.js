@@ -1,8 +1,11 @@
 import React from "react";
-import loading from "../assets/img/loading.gif";
 
 function Loading() {
-  return <img className="relative mx-auto  w-full" src={loading} alt="" />;
+  return (
+    <div className="w-full flex justify-center items-center min-h-[40rem]">
+      <span class="loader w-[48px] h-[48px]"></span>
+    </div>
+  );
 }
 
 export default Loading;

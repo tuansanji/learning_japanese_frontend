@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../../../redux/apiRequest";
+import { resetMsg } from "../../../redux/slice/authSlice";
 
 function Register() {
   const dispatch = useDispatch();
@@ -12,6 +13,12 @@ function Register() {
   const messageRegister = useSelector((state) => {
     return state.auth.register.msg;
   });
+  const isLoading = useSelector((state) => {
+    return state.auth.login?.isFetching;
+  });
+  useEffect(() => {
+    dispatch(resetMsg());
+  }, []);
   const validationSchema = yup.object().shape({
     username: yup
       .string()
@@ -43,7 +50,9 @@ function Register() {
   });
   return (
     <div className="flex justify-center mt-[4rem] mx-[2rem] rounded-2xl overflow-hidden">
-      {" "}
+      {isLoading && (
+        <span class="loader w-[48px] h-[48px] fixed top-[50%] left-[49%] z-[9998]"></span>
+      )}
       <form
         onSubmit={formik.handleSubmit}
         autoComplete="off"

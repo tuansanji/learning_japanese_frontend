@@ -8,6 +8,10 @@ export const userSlice = createSlice({
       isFetching: false,
       error: false,
     },
+    inforUser: {
+      keyImg: null,
+      url: null,
+    },
   },
   reducers: {
     getAllUsersStart: (state) => {
@@ -22,7 +26,9 @@ export const userSlice = createSlice({
       state.usersAll.error = true;
       state.usersAll.isFetching = false;
     },
-    deleteUser: (state, action) => {},
+    resetImg: (state, aciton) => {
+      state.inforUser.keyImg = aciton.payload;
+    },
   },
 });
 
@@ -31,4 +37,5 @@ export const {
   getAllUsersSuccess,
   getAllUsersStart,
   deleteUser,
+  resetImg,
 } = userSlice.actions;

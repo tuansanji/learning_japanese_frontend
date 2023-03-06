@@ -1,20 +1,23 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { PoweroffOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import axios from "axios";
-
+import moment from "moment";
 import "./userInfor.scss";
 import { deleteUser, getAllUsers, logOutUser } from "../../../redux/apiRequest";
 import { createAxios } from "../../../redux/createInstance";
 import { logOutSuccess } from "../../../redux/slice/authSlice";
+import { toastErr, toastSuccess } from "../../../redux/slice/toastSlice";
+import { resetImg } from "../../../redux/slice/userSlice";
 function UserInfor() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const [imagePreview, setImagePreview] = useState(null);
   const user = useSelector((state) => {
-    return state.auth.login.currentUser;
+    return state.auth.login?.currentUser;
   });
   let axiosJWT = createAxios(user, dispatch, logOutSuccess);
 
@@ -44,29 +47,26 @@ function UserInfor() {
       return;
     }
 
-    try {
-      const formData = new FormData();
-      const imgBlob = dataURLtoBlob(imagePreview);
-      formData.append("avatar", imgBlob);
+    const formData = new FormData();
+    const imgBlob = dataURLtoBlob(imagePreview);
+    formData.append("avatar", imgBlob);
 
-      const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/auth/user/edit`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true,
-        }
-      );
-
-      console.log("Avatar uploaded successfully");
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
-      console.log("Failed to upload avatar");
-      console.log(error.response.data.message);
-    }
+    const response = axios
+      .post(`${process.env.REACT_APP_BACKEND_URL}/auth/user/edit`, formData, {
+        headers: {
+          token: `Bearer ${user.accessToken}`,
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      })
+      .then((res) => {
+        dispatch(resetImg(Math.random()));
+        dispatch(toastSuccess(res.data));
+        window.location.reload();
+      })
+      .catch((err) => {
+        dispatch(toastErr(err.response.data));
+      });
   };
   const handleLogOutUser = () => {
     logOutUser(user.accessToken, user._id, dispatch, navigate, axiosJWT);
@@ -86,7 +86,11 @@ function UserInfor() {
                       alt="Avatar preview"
                     />
                   ) : (
-                    <img src={user.thumb} className="w-[100px] " alt="" />
+                    <img
+                      src={`${process.env.REACT_APP_BACKEND_URL}/auth/user/avatar/${user._id}`}
+                      className="w-[10rem] h-[10rem] "
+                      alt=""
+                    />
                   )}
                   <div className=" my-5">
                     Change Photo
@@ -176,7 +180,7 @@ function UserInfor() {
                         <label>Thời gian gia nhập </label>
                       </div>
                       <div className="col-md-6 ml-6">
-                        <p>{user.createdAt}</p>
+                        {moment(user.createdAt).format("DD/MM/YYYY HH:mm")}
                       </div>
                     </div>
                   </div>
@@ -196,13 +200,6 @@ function UserInfor() {
             >
               Đăng Xuất
             </Button>
-            {/* <Button
-              className="bg-green-500 flex items-center"
-              type="primary"
-              icon={<DeleteOutlined />}
-            >
-              Xóa Tài Khoản
-            </Button> */}
 
             {user.isAdmin && (
               <Link to={`/auth/admin`}>

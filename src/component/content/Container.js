@@ -14,7 +14,7 @@ import ADMIN from "../header/Auth/Admin";
 import NavigationIcon from "@material-ui/icons/Navigation";
 import ResetPassword from "../header/Auth/ChangePassword";
 import ForgotPassword from "../header/Auth/ForgotPassword";
-
+import MusicPage from "../../pages/musicPage/MusicPage";
 function Container() {
   return (
     <div className="container_main">
@@ -38,6 +38,8 @@ function Container() {
           path="/user/forgot-password"
           element={<ForgotPassword />}
         ></Route>
+
+        <Route path="/courses/mp3" element={<MusicPage />}></Route>
       </Routes>
 
       <button

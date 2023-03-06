@@ -15,7 +15,8 @@ function Auth() {
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.login?.currentUser);
   let axiosJWT = createAxios(user, dispatch, logOutSuccess);
-
+  const keyImg = useSelector((state) => state.users.inforUser?.keyImg);
+  const [urlImage, setUrlImage] = useState("");
   // const [userGmail, setUser] = useState(null);
 
   // useEffect(() => {
@@ -31,6 +32,7 @@ function Auth() {
   //     });
   // }, []);
   // console.log(userGmail);
+
   const items = [
     {
       key: "1",
@@ -75,8 +77,9 @@ function Auth() {
           </Dropdown>
           <Link to="/user/infor">
             <img
-              className="w-[4rem] rounded-[50%]"
-              src={user.thumb}
+              key={keyImg}
+              className="w-[4rem] h-[4rem] rounded-[50%]"
+              src={`${process.env.REACT_APP_BACKEND_URL}/auth/user/avatar/${user._id}`}
               alt=""
             ></img>
           </Link>

@@ -53,11 +53,15 @@ export const authSlice = createSlice({
       state.login.currentUser = null;
       state.login.isFetching = false;
       state.login.error = false;
-      state.login.msg = action.payload;
     },
     logOutFail: (state) => {
       state.login.isFetching = false;
       state.login.error = true;
+    },
+    resetMsg: (state) => {
+      state.login.isFetching = false;
+      state.login.error = false;
+      state.login.msg = null;
     },
   },
 });
@@ -72,4 +76,5 @@ export const {
   logOutSuccess,
   logOutStart,
   logOutFail,
+  resetMsg,
 } = authSlice.actions;

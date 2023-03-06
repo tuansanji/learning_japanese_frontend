@@ -6,6 +6,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { GoogleLogin } from "react-google-login";
 import axios from "axios";
+import { resetMsg } from "../../../redux/slice/authSlice";
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -13,7 +14,12 @@ function Login() {
   const messageLogin = useSelector((state) => {
     return state.auth.login.msg;
   });
-
+  const isLoading = useSelector((state) => {
+    return state.auth.login?.isFetching;
+  });
+  useEffect(() => {
+    dispatch(resetMsg());
+  }, []);
   const validationSchema = yup.object().shape({
     username: yup
       .string()
@@ -119,6 +125,10 @@ function Login() {
           <p className=" text-[1.8rem] text-[red] mt-7">{messageLogin}</p>
         ) : null}
       </form>
+
+      {isLoading && (
+        <span class="loader w-[48px] h-[48px] fixed top-[50%] left-[49%] z-[9998]"></span>
+      )}
     </div>
   );
 }
