@@ -148,9 +148,42 @@ export const logOutUser = async (
 export const postCourse = async (accessToken, course) => {
   const res = await axios.post(
     `${process.env.REACT_APP_BACKEND_URL}/courses`,
+
+    course,
+
     {
-      course,
-    },
+      headers: { token: `Bearer ${accessToken}` },
+    }
+  );
+  return res;
+};
+
+export const deleteCourse = async (accessToken, id) => {
+  const res = await axios.post(
+    `${process.env.REACT_APP_BACKEND_URL}/courses/delete`,
+    { id },
+    {
+      headers: { token: `Bearer ${accessToken}` },
+    }
+  );
+  return res;
+};
+
+export const deleteManyCourse = async (accessToken, arr) => {
+  const res = await axios.post(
+    `${process.env.REACT_APP_BACKEND_URL}/courses/delete/many`,
+    { arr: arr },
+    {
+      headers: { token: `Bearer ${accessToken}` },
+    }
+  );
+  return res;
+};
+
+export const editCourseRequest = async (accessToken, course) => {
+  const res = await axios.patch(
+    `${process.env.REACT_APP_BACKEND_URL}/courses/edit`,
+    course,
     {
       headers: { token: `Bearer ${accessToken}` },
     }

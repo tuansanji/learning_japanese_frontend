@@ -7,6 +7,7 @@ import {
   Descriptions,
   message,
   Popconfirm,
+  Select,
 } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,6 +24,8 @@ const defaultExpandable = {
 };
 
 const MenuUser = ({ currentUser }) => {
+  const [searchSelector, setSearchSelector] = useState("username");
+  const [inputSearch, setInputSearch] = useState("");
   const [editUser, setEditUser] = useState(false);
   const [bordered, setBordered] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -41,6 +44,7 @@ const MenuUser = ({ currentUser }) => {
   const [xScroll, setXScroll] = useState();
   const [listUsers, setListUsers] = useState([]);
   const [selectedRecord, setSelectedRecord] = useState(null);
+
   const [updatedUser, setUpdatedUser] = useState(null);
   const [newUserEdit, setNewUserEdit] = useState({
     id: "",
@@ -135,9 +139,15 @@ const MenuUser = ({ currentUser }) => {
     message.info("Sửa thành công");
   };
 
+  const filteredData = listUsers.filter((item) => {
+    return item[searchSelector]
+      .toLowerCase()
+      .includes(inputSearch.toLowerCase());
+  });
+
   const data = [];
-  if (listUsers) {
-    listUsers.forEach((user, index) => {
+  if (filteredData) {
+    filteredData.forEach((user, index) => {
       data.push({
         key: index,
         money: user.money,
@@ -373,7 +383,33 @@ const MenuUser = ({ currentUser }) => {
   };
   return (
     <>
-      <h1>USER</h1>
+      <div className="my-[2rem]">
+        <Form.Item label="Fields" className="w-[30rem]">
+          <Select
+            value={searchSelector}
+            onChange={(value) => {
+              setSearchSelector(value);
+            }}
+          >
+            <Select.Option value="username">username</Select.Option>
+            <Select.Option value="email">email</Select.Option>
+
+            <Select.Option value="_id">id</Select.Option>
+          </Select>
+        </Form.Item>
+        <div className="flex h-[3rem] gap-5 items-center">
+          <label htmlFor="inputSearch">Search: </label>
+          <input
+            id="inputSearch"
+            className="border border-[#333] outline-none h-full w-[40rem]  rounded-xl px-3"
+            value={inputSearch}
+            onChange={(e) => {
+              setInputSearch(e.target.value);
+            }}
+          ></input>
+        </div>
+      </div>
+
       <Form
         layout="inline"
         className="components-table-demo-control-bar"

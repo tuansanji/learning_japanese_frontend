@@ -75,7 +75,7 @@ function ForgotPassword() {
         </span>
         <br />
         <span className="text-[#222222]">
-          » Nếu vẫn không thấy thông báo lấy lại mật khẩu. vui lòng liên hệ
+          » Nếu vẫn không thấy thông báo lấy lại mật khẩu. Vui lòng liên hệ
           admin bằng thông tin dưới cuối trang.
         </span>
       </div>

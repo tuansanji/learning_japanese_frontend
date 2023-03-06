@@ -8,21 +8,41 @@ import {
   Descriptions,
   message,
   Popconfirm,
+  Select,
 } from "antd";
 import { Input } from "antd";
 
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllCourses, postCourse } from "../../../../redux/apiRequest";
+import {
+  deleteCourse,
+  deleteManyCourse,
+  editCourseRequest,
+  getAllCourses,
+  postCourse,
+} from "../../../../redux/apiRequest";
+import {
+  success,
+  toastErr,
+  toastSuccess,
+} from "../../../../redux/slice/toastSlice";
 const defaultExpandable = {
   expandedRowRender: (record) => <div>{record.description}</div>,
 };
+const { TextArea } = Input;
+
 const MenuCourses = ({ currentUser }) => {
+  const [inputSearch, setInputSearch] = useState("");
+  const [searchSelector, setSearchSelector] = useState("name");
   const dispatch = useDispatch();
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [editCourse, setEditCourse] = useState(false);
   const [listCourses, setListCourses] = useState([]);
   const [ellipsis, setEllipsis] = useState(false);
   const [msg, setMsg] = useState("");
+  const [reRender, setRerender] = useState(null);
   const [overlayPost, setOverlayPost] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState(null);
   const [postNewCourse, setPostNewCourse] = useState({
     name: "",
     lesson: "",
@@ -33,13 +53,26 @@ const MenuCourses = ({ currentUser }) => {
     pdf: "",
     author: "dũng mori",
   });
+  const [editStates, setEditStates] = useState(Array(listCourses).fill(false));
+  const [newCourseEdit, setNewCourseEdit] = useState({
+    id: "",
+    name: "",
+    lesson: "",
+    stage: "",
+    way: "",
+    level: "",
+    pathVideo: "",
+    pdf: "",
+    desc: "",
+    author: "dũng mori",
+  });
   useEffect(() => {
     getAllCourses(currentUser.accessToken)
       .then((courses) => {
         setListCourses(courses);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [reRender]);
 
   const columns = [
     {
@@ -49,16 +82,17 @@ const MenuCourses = ({ currentUser }) => {
     },
     {
       title: "Lesson",
-      dataIndex: "way",
+      dataIndex: "lesson",
     },
     {
       title: "Stage",
       dataIndex: "stage",
-      sorter: (a, b) => a.admin.localeCompare(b.admin),
+      sorter: (a, b) => a.stage.localeCompare(b.stage),
     },
     {
       title: "Way",
       dataIndex: "way",
+      sorter: (a, b) => a.way.localeCompare(b.way),
     },
     {
       title: "Level",
@@ -71,6 +105,18 @@ const MenuCourses = ({ currentUser }) => {
         {
           text: "N2",
           value: "n2",
+        },
+        {
+          text: "N3",
+          value: "n3",
+        },
+        {
+          text: "N4",
+          value: "n4",
+        },
+        {
+          text: "N5",
+          value: "n5",
         },
       ],
       onFilter: (value, record) => {
@@ -91,7 +137,17 @@ const MenuCourses = ({ currentUser }) => {
           className="bg-red-500 flex items-center"
           type="primary"
           onClick={() => {
-            console.log(record.id);
+            if (window.confirm("Bạn có chắc chắn muốn xóa? ")) {
+              deleteCourse(currentUser.accessToken, record.id)
+                .then((res) => {
+                  dispatch(toastSuccess(res.data));
+                  setRerender(record.id);
+                })
+                .catch((err) => {
+                  dispatch(toastErr(err.response.data));
+                });
+            } else {
+            }
           }}
         >
           Delete
@@ -99,51 +155,230 @@ const MenuCourses = ({ currentUser }) => {
       ),
     },
   ];
+
+  //handle edit course
+  const handleSaveCourse = () => {
+    editCourseRequest(currentUser.accessToken, newCourseEdit)
+      .then((res) => {
+        dispatch(toastSuccess(res.data));
+        setRerender(newCourseEdit.id);
+        setEditCourse(false);
+      })
+      .catch((err) => {
+        dispatch(toastErr(err.response.data));
+      });
+  };
+
+  const filteredData = listCourses.filter((item) => {
+    return item[searchSelector]
+      .toLowerCase()
+      .includes(inputSearch.toLowerCase());
+  });
+
   const data = [];
-  if (listCourses) {
-    listCourses.forEach((course, index) => {
+  if (filteredData) {
+    filteredData.forEach((course, indexCourse) => {
       data.push({
-        key: index,
+        key: indexCourse,
         id: course._id,
         name: course.name,
         lesson: course.lesson,
         stage: course.stage,
         way: course.way,
         level: course.level,
+        desc: course.desc,
+        pdf: course.pdf,
+
         description: (
           <Descriptions
             className="bg-red"
             bordered
-            title="Chi tiết tài khoản"
+            title="Chi tiết bài học"
             size="large"
             extra={
               <div className="flex gap-[2rem]">
                 <Button
+                  className={`bg-blue-500 flex items-center ${
+                    !editStates[indexCourse] && "hidden"
+                  }`}
+                  type="primary"
+                  onClick={() => {
+                    const index = indexCourse;
+                    const newEditStates = [...editStates];
+                    newEditStates[index] = false;
+                    setEditStates(newEditStates);
+                    handleSaveCourse();
+                  }}
+                >
+                  Save
+                </Button>
+                <Button
                   className="bg-green-500 flex items-center"
                   type="primary"
-                  onClick={() => {}}
+                  onClick={() => {
+                    const index = indexCourse;
+                    const newEditStates = [...editStates];
+                    newEditStates[index] = !newEditStates[index];
+                    setEditStates(newEditStates);
+                    setNewCourseEdit({
+                      ...newCourseEdit,
+                      id: course._id,
+                      name: course.name,
+                      lesson: course.lesson,
+                      stage: course.stage,
+                      way: course.way,
+                      level: course.level,
+                      desc: course.desc,
+                      pdf: course.pdf,
+                    });
+
+                    // setEditCourse(!editCourse);
+                  }}
                 >
-                  Edit
+                  {editStates[indexCourse] ? "Cancel" : "Edit"}
                 </Button>
               </div>
             }
           >
-            <Descriptions.Item label="Name">{course.name}</Descriptions.Item>
-            <Descriptions.Item label="Lesson">
-              {course.lesson}
+            <Descriptions.Item label="Name">
+              {editStates[indexCourse] ? (
+                <TextArea
+                  placeholder={course.name}
+                  value={newCourseEdit.name}
+                  allowClear
+                  onChange={(e) => {
+                    setNewCourseEdit({
+                      ...newCourseEdit,
+                      name: e.target.value,
+                    });
+                  }}
+                />
+              ) : (
+                course.name
+              )}
             </Descriptions.Item>
-            <Descriptions.Item label="Stage">{course.stage}</Descriptions.Item>
-            <Descriptions.Item label="Way">{course.way}</Descriptions.Item>
-            <Descriptions.Item label="Level">{course.level}</Descriptions.Item>
+            <Descriptions.Item label="Lesson">
+              {editStates[indexCourse] ? (
+                <TextArea
+                  placeholder={course.lesson}
+                  value={newCourseEdit.lesson}
+                  allowClear
+                  onChange={(e) => {
+                    setNewCourseEdit({
+                      ...newCourseEdit,
+                      lesson: e.target.value,
+                    });
+                  }}
+                />
+              ) : (
+                course.lesson
+              )}
+            </Descriptions.Item>
+            <Descriptions.Item label="Stage">
+              {" "}
+              {editStates[indexCourse] ? (
+                <TextArea
+                  placeholder={course.stage}
+                  value={newCourseEdit.stage}
+                  allowClear
+                  onChange={(e) => {
+                    setNewCourseEdit({
+                      ...newCourseEdit,
+                      stage: e.target.value,
+                    });
+                  }}
+                />
+              ) : (
+                course.stage
+              )}
+            </Descriptions.Item>
+            <Descriptions.Item label="Way">
+              {" "}
+              {editStates[indexCourse] ? (
+                <TextArea
+                  placeholder={course.way}
+                  value={newCourseEdit.way}
+                  allowClear
+                  onChange={(e) => {
+                    setNewCourseEdit({
+                      ...newCourseEdit,
+                      way: e.target.value,
+                    });
+                  }}
+                />
+              ) : (
+                course.way
+              )}
+            </Descriptions.Item>
+            <Descriptions.Item label="Level">
+              {" "}
+              {editStates[indexCourse] ? (
+                <TextArea
+                  placeholder={course.level}
+                  value={newCourseEdit.level}
+                  allowClear
+                  onChange={(e) => {
+                    setNewCourseEdit({
+                      ...newCourseEdit,
+                      level: e.target.value,
+                    });
+                  }}
+                />
+              ) : (
+                course.level
+              )}
+            </Descriptions.Item>
             <Descriptions.Item label="Id">{course._id}</Descriptions.Item>
             <Descriptions.Item label="PathVideo">
-              {course.pathVideo}
+              {editStates[indexCourse] ? (
+                <TextArea
+                  placeholder={course.pathVideo}
+                  value={newCourseEdit.pathVideo}
+                  allowClear
+                  onChange={(e) => {
+                    setNewCourseEdit({
+                      ...newCourseEdit,
+                      pathVideo: e.target.value,
+                    });
+                  }}
+                />
+              ) : (
+                course.pathVideo
+              )}
             </Descriptions.Item>
             <Descriptions.Item label="PDF">
-              {course.pdf || "đang cập nhật..."}
+              {editStates[indexCourse] ? (
+                <TextArea
+                  placeholder={course.pdf}
+                  value={newCourseEdit.pdf}
+                  allowClear
+                  onChange={(e) => {
+                    setNewCourseEdit({
+                      ...newCourseEdit,
+                      pdf: e.target.value,
+                    });
+                  }}
+                />
+              ) : (
+                course.pdf || "đang cập nhật..."
+              )}
             </Descriptions.Item>
             <Descriptions.Item label="Description">
-              {course.desc || "đang cập nhật"}
+              {editStates[indexCourse] ? (
+                <TextArea
+                  placeholder={course.desc}
+                  value={newCourseEdit.desc}
+                  allowClear
+                  onChange={(e) => {
+                    setNewCourseEdit({
+                      ...newCourseEdit,
+                      desc: e.target.value,
+                    });
+                  }}
+                />
+              ) : (
+                course.desc || "đang cập nhật..."
+              )}
             </Descriptions.Item>
             <Descriptions.Item label="Thông tin chi tiết">
               Thời gian đăng:
@@ -162,16 +397,94 @@ const MenuCourses = ({ currentUser }) => {
     ...item,
     ellipsis,
   }));
+
+  // Phần xử lí khi người dùng nháy vào phần mở rộng
+  const handleExpand = (expanded, record) => {
+    // "expanded" (boolean) và "record" (đối tượng dữ liệu của hàng được mở rộng)
+    console.log(record.id);
+    setEditCourse(false);
+    setNewCourseEdit({
+      id: record.id,
+      name: record.name,
+      lesson: record.lesson,
+      stage: record.stage,
+      way: record.way,
+      level: record.level,
+      pathVideo: record.video,
+      pdf: record.pdf,
+      author: "dũng mori",
+    });
+    setSelectedRecord(expanded ? record : null);
+  };
+  const isRecordSelected = (record) => {
+    return selectedRecord && selectedRecord.id === record.id;
+  };
+  const getRowClassName = (record, index) => {
+    return isRecordSelected(record) ? "userAdmin__active" : "";
+  };
+
+  const selectedRows = data
+    .filter((record, index) => selectedRowKeys.includes(index))
+    .map((record) => record.id);
+
+  const defaultFooter = () => {
+    return (
+      <div>
+        <p>
+          Tổng số bài học :{" "}
+          <span style={{ color: "red", fontWeight: 600, fontSize: "1.8rem" }}>
+            {listCourses.length}
+          </span>
+        </p>
+        <p style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+          Tổng số bài học đang được chọn :
+          <span style={{ color: "red", fontWeight: 600, fontSize: "1.8rem" }}>
+            {" "}
+            {selectedRows.length}
+          </span>
+          {selectedRows.length > 0 && (
+            <Button
+              className="bg-red-500 flex items-center"
+              type="primary"
+              onClick={() => {
+                if (window.confirm(`Bạn có chắc chắn muốn xóa ?`)) {
+                  deleteManyCourse(currentUser.accessToken, selectedRows)
+                    .then((res) => {
+                      dispatch(toastSuccess(res.data));
+                    })
+                    .catch((err) => {
+                      dispatch(toastErr(err.response.data));
+                    });
+
+                  setRerender(selectedRows);
+                  setSelectedRowKeys([]);
+                } else {
+                  // Nếu người dùng chọn Cancel
+                  // Hủy bỏ hành động của bạn ở đây
+                }
+              }}
+            >
+              Xóa Hàng loạt
+            </Button>
+          )}
+        </p>
+      </div>
+    );
+  };
+
   const tableProps = {
+    footer: true ? defaultFooter : undefined,
     expandable: {
       ...defaultExpandable,
-
+      onExpand: handleExpand,
       expandRowByClick: false,
     },
-
     rowSelection: {
       type: "checkbox",
+      selectedRowKeys,
+      onChange: setSelectedRowKeys,
     },
+    rowClassName: getRowClassName,
   };
   const handlePostCourse = () => {
     if (
@@ -184,8 +497,10 @@ const MenuCourses = ({ currentUser }) => {
       postCourse(currentUser.accessToken, postNewCourse)
         .then((res) => {
           setMsg(res.data);
+          dispatch(toastSuccess(res.data));
         })
         .catch((err) => {
+          dispatch(toastSuccess(err.response.data));
           setMsg(err.response.data);
         });
     } else {
@@ -195,6 +510,34 @@ const MenuCourses = ({ currentUser }) => {
 
   return (
     <>
+      <div className="my-[2rem]">
+        <Form.Item label="Fields" className="w-[30rem]">
+          <Select
+            value={searchSelector}
+            onChange={(value) => {
+              setSearchSelector(value);
+            }}
+          >
+            <Select.Option value="name">name</Select.Option>
+            <Select.Option value="lesson">lesson</Select.Option>
+            <Select.Option value="stage">stage</Select.Option>
+            <Select.Option value="way">way</Select.Option>
+            <Select.Option value="level">level</Select.Option>
+            <Select.Option value="_id">id</Select.Option>
+          </Select>
+        </Form.Item>
+        <div className="flex h-[3rem] gap-5 items-center">
+          <label htmlFor="inputSearch">Search: </label>
+          <input
+            id="inputSearch"
+            className="border border-[#333] outline-none h-full w-[40rem]  rounded-xl px-3"
+            value={inputSearch}
+            onChange={(e) => {
+              setInputSearch(e.target.value);
+            }}
+          ></input>
+        </div>
+      </div>
       <div
         className={`fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-75 transition-opacity ease-out duration-300 pointer-events-none  ${
           overlayPost ? "opacity-1 z-[99999]" : "opacity-0 z-[-99999]"
@@ -368,6 +711,7 @@ const MenuCourses = ({ currentUser }) => {
                 className="inline-flex items-center justify-center px-8 py-4 font-sans font-semibold tracking-wide text-white bg-blue-500 hover:opacity-60 rounded-lg h-[60px]"
                 onClick={() => {
                   handlePostCourse();
+                  setRerender(postNewCourse.name);
                 }}
               >
                 POST

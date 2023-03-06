@@ -11,9 +11,11 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import { adminSlice } from "./slice/adminSlice";
 
 import { authSlice } from "./slice/authSlice";
 import { courseSlice } from "./slice/courseSlice";
+import { toastSlice } from "./slice/toastSlice";
 import { userSlice } from "./slice/userSlice";
 
 const persistConfig = {
@@ -25,6 +27,8 @@ const rootReducer = combineReducers({
   auth: authSlice.reducer,
   users: userSlice.reducer,
   courses: courseSlice.reducer,
+  toast: toastSlice.reducer,
+  admin: adminSlice.reducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

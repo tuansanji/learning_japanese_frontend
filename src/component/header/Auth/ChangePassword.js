@@ -123,7 +123,7 @@ const ResetPassword = ({ match }) => {
           <br />
           <span className="text-[#222222]">
             » Mật khẩu chỉ được thay trong thời hạn 1 tiếng kể từ khi bắt đầu
-            yêu cầu
+            yêu cầu.
           </span>
           <br />
 
