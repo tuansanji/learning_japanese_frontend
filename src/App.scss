@@ -19,7 +19,7 @@ body {
   box-sizing: border-box;
 }
 .App {
-  background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC6drQJIEQSPsN5YTgu188b69ErFzxT77clA&usqp=CAU");
+  background-image: url("https://ongnhuahdpevietnam.com/wp-content/uploads/2022/08/anh-nen-trang-dep.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   a {
@@ -332,4 +332,62 @@ span.MuiTypography-body1.MuiTypography-displayBlock {
   100% {
     transform: rotate(360deg);
   }
+}
+
+.list_way {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' className='bg-%5B%23FFFFFF%5D'%3E%3Crect width='100%25' height='100%25' fill='none' rx='30' ry='30' stroke='%23333' stroke-width='2' stroke-dasharray='16' stroke-dashoffset='0' stroke-linecap='square'/%3E%3C/svg%3E");
+}
+.waypages {
+  background-image: url("https://ongnhuahdpevietnam.com/wp-content/uploads/2022/08/anh-nen-trang-dep.jpg");
+}
+.minhtuan {
+  h1 {
+    text-align: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    font-size: 6.4rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #fff;
+    strong {
+      background: -o-linear-gradient(
+          190deg,
+          #3d67ff 0%,
+          #9773ff 50%,
+          #efceff 80%
+        ),
+        #fff;
+      background: linear-gradient(260deg, #3d67ff 0%, #9773ff 50%, #efceff 80%),
+        #fff;
+      -webkit-text-fill-color: transparent;
+      -webkit-background-clip: text;
+      background-clip: text;
+      font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+    }
+  }
+  p {
+    text-align: center;
+
+    max-width: 780px;
+    margin: 32px auto 0;
+    color: #7f8e9e;
+    font-size: 2rem;
+    strong {
+      font-weight: 600;
+      -webkit-text-fill-color: transparent;
+      background: -webkit-linear-gradient(45deg, #5ebbff -33%, #a174ff 69%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+  }
+}
+.way_button span {
+  transition: all 0.3s linear;
+  left: 0;
+}
+.way_button:hover span {
+  left: 7px;
+}
+.hongay {
+  background-image: url("https://img.lovepik.com/background/20211021/medium/lovepik-the-backdrop-of-a-web-page-background-image_500073033.jpg");
 }

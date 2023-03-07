@@ -17,6 +17,7 @@ import {
   editUserRequest,
   getAllUsers,
 } from "../../../../redux/apiRequest";
+import Loading from "../../../SupportTab/Loading";
 
 import { Input } from "antd";
 const defaultExpandable = {
@@ -44,7 +45,7 @@ const MenuUser = ({ currentUser }) => {
   const [xScroll, setXScroll] = useState();
   const [listUsers, setListUsers] = useState([]);
   const [selectedRecord, setSelectedRecord] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(true);
   const [updatedUser, setUpdatedUser] = useState(null);
   const [newUserEdit, setNewUserEdit] = useState({
     id: "",
@@ -58,9 +59,10 @@ const MenuUser = ({ currentUser }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getAllUsers(user.accessToken, dispatch).then((users) =>
-      setListUsers(users)
-    );
+    getAllUsers(user.accessToken, dispatch).then((users) => {
+      setIsLoading(false);
+      setListUsers(users);
+    });
   }, [updatedUser]);
   const { TextArea } = Input;
 
@@ -383,6 +385,11 @@ const MenuUser = ({ currentUser }) => {
   };
   return (
     <>
+      {isLoading && (
+        <div className="fixed z-50 inset-0 flex items-center justify-center">
+          <Loading />
+        </div>
+      )}
       <div className="my-[2rem]">
         <Form.Item label="Fields" className="w-[30rem]">
           <Select

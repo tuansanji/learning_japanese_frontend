@@ -1,9 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import MenuNav from "./menuNav/MenuNav";
-import SwipeableTemporaryDrawer from "./MenuNavMobile";
+import SwipeableTemporaryDrawer from "./menuNav/MenuNavMobile";
 import Auth from "./Auth/Auth";
 import logo from "../../assets/img/logo_img.jpg";
 

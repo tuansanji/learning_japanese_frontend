@@ -4,17 +4,16 @@ import HomePage from "../../pages/homePage/HomePage";
 import LevelPage from "../../pages/coursePage/LevelPage";
 import Login from "../header/Auth/Login";
 import Register from "../header/Auth/Register";
-import UserInfor from "../header/Auth/ProfileUser";
+import UserInfor from "../../pages/userInforPage/ProfileUser";
 import WayPage from "../../pages/coursePage/WayPage";
 import GuidePage from "../../pages/guidePage/GuidePage";
 
 import CoursePage from "../../pages/coursePage/CoursePage";
 import GuidePages from "../../pages/guidePage/GuidePages";
-import ADMIN from "../header/Auth/Admin";
+import ADMIN from "../header/Auth/Admin/Admin";
 import NavigationIcon from "@material-ui/icons/Navigation";
 import ResetPassword from "../header/Auth/ChangePassword";
 import ForgotPassword from "../header/Auth/ForgotPassword";
-import MusicPage from "../../pages/musicPage/MusicPage";
 function Container() {
   return (
     <div className="container_main">
@@ -38,8 +37,6 @@ function Container() {
           path="/user/forgot-password"
           element={<ForgotPassword />}
         ></Route>
-
-        <Route path="/courses/mp3" element={<MusicPage />}></Route>
       </Routes>
 
       <button

@@ -26,12 +26,14 @@ import {
   toastErr,
   toastSuccess,
 } from "../../../../redux/slice/toastSlice";
+import Loading from "../../../SupportTab/Loading";
 const defaultExpandable = {
   expandedRowRender: (record) => <div>{record.description}</div>,
 };
 const { TextArea } = Input;
 
 const MenuCourses = ({ currentUser }) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [inputSearch, setInputSearch] = useState("");
   const [searchSelector, setSearchSelector] = useState("name");
   const dispatch = useDispatch();
@@ -70,6 +72,7 @@ const MenuCourses = ({ currentUser }) => {
     getAllCourses(currentUser.accessToken)
       .then((courses) => {
         setListCourses(courses);
+        setIsLoading(false);
       })
       .catch((err) => console.log(err));
   }, [reRender]);
@@ -510,6 +513,11 @@ const MenuCourses = ({ currentUser }) => {
 
   return (
     <>
+      {isLoading && (
+        <div className="fixed z-50 inset-0 flex items-center justify-center">
+          <Loading />
+        </div>
+      )}
       <div className="my-[2rem]">
         <Form.Item label="Fields" className="w-[30rem]">
           <Select

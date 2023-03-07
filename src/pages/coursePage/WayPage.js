@@ -5,14 +5,13 @@ import { getStageCourse, getWayCourse } from "../../redux/apiRequest";
 import ReactPlayer from "react-player";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
-import Loading from "../../component/Loading";
+import Loading from "../../component/SupportTab/Loading";
 import ScrollableTabsButtonAuto from "./Suport2";
 import {
   getCurrentIndex,
   getLessonCurrent,
 } from "../../redux/slice/courseSlice";
 import SyncAltIcon from "@material-ui/icons/SyncAlt";
-import PDFViewer from "./TestPdf";
 
 function WayPage() {
   const params = useParams();

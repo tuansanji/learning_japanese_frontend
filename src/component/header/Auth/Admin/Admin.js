@@ -1,16 +1,12 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { PoweroffOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Button } from "antd";
-import axios from "axios";
 
-import "./userInfor.scss";
-import StickyHeadTable from "./Admin/Users";
-import MenuUser from "./Admin/Users";
-import MenuCourses from "./Admin/Courses";
-import { toastErr, toastSuccess } from "../../../redux/slice/toastSlice";
-import { changeStatus } from "../../../redux/slice/adminSlice";
+import MenuUser from "./Users";
+import MenuCourses from "./Courses";
+import { toastErr, toastSuccess } from "../../../../redux/slice/toastSlice";
+import { changeStatus } from "../../../../redux/slice/adminSlice";
 
 function ADMIN() {
   const dispatch = useDispatch();
@@ -19,10 +15,10 @@ function ADMIN() {
     return state.auth.login.currentUser;
   });
   const statusAdmin = useSelector((state) => state.admin?.status);
-  const [controller, setController] = useState("users");
+
   return (
     <>
-      <div className="container emp-profile mx-auto ">
+      <div className=" w-[70%] bg-[#fff]  p-[3%] my-[3%] rounded-md mx-auto ">
         <Button
           className={` flex items-center mb-10
               controller 

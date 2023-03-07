@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PoweroffOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import axios from "axios";
 import moment from "moment";
-import "./userInfor.scss";
-import { deleteUser, getAllUsers, logOutUser } from "../../../redux/apiRequest";
-import { createAxios } from "../../../redux/createInstance";
-import { logOutSuccess } from "../../../redux/slice/authSlice";
-import { toastErr, toastSuccess } from "../../../redux/slice/toastSlice";
-import { resetImg } from "../../../redux/slice/userSlice";
+
+import { getAllUsers, logOutUser } from "../../redux/apiRequest";
+import { createAxios } from "../../redux/createInstance";
+import { logOutSuccess } from "../../redux/slice/authSlice";
+import { toastErr, toastSuccess } from "../../redux/slice/toastSlice";
+import { resetImg } from "../../redux/slice/userSlice";
 function UserInfor() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
+
   const [imagePreview, setImagePreview] = useState(null);
   const user = useSelector((state) => {
     return state.auth.login?.currentUser;
@@ -74,24 +74,26 @@ function UserInfor() {
   return (
     <>
       {user && (
-        <div className="container emp-profile mx-auto ">
+        <div className="mx-auto p-[3%] my-[3%] rounded-md bg-[#fff] w-[70%] font-medium">
           <div>
-            <div className="row">
-              <div className="col-md-4">
-                <div className="flex flex-col justify-center mb-5">
-                  {imagePreview ? (
-                    <img
-                      src={imagePreview}
-                      className="w-[200px] "
-                      alt="Avatar preview"
-                    />
-                  ) : (
-                    <img
-                      src={`${process.env.REACT_APP_BACKEND_URL}/auth/user/avatar/${user._id}`}
-                      className="w-[10rem] h-[10rem] "
-                      alt=""
-                    />
-                  )}
+            <div className="">
+              <div className="">
+                <div className="flex flex-row gap-10 mb-5">
+                  <div className="h-[20rem] w-[20rem] overflow-hidden">
+                    {imagePreview ? (
+                      <img
+                        src={imagePreview}
+                        className="h-full"
+                        alt="Avatar preview"
+                      />
+                    ) : (
+                      <img
+                        src={`${process.env.REACT_APP_BACKEND_URL}/auth/user/avatar/${user._id}`}
+                        className="h-full"
+                        alt=""
+                      />
+                    )}
+                  </div>
                   <div className=" my-5">
                     Change Photo
                     <input
@@ -100,22 +102,24 @@ function UserInfor() {
                       accept="image/*"
                       onChange={handleImagePreview}
                     />
+                    {imagePreview && (
+                      <Button
+                        className="bg-green-500 w-[100px] flex items-center mt-[3rem]"
+                        type=" primary"
+                        onClick={handleUploadImage}
+                      >
+                        Xác nhận
+                      </Button>
+                    )}
                   </div>
-                  {imagePreview && (
-                    <Button
-                      className="bg-green-500 w-[100px] flex items-center"
-                      type=" primary"
-                      onClick={handleUploadImage}
-                    >
-                      Xác nhận
-                    </Button>
-                  )}
                 </div>
               </div>
-              <div className="col-md-6">
-                <div className="profile-head">
+              <div className="">
+                <div className="text-[#333]">
                   <h5>Vị trí của bạn</h5>
-                  <h6>{user.isAdmin ? "Chủ trang(ADMIN)" : "Học viên"}</h6>
+                  <h6 className="text-[#0062CC] ">
+                    {user.isAdmin ? "Chủ trang(ADMIN)" : "Học viên"}
+                  </h6>
                   <p className="mt-10 text-[2rem]">
                     Tổng só xu hiện có :
                     <span className="text-[red] text-[3rem] ml-8">
@@ -125,9 +129,9 @@ function UserInfor() {
                 </div>
               </div>
             </div>
-            <div className="row">
-              <div className="col-md-8 tab-infor">
-                <div className="tab-content profile-tab" id="myTabContent">
+            <div className="">
+              <div className="">
+                <div className=" " id="myTabContent">
                   <div
                     className="tab-pane fade show active"
                     id="home"
@@ -135,51 +139,53 @@ function UserInfor() {
                     aria-labelledby="home-tab"
                   >
                     <div className="row flex my-[1rem]">
-                      <div className="col-md-6">
-                        <label>User Id : </label>
+                      <div className="">
+                        <label className="font-bold">User Id : </label>
                       </div>
-                      <div className="col-md-6 ml-6">
-                        <p> {user._id}</p>
-                      </div>
-                    </div>
-                    <div className="row flex my-[1rem]">
-                      <div className="col-md-6">
-                        <label>Name :</label>
-                      </div>
-                      <div className="col-md-6 ml-6">
-                        <p>{user.username}</p>
+                      <div className=" ml-6">
+                        <p className="text-[#0062CC] font-bold"> {user._id}</p>
                       </div>
                     </div>
                     <div className="row flex my-[1rem]">
-                      <div className="col-md-6">
-                        <label>Email :</label>
+                      <div className="">
+                        <label className="font-bold">Name :</label>
                       </div>
-                      <div className="col-md-6 ml-6">
-                        <p>{user.email}</p>
+                      <div className=" ml-6">
+                        <p className="text-[#0062CC] font-bold">
+                          {user.username}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="row flex my-[1rem]">
+                      <div className="">
+                        <label className="font-bold">Email :</label>
+                      </div>
+                      <div className=" ml-6">
+                        <p className="text-[#0062CC] font-bold">{user.email}</p>
                       </div>
                     </div>
 
                     <div className="row flex my-[1rem] items-center ">
-                      <div className="col-md-6">
-                        <label>Khóa học đã mua :</label>
+                      <div className="">
+                        <label className="font-bold">Khóa học đã mua :</label>
                       </div>
-                      <div className="col-md-6 ml-6 mr-5">
-                        <p>{user.courses.length}</p>
+                      <div className=" ml-6 mr-5">
+                        <p className="text-[red]">{user.courses.length}</p>
                       </div>
                       <button
                         className="hover:bg-slate-300 p-1 rounded-lg"
                         onClick={() => {
-                          alert("ai chon xem mà xem");
+                          alert("ai cho xem mà xem");
                         }}
                       >
                         Xem chi tiết
                       </button>
                     </div>
-                    <div className="row flex my-[1rem]">
-                      <div className="col-md-6">
-                        <label>Thời gian gia nhập </label>
+                    <div className=" flex my-[1rem]">
+                      <div className="">
+                        <label className="font-bold">Thời gian gia nhập </label>
                       </div>
-                      <div className="col-md-6 ml-6">
+                      <div className=" ml-6">
                         {moment(user.createdAt).format("DD/MM/YYYY HH:mm")}
                       </div>
                     </div>
@@ -188,9 +194,9 @@ function UserInfor() {
               </div>
             </div>
           </div>
-          <div className="btn__user-switch">
+          <div className="flex justify-end">
             <Button
-              className="bg-green-500 flex items-center"
+              className="bg-green-500 flex items-center mx-[1rem]"
               type="primary"
               icon={<PoweroffOutlined />}
               onClick={() => {

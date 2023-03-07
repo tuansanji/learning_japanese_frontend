@@ -4,8 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../../redux/apiRequest";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { GoogleLogin } from "react-google-login";
-import axios from "axios";
+
 import { resetMsg } from "../../../redux/slice/authSlice";
 function Login() {
   const dispatch = useDispatch();
@@ -127,7 +126,7 @@ function Login() {
       </form>
 
       {isLoading && (
-        <span class="loader w-[48px] h-[48px] fixed top-[50%] left-[49%] z-[9998]"></span>
+        <span className="loader w-[48px] h-[48px] fixed top-[50%] left-[49%] z-[9998]"></span>
       )}
     </div>
   );
