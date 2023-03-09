@@ -124,22 +124,24 @@ function WayPage() {
   };
   // phần thêm thời gian cho video
   useEffect(() => {
-    if (
-      (lessonCurrent && lessonCurrent.timeLine === null) ||
-      lessonCurrent.timeLine === undefined ||
-      lessonCurrent.timeLine === 0
-    ) {
-      axios
-        .post(`${process.env.REACT_APP_BACKEND_URL}/courses/timeLine`, {
-          id: lessonCurrent._id,
-          timeLine: Number(videoDuration).toFixed(0),
-        })
-        .then((res) => {
-          return;
-        })
-        .catch((err) => {
-          return;
-        });
+    if (lessonCurrent || lessonCurrent !== null) {
+      if (
+        (lessonCurrent && lessonCurrent.timeLine === null) ||
+        lessonCurrent.timeLine === undefined ||
+        lessonCurrent.timeLine === 0
+      ) {
+        axios
+          .post(`${process.env.REACT_APP_BACKEND_URL}/courses/timeLine`, {
+            id: lessonCurrent._id,
+            timeLine: Number(videoDuration).toFixed(0),
+          })
+          .then((res) => {
+            return;
+          })
+          .catch((err) => {
+            return;
+          });
+      }
     }
   }, [videoDuration]);
 
@@ -152,7 +154,9 @@ function WayPage() {
         } 
         overflow-y-auto h-full fixed left-0 lg:w-[100%] md:w-full top-[6rem]`}
       >
-        {lessonCurrent && lessonCurrent.stage !== "AUDIO" ? (
+        {lessonCurrent &&
+        lessonCurrent !== null &&
+        lessonCurrent.stage !== "AUDIO" ? (
           <ReactPlayer
             width="100%"
             height="500px"

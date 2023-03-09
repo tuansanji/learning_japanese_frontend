@@ -60,19 +60,21 @@ function MusicPage({ lessonCurrent, currentLessonList }) {
   }, []);
   useEffect(() => {
     // Set isLoading to true when component mounts or the audio src changes
-    setLoading(true);
+    if (lessonCurrent) {
+      setLoading(true);
 
-    const audio = new Audio(lessonCurrent.audio);
+      const audio = new Audio(lessonCurrent.audio);
 
-    audio.addEventListener("loadeddata", () => {
-      // Set isLoading to false when audio has finished loading
-      setLoading(false);
-    });
+      audio.addEventListener("loadeddata", () => {
+        // Set isLoading to false when audio has finished loading
+        setLoading(false);
+      });
 
-    // Clean up event listener on component unmount
-    return () => {
-      audio.removeEventListener("loadeddata", handleLoadedData);
-    };
+      // Clean up event listener on component unmount
+      return () => {
+        audio.removeEventListener("loadeddata", handleLoadedData);
+      };
+    }
   }, [lessonCurrent]);
   //xử lí input bài hát
   const handleSeek = (e) => {
@@ -168,22 +170,23 @@ function MusicPage({ lessonCurrent, currentLessonList }) {
 
   // thêm thời gian video
   useEffect(() => {
-    if (
-      (lessonCurrent && lessonCurrent.timeLine === null) ||
-      lessonCurrent.timeLine === undefined ||
-      lessonCurrent.timeLine === 0
-    ) {
-      axios
-        .post(`${process.env.REACT_APP_BACKEND_URL}/courses/timeLine`, {
-          id: lessonCurrent._id,
-          timeLine: Number(duration).toFixed(0),
-        })
-        .then((res) => {
-          return;
-        })
-        .catch((err) => {
-          return;
-        });
+    if (lessonCurrent || lessonCurrent !== null) {
+      if (
+        lessonCurrent.timeLine === undefined ||
+        lessonCurrent.timeLine === 0
+      ) {
+        axios
+          .post(`${process.env.REACT_APP_BACKEND_URL}/courses/timeLine`, {
+            id: lessonCurrent._id,
+            timeLine: Number(duration).toFixed(0),
+          })
+          .then((res) => {
+            return;
+          })
+          .catch((err) => {
+            return;
+          });
+      }
     }
   }, [duration]);
 
@@ -228,6 +231,7 @@ function MusicPage({ lessonCurrent, currentLessonList }) {
             <button
               className={`  p-5   rounded-[50%]            
             ${
+              localStorage.getItem("index") &&
               JSON.parse(localStorage.getItem("index")) === 0
                 ? "opacity-30"
                 : `hover:bg-slate-100 active:opacity-20 cursor-pointer`
@@ -252,8 +256,9 @@ function MusicPage({ lessonCurrent, currentLessonList }) {
             <button
               className={` p-5 rounded-[50%]      
             ${
+              localStorage.getItem("index") &&
               JSON.parse(localStorage.getItem("index")) ===
-              currentLessonList.length - 1
+                currentLessonList.length - 1
                 ? "opacity-30"
                 : `hover:bg-slate-100 active:opacity-20 cursor-pointer`
             }
