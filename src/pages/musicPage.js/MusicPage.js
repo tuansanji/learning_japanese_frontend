@@ -166,6 +166,7 @@ function MusicPage({ lessonCurrent, currentLessonList }) {
 
   //load data
   const handleLoadedData = () => {
+    setLoading(false);
     setDuration(audioRef.current.duration);
     if (play) audioRef.current.play();
   };
