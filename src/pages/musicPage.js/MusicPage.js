@@ -217,7 +217,7 @@ function MusicPage({ lessonCurrent, currentLessonList }) {
           <audio
             id="audio"
             ref={audioRef}
-            src={lessonCurrent.audio}
+            src={lessonCurrent && lessonCurrent.audio}
             onLoadedData={handleLoadedData}
             onTimeUpdate={() => setCurrentTime(audioRef.current.currentTime)}
             onEnded={() => setPlay(false)}
