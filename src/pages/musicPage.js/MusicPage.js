@@ -124,7 +124,7 @@ function MusicPage({ lessonCurrent, currentLessonList }) {
           <header className="items-center pt-[6rem] flex flex-col justify-center">
             <h4 className="font-bold text-[1.6rem] ">Now playing:</h4>
             <h2 className="text-[3rem] animate-charcter">
-              {lessonCurrent.name}
+              {lessonCurrent && lessonCurrent.name}
             </h2>
           </header>
 
