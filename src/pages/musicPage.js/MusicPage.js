@@ -13,6 +13,7 @@ import {
 } from "../../redux/slice/courseSlice";
 import { useDispatch } from "react-redux";
 import Loading from "../../component/SupportTab/Loading";
+import axios from "axios";
 function MusicPage({ lessonCurrent, currentLessonList }) {
   const [play, setPlay] = useState(false);
   const cdRef = useRef(null);
@@ -24,15 +25,6 @@ function MusicPage({ lessonCurrent, currentLessonList }) {
   const [repeatOne, setRepeatOne] = useState(false);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
-  const handlePlayAndPause = () => {
-    if (play) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play();
-    }
-
-    setPlay(!play);
-  };
 
   useEffect(() => {
     const cdMove = gsap.to(cdRef.current, {
@@ -51,11 +43,9 @@ function MusicPage({ lessonCurrent, currentLessonList }) {
       cdMove.pause();
     };
   }, [play]);
-  const handleLoadedData = () => {
-    setLoading(false);
-    setDuration(audioRef.current.duration);
-    if (play) audioRef.current.play();
-  };
+
+  //thêm thời gian video
+
   useEffect(() => {
     const intervalId = setInterval(() => {
       const currentTime = audioRef.current.currentTime;
@@ -68,8 +58,23 @@ function MusicPage({ lessonCurrent, currentLessonList }) {
     }, 100);
     return () => clearInterval(intervalId);
   }, []);
+  useEffect(() => {
+    // Set isLoading to true when component mounts or the audio src changes
+    setLoading(true);
 
-  //
+    const audio = new Audio(lessonCurrent.audio);
+
+    audio.addEventListener("loadeddata", () => {
+      // Set isLoading to false when audio has finished loading
+      setLoading(false);
+    });
+
+    // Clean up event listener on component unmount
+    return () => {
+      audio.removeEventListener("loadeddata", handleLoadedData);
+    };
+  }, [lessonCurrent]);
+  //xử lí input bài hát
   const handleSeek = (e) => {
     const seekTime = Number((e.target.value / 100) * audioRef.current.duration);
     audioRef.current.currentTime = seekTime;
@@ -82,12 +87,23 @@ function MusicPage({ lessonCurrent, currentLessonList }) {
   // phát lại bài hát
   const handleRepeat = () => {
     setRepeat(!repeat);
+    setRepeatOne(false);
   };
   //phát lại một bài hát
   const handleRepeatOne = () => {
     setRepeatOne(!repeatOne);
+    setRepeat(false);
   };
+  //tạm dừng và tiếp tục
+  const handlePlayAndPause = () => {
+    if (play) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
 
+    setPlay(!play);
+  };
   //next bài hát
   const handleNextLesson = () => {
     let currentIndex = JSON.parse(localStorage.getItem("index"));
@@ -116,14 +132,70 @@ function MusicPage({ lessonCurrent, currentLessonList }) {
     }
   };
 
+  //xử lí video kết thúc( xử lí repeat )
+  const handleEndVideo = () => {
+    if (!repeatOne) {
+      if (repeat) {
+        let currentIndex = JSON.parse(localStorage.getItem("index"));
+        if (currentIndex === currentLessonList.length - 1) {
+          dispatch(getCurrentIndex(0));
+          let newIndex = JSON.parse(localStorage.getItem("index"));
+          dispatch(getLessonCurrent(currentLessonList[newIndex]));
+          audioRef.current.play();
+          setPlay(true);
+          const activeElement = document.querySelector(".content_2 .active");
+          activeElement.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }
+      } else {
+        handleNextLesson();
+      }
+    } else if (repeatOne) {
+      setProgress(0);
+      audioRef.current.currentTime = 0;
+      audioRef.current.play();
+      setPlay(true);
+    }
+  };
+
+  //load data
+  const handleLoadedData = () => {
+    setDuration(audioRef.current.duration);
+    if (play) audioRef.current.play();
+  };
+
+  // thêm thời gian video
+  useEffect(() => {
+    if (
+      (lessonCurrent && lessonCurrent.timeLine === null) ||
+      lessonCurrent.timeLine === undefined ||
+      lessonCurrent.timeLine === 0
+    ) {
+      axios
+        .post(`${process.env.REACT_APP_BACKEND_URL}/courses/timeLine`, {
+          id: lessonCurrent._id,
+          timeLine: Number(duration).toFixed(0),
+        })
+        .then((res) => {
+          return;
+        })
+        .catch((err) => {
+          return;
+        });
+    }
+  }, [duration]);
+
   return (
     <div>
       <div className="bg-[#EEF1F7] h-[80vh] w-[800px]">
         {loading && (
-          <div className="fixed z-[8888]">
+          <div className="fixed z-[8888] top-[30%] w-[100vh] ">
             <Loading />
           </div>
         )}
+
         <div className=" w-full flex flex-col justify-center items-center gap-[3rem]">
           <header className="items-center pt-[6rem] flex flex-col justify-center">
             <h4 className="font-bold text-[1.6rem] ">Now playing:</h4>
@@ -145,21 +217,27 @@ function MusicPage({ lessonCurrent, currentLessonList }) {
           </div>
 
           <div className="flex gap-10 bg-[#f0e6e6] px-[3rem] py-[1rem] rounded-2xl">
-            <div
+            <button
               onClick={handleRepeat}
               className="cursor-pointer  active:opacity-20 rounded-[50%] hover:bg-slate-100   p-5 "
             >
               <LoopIcon
                 style={{ fontSize: "4rem", color: `${repeat ? "red" : ""}` }}
               />
-            </div>
-            <div
-              className="  p-5  cursor-pointer  active:opacity-20 rounded-[50%] hover:bg-slate-100 "
+            </button>
+            <button
+              className={`  p-5   rounded-[50%]            
+            ${
+              JSON.parse(localStorage.getItem("index")) === 0
+                ? "opacity-30"
+                : `hover:bg-slate-100 active:opacity-20 cursor-pointer`
+            } 
+              `}
               onClick={handlePrevLesson}
             >
               <SkipPreviousIcon style={{ fontSize: "4rem" }} />
-            </div>
-            <div
+            </button>
+            <button
               className="p-5    cursor-pointer  active:opacity-20  hover:opacity-70 rounded-[50%] bg-[red] overflow-hidden"
               onClick={() => {
                 handlePlayAndPause();
@@ -170,41 +248,45 @@ function MusicPage({ lessonCurrent, currentLessonList }) {
               ) : (
                 <PlayArrowIcon style={{ fontSize: "4rem" }} />
               )}
-            </div>
-            <div
-              className="  p-5  cursor-pointer  active:opacity-20 rounded-[50%] hover:bg-slate-100 "
+            </button>
+            <button
+              className={` p-5 rounded-[50%]      
+            ${
+              JSON.parse(localStorage.getItem("index")) ===
+              currentLessonList.length - 1
+                ? "opacity-30"
+                : `hover:bg-slate-100 active:opacity-20 cursor-pointer`
+            }
+              `}
               onClick={handleNextLesson}
             >
               <SkipNextIcon style={{ fontSize: "4rem" }} />
-            </div>
-            <div
+            </button>
+            <button
               onClick={handleRepeatOne}
               className="p-5  cursor-pointer  active:opacity-20 rounded-[50%] hover:bg-slate-100  "
             >
               <RepeatOneIcon
                 style={{ fontSize: "4rem", color: `${repeatOne ? "red" : ""}` }}
               />
-            </div>
+            </button>
           </div>
 
           <div className="relative w-full flex justify-center">
             <span className="absolute left-[10%] text-red-600 font-bold">
               {audioRef.current &&
-                audioRef.current.currentTime != null &&
-                `
-  ${(audioRef.current.currentTime / 60).toFixed(2).split(".")[0]}:${
-                  (audioRef.current.currentTime / 60).toFixed(2).split(".")[1]
-                }
-  `}
+                audioRef.current !== null &&
+                `${Math.floor(audioRef.current.currentTime.toFixed(0) / 60)}:${
+                  audioRef.current.currentTime.toFixed(0) % 60 < 10 ? "0" : ""
+                }${audioRef.current.currentTime.toFixed(0) % 60}
+                              `}
             </span>
             <span className="absolute right-[10%] font-bold">
               {duration &&
-                `
-              ${(duration / 60).toFixed(2).split(".")[0]}:${
-                  (duration / 60).toFixed(2).split(".")[1]
-                }
-              
-              `}
+                `${Math.floor(duration.toFixed(0) / 60)}:${
+                  duration.toFixed(0) % 60 < 10 ? "0" : ""
+                }${duration.toFixed(0) % 60}
+                              `}
             </span>
 
             <input
@@ -224,7 +306,9 @@ function MusicPage({ lessonCurrent, currentLessonList }) {
             src={lessonCurrent && lessonCurrent.audio}
             onLoadedData={handleLoadedData}
             onTimeUpdate={() => setCurrentTime(audioRef.current.currentTime)}
-            onEnded={() => setPlay(false)}
+            onEnded={() => {
+              handleEndVideo();
+            }}
           ></audio>
         </div>
       </div>

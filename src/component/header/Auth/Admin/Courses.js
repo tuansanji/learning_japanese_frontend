@@ -33,10 +33,10 @@ const defaultExpandable = {
 const { TextArea } = Input;
 
 const MenuCourses = ({ currentUser }) => {
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
   const [inputSearch, setInputSearch] = useState("");
   const [searchSelector, setSearchSelector] = useState("name");
-  const dispatch = useDispatch();
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [editCourse, setEditCourse] = useState(false);
   const [listCourses, setListCourses] = useState([]);
@@ -54,6 +54,7 @@ const MenuCourses = ({ currentUser }) => {
     pathVideo: "",
     pdf: "",
     audio: "",
+    desc: "",
     author: "dũng mori",
   });
   const [editStates, setEditStates] = useState(Array(listCourses).fill(false));
@@ -68,7 +69,6 @@ const MenuCourses = ({ currentUser }) => {
     pdf: "",
     desc: "",
     audio: "",
-
     author: "dũng mori",
   });
   useEffect(() => {
@@ -195,7 +195,7 @@ const MenuCourses = ({ currentUser }) => {
         desc: course.desc,
         pdf: course.pdf,
         audio: course.audio,
-
+        timeLine: course.timeLine,
         description: (
           <Descriptions
             className="bg-red"
@@ -238,6 +238,7 @@ const MenuCourses = ({ currentUser }) => {
                       desc: course.desc,
                       pdf: course.pdf,
                       audio: course.audio,
+                      timeLine: course.timeLine,
                     });
 
                     // setEditCourse(!editCourse);
@@ -371,10 +372,10 @@ const MenuCourses = ({ currentUser }) => {
                 course.pdf || "đang cập nhật..."
               )}
             </Descriptions.Item>
-            <Descriptions.Item label="Description">
+            {/* <Descriptions.Item label="desc">
               {editStates[indexCourse] ? (
                 <TextArea
-                  placeholder={course.desc}
+                  placeholder={course.desc || "cập nhật"}
                   value={newCourseEdit.desc}
                   allowClear
                   onChange={(e) => {
@@ -387,6 +388,23 @@ const MenuCourses = ({ currentUser }) => {
               ) : (
                 course.desc || "đang cập nhật..."
               )}
+            </Descriptions.Item>{" "} */}
+            <Descriptions.Item label="Audio">
+              {editStates[indexCourse] ? (
+                <TextArea
+                  placeholder={course.audio}
+                  value={newCourseEdit.audio}
+                  allowClear
+                  onChange={(e) => {
+                    setNewCourseEdit({
+                      ...newCourseEdit,
+                      audio: e.target.value,
+                    });
+                  }}
+                />
+              ) : (
+                course.audio || "đang cập nhật..."
+              )}
             </Descriptions.Item>
             <Descriptions.Item label="Thông tin chi tiết">
               Thời gian đăng:
@@ -395,7 +413,7 @@ const MenuCourses = ({ currentUser }) => {
               Sửa đổi gần nhất:
               {moment(course.updatedAt).format("DD/MM/YYYY HH:mm")}
               <br />
-              link audi0: {course.audio}
+              timline:{course.timeLine || "đang cập nhật"}
             </Descriptions.Item>
           </Descriptions>
         ),
@@ -422,6 +440,7 @@ const MenuCourses = ({ currentUser }) => {
       pathVideo: record.video,
       pdf: record.pdf,
       audio: record.audio,
+      desc: record.desc,
       author: "dũng mori",
     });
     setSelectedRecord(expanded ? record : null);
@@ -763,6 +782,7 @@ const MenuCourses = ({ currentUser }) => {
                     level: "",
                     pathVideo: "",
                     pdf: "",
+                    desc: "",
                     author: "dũng mori",
                   });
                 }}

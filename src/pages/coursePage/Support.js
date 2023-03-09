@@ -122,7 +122,13 @@ function Support({ listCurrent, stageCourse }) {
                           </h3>
                           <p className="flex items-center gap-2 text-[1.1rem] mb-0">
                             <PlayCircleFilledIcon />
-                            <span>{lesson.timeLine || "2:50"}</span>
+                            <span>
+                              {lesson.timeLine &&
+                                `${Math.floor(lesson.timeLine / 60)}:${
+                                  lesson.timeLine % 60 < 10 ? "0" : ""
+                                }${lesson.timeLine % 60}
+                              `}
+                            </span>
                           </p>
                         </div>
                         <div

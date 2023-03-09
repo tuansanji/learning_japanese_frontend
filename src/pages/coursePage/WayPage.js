@@ -14,6 +14,8 @@ import {
 } from "../../redux/slice/courseSlice";
 import SyncAltIcon from "@material-ui/icons/SyncAlt";
 import { createCanvas, loadImage } from "canvas";
+import { duration } from "@material-ui/core";
+import axios from "axios";
 function WayPage() {
   const canvasRef = useRef(null);
   const params = useParams();
@@ -64,7 +66,7 @@ function WayPage() {
       setcurrentLessonList(lessonList);
     }
   }, [stageCourseList, lessonCurrent]);
-
+  //ẩn footer và back to top
   useEffect(() => {
     const footer = document.querySelector("#footer");
     const btnBackToTop = document.querySelector("#btn_BackToTop");
@@ -86,9 +88,10 @@ function WayPage() {
       activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   };
+
+  //  xác đình đã học xong bái hay chưa và thêm nó vào localStorage. sau này sẽ thêm nó vào db của user
   const handleProgress = (state) => {
     const playedSeconds = state.playedSeconds;
-
     if (isVideoReady && (playedSeconds / videoDuration) * 100 >= 80) {
       setIsVideoFinished(true);
       let arr = JSON.parse(localStorage.getItem("arrVideoFinished")) || [];
@@ -106,6 +109,8 @@ function WayPage() {
   const handleDuration = (duration) => {
     setVideoDuration(duration);
   };
+
+  //next bài học
   const handleNextLesson = () => {
     let currentIndex = JSON.parse(localStorage.getItem("index"));
 
@@ -117,6 +122,26 @@ function WayPage() {
       activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   };
+  // phần thêm thời gian cho video
+  useEffect(() => {
+    if (
+      (lessonCurrent && lessonCurrent.timeLine === null) ||
+      lessonCurrent.timeLine === undefined ||
+      lessonCurrent.timeLine === 0
+    ) {
+      axios
+        .post(`${process.env.REACT_APP_BACKEND_URL}/courses/timeLine`, {
+          id: lessonCurrent._id,
+          timeLine: Number(videoDuration).toFixed(0),
+        })
+        .then((res) => {
+          return;
+        })
+        .catch((err) => {
+          return;
+        });
+    }
+  }, [videoDuration]);
 
   return (
     <div className="course-page flex w-full md:flex-col md:items-center  ">
@@ -127,7 +152,7 @@ function WayPage() {
         } 
         overflow-y-auto h-full fixed left-0 lg:w-[100%] md:w-full top-[6rem]`}
       >
-        {lessonCurrent && lessonCurrent.stage !== "STAGE" ? (
+        {lessonCurrent && lessonCurrent.stage !== "AUDIO" ? (
           <ReactPlayer
             width="100%"
             height="500px"
