@@ -6,14 +6,16 @@ import ReactPlayer from "react-player";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import Loading from "../../component/SupportTab/Loading";
+import MusicPage from "../musicPage.js/MusicPage";
 import ScrollableTabsButtonAuto from "./Suport2";
 import {
   getCurrentIndex,
   getLessonCurrent,
 } from "../../redux/slice/courseSlice";
 import SyncAltIcon from "@material-ui/icons/SyncAlt";
-
+import { createCanvas, loadImage } from "canvas";
 function WayPage() {
+  const canvasRef = useRef(null);
   const params = useParams();
   const dispatch = useDispatch();
 
@@ -118,15 +120,14 @@ function WayPage() {
 
   return (
     <div className="course-page flex w-full md:flex-col md:items-center  ">
+      {loading && <Loading />}
       <div
         className={`course-page__video flex flex-col items-center  ${
           openMenu ? "laptop:w-[75%] " : "w-full"
         } 
         overflow-y-auto h-full fixed left-0 lg:w-[100%] md:w-full top-[6rem]`}
       >
-        {loading ? (
-          <Loading />
-        ) : (
+        {lessonCurrent && lessonCurrent.stage !== "STAGE" ? (
           <ReactPlayer
             width="100%"
             height="500px"
@@ -142,8 +143,12 @@ function WayPage() {
             controls={true}
             ref={video}
           />
+        ) : (
+          <MusicPage
+            lessonCurrent={lessonCurrent}
+            currentLessonList={currentLessonList}
+          />
         )}
-
         <div className="my-10">
           <p className="animate-charcter text-[3rem] ">
             {lessonCurrent && `${lessonCurrent.name} - ${lessonCurrent.stage}`}

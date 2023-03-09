@@ -53,6 +53,7 @@ const MenuCourses = ({ currentUser }) => {
     level: "",
     pathVideo: "",
     pdf: "",
+    audio: "",
     author: "dũng mori",
   });
   const [editStates, setEditStates] = useState(Array(listCourses).fill(false));
@@ -66,6 +67,8 @@ const MenuCourses = ({ currentUser }) => {
     pathVideo: "",
     pdf: "",
     desc: "",
+    audio: "",
+
     author: "dũng mori",
   });
   useEffect(() => {
@@ -191,6 +194,7 @@ const MenuCourses = ({ currentUser }) => {
         level: course.level,
         desc: course.desc,
         pdf: course.pdf,
+        audio: course.audio,
 
         description: (
           <Descriptions
@@ -233,6 +237,7 @@ const MenuCourses = ({ currentUser }) => {
                       level: course.level,
                       desc: course.desc,
                       pdf: course.pdf,
+                      audio: course.audio,
                     });
 
                     // setEditCourse(!editCourse);
@@ -390,6 +395,7 @@ const MenuCourses = ({ currentUser }) => {
               Sửa đổi gần nhất:
               {moment(course.updatedAt).format("DD/MM/YYYY HH:mm")}
               <br />
+              link audi0: {course.audio}
             </Descriptions.Item>
           </Descriptions>
         ),
@@ -415,6 +421,7 @@ const MenuCourses = ({ currentUser }) => {
       level: record.level,
       pathVideo: record.video,
       pdf: record.pdf,
+      audio: record.audio,
       author: "dũng mori",
     });
     setSelectedRecord(expanded ? record : null);
@@ -706,6 +713,27 @@ const MenuCourses = ({ currentUser }) => {
                 id="pdf"
                 type="text"
                 placeholder="Điền trình độ..."
+                className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
+              />
+            </div>
+            <div className=" flex gap-5 items-center w-full">
+              <label
+                className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
+                htmlFor="pdf"
+              >
+                Audio :
+              </label>
+              <input
+                value={postNewCourse.audio}
+                onChange={(e) => {
+                  setPostNewCourse({
+                    ...postNewCourse,
+                    audio: e.target.value,
+                  });
+                }}
+                id="audio"
+                type="text"
+                placeholder="Điền link mp3..."
                 className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
               />
             </div>

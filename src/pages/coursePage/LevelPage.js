@@ -24,11 +24,11 @@ function LevelPage() {
 
   return (
     <div className=" waypages  bg-no-repeat bg-cover">
-      <div className="minhtuan w-full h-[600px] bg-[rgb(13,16,24)] flex flex-col justify-center items-center">
-        <h1>
+      <div className="trial_study w-full h-[600px] bg-[rgb(13,16,24)] flex flex-col justify-center items-center ">
+        <h1 className="text-center max-w-[1000px] my-0 mx-auto text-[6.4rem] font-bold leading-[1.2] text-[#fff]">
           Cách dễ nhất để học <strong>TIẾNG NHẬT</strong> cho người mới bắt đầu!
         </h1>
-        <p>
+        <p className="text-center max-w-[780px] mt-[32px] mx-auto text-[#7f8e9e] text-[2rem] ">
           Với lộ trình được <strong>cá nhân hóa</strong> và hệ thống bài giảng
           lên tới <strong>hàng nghìn </strong>
           video/bài test, khóa học cam kết cung cấp đầy đủ kiến thức theo từng
@@ -58,7 +58,7 @@ function LevelPage() {
       {isloading ? (
         <Loading />
       ) : (
-        <div className=" flex flex-wrap  py-[6rem] mx-auto hongay ">
+        <div className=" flex flex-wrap  py-[6rem] mx-auto menu_way ">
           {wayList &&
             wayList.map((way, index) => (
               <section
