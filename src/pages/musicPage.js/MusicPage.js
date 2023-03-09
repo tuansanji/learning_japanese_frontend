@@ -7,6 +7,7 @@ import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import RepeatOneIcon from "@material-ui/icons/RepeatOne";
 import gsap from "gsap";
 import music from "../../assets/music/1234.mp3";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import {
   getCurrentIndex,
   getLessonCurrent,
@@ -24,6 +25,7 @@ function MusicPage({ lessonCurrent, currentLessonList }) {
   const [repeat, setRepeat] = useState(false);
   const [repeatOne, setRepeatOne] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [menuMusic, setMenuMusic] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -192,34 +194,55 @@ function MusicPage({ lessonCurrent, currentLessonList }) {
 
   return (
     <div>
-      <div className="bg-[#EEF1F7] h-[80vh] w-[800px]">
+      <div
+        className={`bg-[#EEF1F7] md:w-full ${
+          menuMusic ? "h-[20vh] fixed  w-[73%] left-0" : "h-[80vh] w-[800px] "
+        }`}
+      >
         {loading && (
           <div className="fixed z-[8888] top-[30%] w-[100vh] ">
             <Loading />
           </div>
         )}
 
-        <div className=" w-full flex flex-col justify-center items-center gap-[3rem]">
-          <header className="items-center pt-[6rem] flex flex-col justify-center">
-            <h4 className="font-bold text-[1.6rem] ">Now playing:</h4>
-            <h2 className="text-[3rem] animate-charcter">
-              {lessonCurrent && lessonCurrent.name}
-            </h2>
-          </header>
-
-          <div
-            ref={cdRef}
-            id="cdThumb"
-            className="w-[20rem] h-[20rem] rounded-[50%] overflow-hidden"
+        <div
+          className={` w-full flex flex-col justify-center items-center relative ${
+            menuMusic ? "gap-[0.1rem] " : "gap-[3rem]"
+          }`}
+        >
+          <span
+            className="absolute top-[-1rem] right-[1rem] cursor-pointer "
+            onClick={() => {
+              setMenuMusic(!menuMusic);
+            }}
           >
-            <img
-              className=" "
-              src="https://raonhanh365.vn/pictures/detail/2022/08/16/1693332637108959744.jpg"
-              alt=""
-            />
+            <ArrowDropDownIcon style={{ fontSize: "50px" }} />
+          </span>
+
+          <div className={`${menuMusic ? "hidden" : "flex"}  flex-col gap-7 `}>
+            <header className="items-center pt-[6rem] flex flex-col justify-center">
+              <h4 className="font-bold text-[1.6rem] ">Now playing:</h4>
+              <h2 className="text-[3rem] animate-charcter">
+                {lessonCurrent && lessonCurrent.name}
+              </h2>
+            </header>
+
+            <div
+              ref={cdRef}
+              id="cdThumb"
+              className="w-[20rem] h-[20rem] rounded-[50%] overflow-hidden"
+            >
+              <img
+                className=" "
+                src="https://raonhanh365.vn/pictures/detail/2022/08/16/1693332637108959744.jpg"
+                alt=""
+              />
+            </div>
           </div>
 
-          <div className="flex gap-10 bg-[#f0e6e6] px-[3rem] py-[1rem] rounded-2xl">
+          <div
+            className={`flex flex-row gap-10 sm:gap-6 bg-[#f0e6e6] px-[3rem] py-[1rem] rounded-2xl`}
+          >
             <button
               onClick={handleRepeat}
               className="cursor-pointer  active:opacity-20 rounded-[50%] hover:bg-slate-100   p-5 "

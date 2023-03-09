@@ -45,14 +45,8 @@ function Login() {
 
   return (
     <div className="flex items-center justify-center mt-[4rem] mx-[2rem] rounded-2xl overflow-hidden">
-      {/* <GoogleLogin
-        clientId="YOUR_CLIENT_ID"
-        buttonText="Đăng nhập bằng Gmail"
-        onSuccess={responseGoogle}
-        onFailure={responseGoogle}
-        cookiePolicy={"single_host_origin"}
-      /> */}
       {/* <a href="http://localhost:5002/auth/google"> google</a> */}
+
       <form
         onSubmit={formik.handleSubmit}
         autoComplete="off"
