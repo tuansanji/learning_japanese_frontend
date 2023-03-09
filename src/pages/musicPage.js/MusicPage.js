@@ -119,7 +119,11 @@ function MusicPage({ lessonCurrent, currentLessonList }) {
   return (
     <div>
       <div className="bg-[#EEF1F7] h-[80vh] w-[800px]">
-        <div className="fixed z-[8888] inset-0">{loading && <Loading />}</div>
+        {loading && (
+          <div className="fixed z-[8888]">
+            <Loading />
+          </div>
+        )}
         <div className=" w-full flex flex-col justify-center items-center gap-[3rem]">
           <header className="items-center pt-[6rem] flex flex-col justify-center">
             <h4 className="font-bold text-[1.6rem] ">Now playing:</h4>
