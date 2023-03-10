@@ -24,11 +24,15 @@ export const createAxios = (user, dispatch, StateSuccess) => {
 
       if (decodedToken.exp < date.getTime() / 1000) {
         const data = await refreshToken();
+
         const refreshUser = {
           ...user,
           accessToken: data.accessToken,
         };
-        dispatch(StateSuccess(refreshUser));
+
+        if (StateSuccess) {
+          dispatch(StateSuccess(refreshUser));
+        }
         config.headers["token"] = "Bearer " + data.accessToken;
       }
       return config;

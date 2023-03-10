@@ -22,7 +22,7 @@ function InforWay() {
         "Trang bị kỹ năng dịch câu cơ bản",
         "Hướng dẫn chuẩn bị bài, học và ôn bài hiệu quả.",
       ],
-      colorBg: "[#E8FFD4]",
+      colorBg: "bg-[#E8FFD4]",
       colorTitle: "text-[#50AB44]",
     },
     {
@@ -42,7 +42,7 @@ function InforWay() {
         "Test từ vựng liên tục theo lộ trình học",
         "Luyện kỹ năng đặt câu, đọc, dịch câu ngắn theo ngữ pháp.",
       ],
-      colorBg: "[#FFF7DA]",
+      colorBg: "bg-[#FFF7DA]",
       colorTitle: "text-[#FB7645]",
     },
     {
@@ -63,7 +63,7 @@ function InforWay() {
         "Luyện đề trực tuyến trên web/app Dũng mori, xem ngay kết quả, xem lại lịch sử thi và bảng xếp hạng thành tích",
         "ủng cố lại kiến thức ở chặng 2",
       ],
-      colorBg: "[#C7E1FF]",
+      colorBg: "bg-[#C7E1FF]",
       colorTitle: "text-[#0E65E5]",
     },
     {
@@ -79,24 +79,28 @@ function InforWay() {
         "Làm đề, thi thử liên tục",
         "Giải đáp thắc mắc 24/7",
       ],
-      colorBg: "[#E5D9FF]",
+      colorBg: "bg-[#E5D9FF]",
       colorTitle: "text-[#9683E1]",
     },
   ];
 
   return (
-    <div className="list_way bg-center bg-cover bg-[#ffff] rounded-[3rem] w-[90%] mx-auto flex items-center justify-center flex-col py-[6rem] relative">
+    <div className="list_way bg-center bg-cover bg-[#ffff] rounded-[3rem] w-[90%] mx-auto flex items-center justify-center flex-col py-[6rem] md:py-[2rem] relative">
       <img
         src={img1}
-        className=" absolute right-0 bottom-[-6rem] w-[20rem]"
+        className=" absolute right-0 bottom-[-6rem] ssm:bottom-[-3rem] w-[20rem] md:w-[10rem]"
         alt=""
       />
       <img
         src={img2}
-        className=" absolute right-0 top-[-7rem] w-[15rem]"
+        className=" absolute right-0 top-[-7rem] ssm:top-[-3rem]  w-[15rem]  md:w-[10rem] ssm:w-[5rem]"
         alt=""
       />
-      <img src={img3} className=" absolute top-[50%] left-[-7rem]" alt="" />
+      <img
+        src={img3}
+        className=" absolute top-[50%] left-[-7rem]   md:w-[10rem] ssm:left-[0] z-50 ssm:w-[5rem]"
+        alt=""
+      />
       {n1Way &&
         n1Way.map((way, index) => {
           return (

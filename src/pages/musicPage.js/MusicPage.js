@@ -196,7 +196,7 @@ function MusicPage({ lessonCurrent, currentLessonList }) {
   return (
     <div>
       <div
-        className={`bg-[#EEF1F7] md:w-full ${
+        className={`bg-[#EEF1F7] md:w-full md:h-[63vh]  ${
           menuMusic ? "h-[20vh] fixed  w-[73%] left-0" : "h-[80vh] w-[800px] "
         }`}
       >
@@ -207,12 +207,12 @@ function MusicPage({ lessonCurrent, currentLessonList }) {
         )}
 
         <div
-          className={` w-full flex flex-col justify-center items-center relative ${
+          className={` w-full md:w-[90%] mx-auto flex flex-col justify-center items-center relative ${
             menuMusic ? "gap-[0.1rem] " : "gap-[3rem]"
           }`}
         >
           <span
-            className="absolute top-[-1rem] right-[1rem] cursor-pointer "
+            className="absolute top-[-1rem] right-[3rem] cursor-pointer "
             onClick={() => {
               setMenuMusic(!menuMusic);
             }}
@@ -221,7 +221,7 @@ function MusicPage({ lessonCurrent, currentLessonList }) {
           </span>
 
           <div className={`${menuMusic ? "hidden" : "flex"}  flex-col gap-7 `}>
-            <header className="items-center pt-[6rem] flex flex-col justify-center">
+            <header className="items-center pt-[6rem] md:pt-[2rem] flex flex-col justify-center">
               <h4 className="font-bold text-[1.6rem] ">Now playing:</h4>
               <h2 className="text-[3rem] animate-charcter">
                 {lessonCurrent && lessonCurrent.name}

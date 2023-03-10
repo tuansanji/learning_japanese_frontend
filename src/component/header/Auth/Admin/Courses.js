@@ -27,6 +27,9 @@ import {
   toastSuccess,
 } from "../../../../redux/slice/toastSlice";
 import Loading from "../../../SupportTab/Loading";
+import { createAxios } from "../../../../redux/createInstance";
+import { getAllCourseSuccess } from "../../../../redux/slice/courseSlice";
+
 const defaultExpandable = {
   expandedRowRender: (record) => <div>{record.description}</div>,
 };
@@ -71,8 +74,10 @@ const MenuCourses = ({ currentUser }) => {
     audio: "",
     author: "dũng mori",
   });
+  let axiosJWT = createAxios(currentUser, dispatch);
+
   useEffect(() => {
-    getAllCourses(currentUser.accessToken)
+    getAllCourses(currentUser.accessToken, axiosJWT)
       .then((courses) => {
         setListCourses(courses);
         setIsLoading(false);
@@ -144,7 +149,7 @@ const MenuCourses = ({ currentUser }) => {
           type="primary"
           onClick={() => {
             if (window.confirm("Bạn có chắc chắn muốn xóa? ")) {
-              deleteCourse(currentUser.accessToken, record.id)
+              deleteCourse(currentUser.accessToken, record.id, axiosJWT)
                 .then((res) => {
                   dispatch(toastSuccess(res.data));
                   setRerender(record.id);
@@ -164,7 +169,7 @@ const MenuCourses = ({ currentUser }) => {
 
   //handle edit course
   const handleSaveCourse = () => {
-    editCourseRequest(currentUser.accessToken, newCourseEdit)
+    editCourseRequest(currentUser.accessToken, newCourseEdit, axiosJWT)
       .then((res) => {
         dispatch(toastSuccess(res.data));
         setRerender(newCourseEdit.id);
@@ -477,7 +482,11 @@ const MenuCourses = ({ currentUser }) => {
               type="primary"
               onClick={() => {
                 if (window.confirm(`Bạn có chắc chắn muốn xóa ?`)) {
-                  deleteManyCourse(currentUser.accessToken, selectedRows)
+                  deleteManyCourse(
+                    currentUser.accessToken,
+                    selectedRows,
+                    axiosJWT
+                  )
                     .then((res) => {
                       dispatch(toastSuccess(res.data));
                     })
@@ -523,7 +532,7 @@ const MenuCourses = ({ currentUser }) => {
       postNewCourse.way !== "" &&
       postNewCourse.level !== ""
     ) {
-      postCourse(currentUser.accessToken, postNewCourse)
+      postCourse(currentUser.accessToken, postNewCourse, axiosJWT)
         .then((res) => {
           setMsg(res.data);
           dispatch(toastSuccess(res.data));

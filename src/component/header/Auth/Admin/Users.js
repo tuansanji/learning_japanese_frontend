@@ -306,7 +306,11 @@ const MenuUser = ({ currentUser }) => {
               type="primary"
               onClick={() => {
                 if (window.confirm(`Bạn có chắc chắn muốn xóa ?`)) {
-                  deleteManyUser(currentUser.accessToken, selectedRows);
+                  deleteManyUser(
+                    currentUser.accessToken,
+                    selectedRows,
+                    axiosJWT
+                  );
                   setUpdatedUser(selectedRows);
                   setSelectedRowKeys([]);
                 } else {
@@ -357,12 +361,12 @@ const MenuUser = ({ currentUser }) => {
   // Phần xử lí cập nhật chỉnh sử user
   const handleEditUser = () => {
     // cận thận vì khi nháy nút edit thì tất cả các thẻ sẽ chuyển sang chế độ isedit bằng true nên. có thể fix bằng cách chỉnh lại logic của onClick nút edit. Chúng ta sẽ ẩn hoặc mở nút Save của chính thẻ đó
-    editUserRequest(currentUser.accessToken, newUserEdit);
+    editUserRequest(currentUser.accessToken, newUserEdit, axiosJWT);
     setUpdatedUser(newUserEdit);
   };
   //phần xử lí xóa user
   const handleDeleteUser = (id) => {
-    deleteUser(currentUser.accessToken, id);
+    deleteUser(currentUser.accessToken, id, axiosJWT);
     setUpdatedUser(id);
   };
   const tableProps = {

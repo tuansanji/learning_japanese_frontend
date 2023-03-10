@@ -71,6 +71,9 @@ export const courseSlice = createSlice({
     getCurrentStageList: (state, action) => {
       state.listStageCurrent = action.payload;
     },
+    getAllCourseSuccess: (state, action) => {
+      state.listStageCurrent.error = false;
+    },
   },
 });
 
@@ -84,4 +87,5 @@ export const {
   getCurrentIndex,
   getCurrentStage,
   getCurrentStageList,
+  getAllCourseSuccess,
 } = courseSlice.actions;

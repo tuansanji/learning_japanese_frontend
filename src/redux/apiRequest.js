@@ -52,6 +52,7 @@ export const registerUser = async (user, dispatch, navigate) => {
 };
 export const getAllUsers = async (accessToken, dispatch, axiosJWT) => {
   dispatch(getAllUsersStart());
+
   try {
     const res = await axiosJWT.get(
       `${process.env.REACT_APP_BACKEND_URL}/user/all`,
@@ -60,16 +61,16 @@ export const getAllUsers = async (accessToken, dispatch, axiosJWT) => {
       }
     );
 
-    dispatch(getAllUsersSuccess());
+    // dispatch(getAllUsersSuccess());
     return res.data;
   } catch (error) {
     dispatch(getAllUsersError());
   }
 };
 
-export const deleteUser = async (accessToken, id, dispatch, navigate) => {
+export const deleteUser = async (accessToken, id, axiosJWT) => {
   try {
-    const res = await axios.post(
+    const res = await axiosJWT.post(
       `${process.env.REACT_APP_BACKEND_URL}/user/delete`,
 
       { id: id },
@@ -85,9 +86,9 @@ export const deleteUser = async (accessToken, id, dispatch, navigate) => {
   }
 };
 
-export const deleteManyUser = async (accessToken, arr) => {
+export const deleteManyUser = async (accessToken, arr, axiosJWT) => {
   try {
-    const res = await axios.post(
+    const res = await axiosJWT.post(
       `${process.env.REACT_APP_BACKEND_URL}/user/delete/many`,
 
       { arr: arr },
@@ -103,9 +104,9 @@ export const deleteManyUser = async (accessToken, arr) => {
   }
 };
 
-export const editUserRequest = async (accessToken, user) => {
+export const editUserRequest = async (accessToken, user, axiosJWT) => {
   try {
-    const res = await axios.patch(
+    const res = await axiosJWT.patch(
       `${process.env.REACT_APP_BACKEND_URL}/user/edit`,
       {
         id: user.id,
@@ -147,8 +148,8 @@ export const logOutUser = async (
   }
 };
 
-export const postCourse = async (accessToken, course) => {
-  const res = await axios.post(
+export const postCourse = async (accessToken, course, axiosJWT) => {
+  const res = await axiosJWT.post(
     `${process.env.REACT_APP_BACKEND_URL}/courses`,
 
     course,
@@ -160,8 +161,8 @@ export const postCourse = async (accessToken, course) => {
   return res;
 };
 
-export const deleteCourse = async (accessToken, id) => {
-  const res = await axios.post(
+export const deleteCourse = async (accessToken, id, axiosJWT) => {
+  const res = await axiosJWT.post(
     `${process.env.REACT_APP_BACKEND_URL}/courses/delete`,
     { id },
     {
@@ -171,8 +172,8 @@ export const deleteCourse = async (accessToken, id) => {
   return res;
 };
 
-export const deleteManyCourse = async (accessToken, arr) => {
-  const res = await axios.post(
+export const deleteManyCourse = async (accessToken, arr, axiosJWT) => {
+  const res = await axiosJWT.post(
     `${process.env.REACT_APP_BACKEND_URL}/courses/delete/many`,
     { arr: arr },
     {
@@ -182,8 +183,8 @@ export const deleteManyCourse = async (accessToken, arr) => {
   return res;
 };
 
-export const editCourseRequest = async (accessToken, course) => {
-  const res = await axios.patch(
+export const editCourseRequest = async (accessToken, course, axiosJWT) => {
+  const res = await axiosJWT.patch(
     `${process.env.REACT_APP_BACKEND_URL}/courses/edit`,
     course,
     {
@@ -193,21 +194,19 @@ export const editCourseRequest = async (accessToken, course) => {
   return res;
 };
 
-export const getAllCourses = async (accessToken) => {
+export const getAllCourses = async (accessToken, axiosJWT) => {
   try {
-    const courses = await axios.get(
+    const courses = await axiosJWT.get(
       `${process.env.REACT_APP_BACKEND_URL}/courses`,
       {
         headers: { token: `Bearer ${accessToken}` },
       }
     );
-
     return courses.data;
   } catch (error) {
     console.log(error);
   }
 };
-
 export const getCourse = async (dispatch, level) => {
   dispatch(getCourseStart({ level: level }));
   try {
