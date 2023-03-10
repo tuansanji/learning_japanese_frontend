@@ -20,6 +20,8 @@ import {
 import Loading from "../../../SupportTab/Loading";
 
 import { Input } from "antd";
+import { createAxios } from "../../../../redux/createInstance";
+import { getAllUsersSuccess } from "../../../../redux/slice/userSlice";
 const defaultExpandable = {
   expandedRowRender: (record) => <div>{record.description}</div>,
 };
@@ -57,9 +59,10 @@ const MenuUser = ({ currentUser }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const user = useSelector((state) => state.auth.login?.currentUser);
   const dispatch = useDispatch();
+  let axiosJWT = createAxios(user, dispatch, getAllUsersSuccess);
 
   useEffect(() => {
-    getAllUsers(user.accessToken, dispatch).then((users) => {
+    getAllUsers(user?.accessToken, dispatch, axiosJWT).then((users) => {
       setIsLoading(false);
       setListUsers(users);
     });

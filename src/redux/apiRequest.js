@@ -50,10 +50,10 @@ export const registerUser = async (user, dispatch, navigate) => {
     dispatch(registerError(error.response.data));
   }
 };
-export const getAllUsers = async (accessToken, dispatch) => {
+export const getAllUsers = async (accessToken, dispatch, axiosJWT) => {
   dispatch(getAllUsersStart());
   try {
-    const res = await axios.get(
+    const res = await axiosJWT.get(
       `${process.env.REACT_APP_BACKEND_URL}/user/all`,
       {
         headers: { token: `Bearer ${accessToken}` },
