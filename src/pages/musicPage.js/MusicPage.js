@@ -196,8 +196,10 @@ function MusicPage({ lessonCurrent, currentLessonList }) {
   return (
     <div>
       <div
-        className={`bg-[#EEF1F7] md:w-full md:h-[63vh]  ${
-          menuMusic ? "h-[20vh] fixed  w-[73%] left-0" : "h-[80vh] w-[800px] "
+        className={`bg-[#EEF1F7] md:w-full  ${
+          menuMusic
+            ? "h-[20vh] fixed md:h-[14rem]  w-[73%] left-0"
+            : "h-[80vh]  md:h-[63vh] w-[800px] "
         }`}
       >
         {loading && (
