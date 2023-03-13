@@ -13,9 +13,11 @@ import {
   getLessonCurrent,
 } from "../../redux/slice/courseSlice";
 import SyncAltIcon from "@material-ui/icons/SyncAlt";
-import { createCanvas, loadImage } from "canvas";
-import { duration } from "@material-ui/core";
+
 import axios from "axios";
+import baimot from "../../assets/pdf/baimot.pdf";
+import PDFViewer from "./CanvasPdf";
+
 function WayPage() {
   const canvasRef = useRef(null);
   const params = useParams();
@@ -185,12 +187,13 @@ function WayPage() {
         </div>
 
         <div className="w-full ">
-          <embed
-            src={"http://118.27.25.228/Ljapanese/PDF/N1/C1/TV/DCH/1.pdf"}
+          {/* <embed
+            src={"http://118.27.25.228/Ljapanese/pdfjs/N1/C1/TV/DCH/1.pdf"}
             width="100%"
             height="1000"
             type="application/pdf"
-          />
+          /> */}
+          <PDFViewer url={baimot} />
         </div>
       </div>
 

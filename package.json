@@ -18,6 +18,7 @@
     "formik": "^2.2.9",
     "google-auth-library": "^8.7.0",
     "gsap": "^3.11.4",
+    "html-to-image": "^1.11.11",
     "js-cookie": "^3.0.1",
     "json-server": "^0.17.1",
     "jwt-decode": "^3.1.2",
