@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+
 import { Button } from "antd";
 
 import MenuUser from "./Users";
 import MenuCourses from "./Courses";
 import { toastErr, toastSuccess } from "../../../../redux/slice/toastSlice";
 import { changeStatus } from "../../../../redux/slice/adminSlice";
+import axios from "axios";
 
 function ADMIN() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const user = useSelector((state) => {
     return state.auth.login.currentUser;
   });

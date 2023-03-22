@@ -7,14 +7,23 @@
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
-      content="Web site created using create-react-app"
+      content="Ngoài các Khóa tiếng Nhật tổng quát cơ bản, JLPT.SITE còn cung cấp nhiều lựa chọn khác như: khóa học tiếng Nhật cao cấp, khóa học giao tiếp tiếng Nhật, khóa luyện thi chứng chỉ năng lực Nhật ngữ JLPT, khóa học theo yêu cầu thiết kế riêng. Khóa học tiếng Nhật tổng quát cơ bản giúp học viên rèn luyện tổng hợp 4 kỹ năng Nghe – Nói – Đọc – Viết. Trong đó Kỹ năng giao tiếp được đặc biệt chú trọng."
     />
 
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-
+    <!-- <script>
+      document.addEventListener("contextmenu", (event) =>
+        event.preventDefault()
+      );
+    </script> -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/html-react-parser@latest/dist/html-react-parser.min.js"></script>
+    <script>
+      window.HTMLReactParser(/* string */);
+    </script>
     <link rel="icon" type="image/png" href="%PUBLIC_URL%/favi.png" />
 
     <title>Learn Japanese</title>
@@ -22,5 +31,36 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <!-- Messenger Plugin chat Code -->
+    <div id="fb-root"></div>
+
+    <!-- Your Plugin chat code -->
+    <!-- <div id="fb-customer-chat" class="fb-customerchat"></div>
+
+    <script>
+      var chatbox = document.getElementById("fb-customer-chat");
+      chatbox.setAttribute("page_id", "118002461221056");
+      chatbox.setAttribute("attribution", "biz_inbox");
+    </script> -->
+
+    <!-- Your SDK code -->
+    <!-- <script>
+      window.fbAsyncInit = function () {
+        FB.init({
+          xfbml: true,
+          version: "v16.0",
+        });
+      };
+
+      (function (d, s, id) {
+        var js,
+          fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      })(document, "script", "facebook-jssdk");
+    </script> -->
   </body>
 </html>

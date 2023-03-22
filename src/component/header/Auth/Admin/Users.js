@@ -1,7 +1,9 @@
 import moment from "moment";
+import { io } from "socket.io-client";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Form,
-  Space,
   Table,
   Button,
   Descriptions,
@@ -9,8 +11,7 @@ import {
   Popconfirm,
   Select,
 } from "antd";
-import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { Input } from "antd";
 import {
   deleteManyUser,
   deleteUser,
@@ -19,32 +20,18 @@ import {
 } from "../../../../redux/apiRequest";
 import Loading from "../../../SupportTab/Loading";
 
-import { Input } from "antd";
 import { createAxios } from "../../../../redux/createInstance";
 import { getAllUsersSuccess } from "../../../../redux/slice/userSlice";
+// import socket from "../../../content/Container";
 const defaultExpandable = {
   expandedRowRender: (record) => <div>{record.description}</div>,
 };
-
+// const socket = io(process.env.REACT_APP_BACKEND_URL);
 const MenuUser = ({ currentUser }) => {
+  const [onlineUsers, setOnlineUsers] = useState(0);
   const [searchSelector, setSearchSelector] = useState("username");
   const [inputSearch, setInputSearch] = useState("");
   const [editUser, setEditUser] = useState(false);
-  const [bordered, setBordered] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [size, setSize] = useState("large");
-  const [expandable, setExpandable] = useState(defaultExpandable);
-  const [showTitle, setShowTitle] = useState(false);
-  const [showHeader, setShowHeader] = useState(true);
-  const [showfooter, setShowFooter] = useState(true);
-  const [rowSelection, setRowSelection] = useState({});
-  const [hasData, setHasData] = useState(true);
-  const [tableLayout, setTableLayout] = useState();
-  const [top, setTop] = useState("none");
-  const [bottom, setBottom] = useState("bottomRight");
-  const [ellipsis, setEllipsis] = useState(false);
-  const [yScroll, setYScroll] = useState(false);
-  const [xScroll, setXScroll] = useState();
   const [listUsers, setListUsers] = useState([]);
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -60,6 +47,16 @@ const MenuUser = ({ currentUser }) => {
   const user = useSelector((state) => state.auth.login?.currentUser);
   const dispatch = useDispatch();
   let axiosJWT = createAxios(user, dispatch, getAllUsersSuccess);
+  // lấy dữ liệu số người đang online từ server
+  // useEffect(() => {
+  //   socket.on("userCount", (count) => {
+  //     setOnlineUsers(count);
+  //   });
+
+  //   return () => {
+  //     socket.emit("disconnect", user._id);
+  //   };
+  // }, []);
 
   useEffect(() => {
     getAllUsers(user?.accessToken, dispatch, axiosJWT).then((users) => {
@@ -166,7 +163,7 @@ const MenuUser = ({ currentUser }) => {
             className="bg-red"
             bordered
             title="Chi tiết tài khoản"
-            size={size}
+            size="large"
             extra={
               <div className="flex gap-[2rem]">
                 {editUser && (
@@ -327,15 +324,9 @@ const MenuUser = ({ currentUser }) => {
     );
   };
   const scroll = {};
-  if (yScroll) {
-    scroll.y = 240;
-  }
-  if (xScroll) {
-    scroll.x = "100vw";
-  }
+
   const tableColumns = columns.map((item) => ({
     ...item,
-    ellipsis,
   }));
 
   // Phần xử lí khi người dùng nháy vào phần mở rộng
@@ -370,25 +361,19 @@ const MenuUser = ({ currentUser }) => {
     setUpdatedUser(id);
   };
   const tableProps = {
-    bordered,
-    loading,
-    size,
     expandable: {
       ...defaultExpandable,
       onExpand: handleExpand,
       expandRowByClick: false,
     },
 
-    showHeader,
-    footer: showfooter ? defaultFooter : undefined,
+    footer: defaultFooter,
     rowSelection: {
       type: "checkbox",
       selectedRowKeys,
       onChange: setSelectedRowKeys,
     },
     rowClassName: getRowClassName,
-    scroll,
-    tableLayout,
   };
   return (
     <>
@@ -397,6 +382,12 @@ const MenuUser = ({ currentUser }) => {
           <Loading />
         </div>
       )}
+      <div>
+        {onlineUsers && (
+          <p>Hệ thống có tổng cộng: {onlineUsers} người đang online.</p>
+        )}
+      </div>
+
       <div className="my-[2rem]">
         <Form.Item label="Fields" className="w-[30rem]">
           <Select
@@ -434,10 +425,10 @@ const MenuUser = ({ currentUser }) => {
       <Table
         {...tableProps}
         pagination={{
-          position: [top, bottom],
+          position: ["none", "bottomRight"],
         }}
         columns={tableColumns}
-        dataSource={hasData ? data : []}
+        dataSource={data}
         scroll={scroll}
       />
     </>

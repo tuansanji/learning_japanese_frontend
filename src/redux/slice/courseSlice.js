@@ -58,12 +58,20 @@ export const courseSlice = createSlice({
       state[action.payload.level].error = true;
     },
     getLessonCurrent: (state, action) => {
-      localStorage.setItem("lesson", JSON.stringify(action.payload));
-      state.lessonCurrent.lessonCurrent = action.payload;
+      localStorage.setItem(
+        action.payload.state,
+        JSON.stringify(action.payload.data)
+      );
+
+      state.lessonCurrent.lessonCurrent = action.payload.data;
     },
     getCurrentIndex: (state, action) => {
-      localStorage.setItem("index", JSON.stringify(action.payload));
-      state.lessonCurrent.currentIndex = action.payload;
+      localStorage.setItem(
+        action.payload.state,
+        JSON.stringify(action.payload.index)
+      );
+
+      state.lessonCurrent.currentIndex = action.payload.index;
     },
     getCurrentStage: (state, action) => {
       state.lessonCurrent.currentStage = action.payload;

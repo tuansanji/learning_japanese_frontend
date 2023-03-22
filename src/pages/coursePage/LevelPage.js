@@ -6,12 +6,12 @@ import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import InforWay from "../../component/content/inforWay/InforWay";
 import Loading from "../../component/SupportTab/Loading";
 import { getCourse, getLevelCourse } from "../../redux/apiRequest";
-import { createAxios } from "../../redux/createInstance";
+
 function LevelPage() {
   const dispatch = useDispatch();
   const params = useParams();
   const [wayList, setWayList] = useState([]);
-  const isloading = useSelector(
+  const isLoading = useSelector(
     (state) => state.courses[params.level].isFetching
   );
 
@@ -24,7 +24,7 @@ function LevelPage() {
 
   return (
     <div className=" waypages  bg-no-repeat bg-cover">
-      <div className="trial_study w-full ssm:px-[1rem] h-[600px] sm:h-[500px] ssm:h-[450px] bg-[rgb(13,16,24)] flex flex-col justify-center items-center ">
+      <div className="trial_study w-full ssm:px-[1rem] h-[600px] sm:h-[500px] ssm:h-[450px] bg-[rgb(13,16,24)] flex flex-col justify-center items-center md:px-[2rem] ">
         <h1 className="text-center max-w-[1000px] my-0 mx-auto text-[6.4rem] md:text-[4rem] ssm:text-[3rem] font-bold leading-[1.2] text-[#fff] ">
           Cách dễ nhất để học <strong>TIẾNG NHẬT</strong> cho người mới bắt đầu!
         </h1>
@@ -39,23 +39,27 @@ function LevelPage() {
             className="flex items-center gap-x-7"
             aria-label="button-combination"
           >
-            <button className="way_button inline-flex items-center justify-center px-8 py-4 font-sans font-bold tracking-wide text-white bg-blue-500 rounded-2xl h-[55px] text-[1.6rem] ssm:text-[1.2rem] hover:opacity-75 active:opacity-30">
-              Học thử miễn phí{" "}
-              <span className="flex items-center pl-3 relative ">
-                <ArrowForwardIosIcon style={{ fontSize: "2rem" }} />
-              </span>
-            </button>
-            <button className="way_button inline-flex items-center justify-center px-8 py-4 font-sans font-bold tracking-wide text-blue-500 border border-blue-500 rounded-2xl h-[55px] text-[1.6rem] hover:opacity-75 active:opacity-30 ssm:text-[1.2rem] ">
-              Mua khóa học{" "}
-              <span className="flex items-center pl-3 relative ">
-                <ArrowForwardIosIcon style={{ fontSize: "2rem" }} />
-              </span>
-            </button>
+            <Link to={`/courses/${params.level}/${wayList[0]}`}>
+              <button className="way_button inline-flex items-center justify-center px-8 py-4 font-sans font-bold tracking-wide text-white bg-blue-500 rounded-2xl h-[55px] text-[1.6rem] ssm:text-[1.2rem] hover:opacity-75 active:opacity-30">
+                Học thử miễn phí{" "}
+                <span className="flex items-center pl-3 relative ">
+                  <ArrowForwardIosIcon style={{ fontSize: "2rem" }} />
+                </span>
+              </button>
+            </Link>
+            <Link to={`/courses/buy/${params.level}`}>
+              <button className="way_button inline-flex items-center justify-center px-8 py-4 font-sans font-bold tracking-wide text-blue-500 border border-blue-500 rounded-2xl h-[55px] text-[1.6rem] hover:opacity-75 active:opacity-30 ssm:text-[1.2rem] ">
+                Mua khóa học{" "}
+                <span className="flex items-center pl-3 relative ">
+                  <ArrowForwardIosIcon style={{ fontSize: "2rem" }} />
+                </span>
+              </button>
+            </Link>
           </div>
         </div>
       </div>
 
-      {isloading ? (
+      {isLoading ? (
         <Loading />
       ) : (
         <div className=" flex flex-wrap  py-[6rem] ssm:py-[1rem] mx-auto menu_way ">

@@ -1,9 +1,10 @@
 import Nav from "./component/header/Nav";
 import Footer from "./component/footer/footer";
 import Container from "./component/content/Container";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.scss";
+import "./test.scss";
 
 function App() {
   return (

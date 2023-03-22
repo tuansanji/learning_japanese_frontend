@@ -111,7 +111,7 @@ function Introduce({ address, title, titleSub, description, isBtn, img }) {
 
         <div className="tablet:w-[50%] sm:hidden tablet:float-left relative px-[15px]">
           <div className="preview">
-            <div className="preview_inside xl:h-[100%]">
+            <div className="preview_inside xl:h-[100%] ">
               <img
                 src={img}
                 alt=""

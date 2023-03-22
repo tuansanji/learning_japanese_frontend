@@ -46,21 +46,21 @@ function MenuNav() {
       icon: <AppstoreOutlined />,
       children: [
         {
-          label: "Cách đăng kí tài khoản",
-          key: "cach-dang-ki-tai-khoan",
+          label: "Giới thiệu khóa học tiếng nhật",
+          key: "Giới-thiệu-khóa-học-tiếng-nhật",
         },
 
         {
-          label: "Sửa lỗi không thể mua khóa học",
-          key: "sua-loi-khong-the-mua-khoa-hoc",
+          label: "Chi tiết ký thi JLPT tại Nhật",
+          key: "Chi-tiết-ký-thi-JLPT-tại-Nhật",
         },
         {
-          label: "Cách mua khóa học nhanh",
-          key: "cach-mua-khoa-hoc-nhanh",
+          label: "Hướng dẫn tiếng nhật cho người mới bắt đầu",
+          key: "Hướng-dẫn-tiếng-nhật-cho-người-mới-bắt-đầu",
         },
         {
-          label: "Cách đăng kí trở thành người dạy trong trung tâm",
-          key: "cach-dang-ki-tro-thanh-nguoi-day-trung-tam",
+          label: "Các câu hỏi thường gặp",
+          key: "Các-câu-hỏi-thường-gặp",
         },
       ],
     },

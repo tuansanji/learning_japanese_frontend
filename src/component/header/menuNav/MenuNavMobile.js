@@ -83,11 +83,11 @@ export default function SwipeableTemporaryDrawer() {
         {[
           {
             name: "Trang cá nhân",
-            link: "/user ",
+            link: "/user/infor",
           },
           {
             name: "Liên hệ",
-            link: "/contact",
+            link: "mailto:hoangtuansanji@gmail.com",
           },
         ].map((text, index) => (
           <Link to={text.link} key={index} button>
@@ -104,7 +104,7 @@ export default function SwipeableTemporaryDrawer() {
   );
 
   return (
-    <div className=" tablet:hidden">
+    <div className=" tablet:hidden ">
       {["left"].map((anchor) => (
         <React.Fragment key={anchor}>
           <Button
@@ -114,6 +114,7 @@ export default function SwipeableTemporaryDrawer() {
             <MenuIcon style={{ fontSize: 40 }} />
           </Button>
           <SwipeableDrawer
+            className="!z-[9999] "
             anchor={anchor}
             open={state[anchor]}
             onClose={toggleDrawer(anchor, false)}

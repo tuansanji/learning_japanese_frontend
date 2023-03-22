@@ -16,11 +16,7 @@ import {
   getCourseSuccess,
 } from "./slice/courseSlice";
 import { toastErr, toastSuccess } from "./slice/toastSlice";
-import {
-  getAllUsersError,
-  getAllUsersStart,
-  getAllUsersSuccess,
-} from "./slice/userSlice";
+import { getAllUsersError, getAllUsersStart } from "./slice/userSlice";
 
 export const loginUser = async (user, dispatch, navigate) => {
   dispatch(loginStart());

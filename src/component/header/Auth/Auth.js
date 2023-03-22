@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { DownOutlined, SmileOutlined } from "@ant-design/icons";
+import { DownOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
-import Cookies from "js-cookie";
 
 import { logOutUser } from "../../../redux/apiRequest";
 import { createAxios } from "../../../redux/createInstance";
@@ -18,7 +17,7 @@ function Auth() {
   let axiosJWT = createAxios(user, dispatch, logOutSuccess);
   const keyImg = useSelector((state) => state.users.inforUser?.keyImg);
 
-  const [userGmail, setUser] = useState(null);
+  // const [userGmail, setUser] = useState(null);
 
   // useEffect(() => {
   //   axios

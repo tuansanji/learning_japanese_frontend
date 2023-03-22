@@ -136,12 +136,15 @@ function Footer() {
                       </a>
                     </li>
                     <li>
-                      <a href="#" style={{ backgroundColor: "red" }}>
+                      <a
+                        href="mailto:hoangtuansanji@gmail.com"
+                        style={{ backgroundColor: "red" }}
+                      >
                         <EmailIcon></EmailIcon>
                       </a>
                     </li>
                     <li>
-                      <a href="#">
+                      <a href="sms:+84968763453?body=hello">
                         <PhoneIcon></PhoneIcon>
                       </a>
                     </li>

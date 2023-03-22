@@ -51,7 +51,7 @@ function UserInfor() {
     const imgBlob = dataURLtoBlob(imagePreview);
     formData.append("avatar", imgBlob);
 
-    const response = axios
+    axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/auth/user/edit`, formData, {
         headers: {
           token: `Bearer ${user.accessToken}`,
@@ -65,6 +65,7 @@ function UserInfor() {
         window.location.reload();
       })
       .catch((err) => {
+        console.log("lỗi");
         dispatch(toastErr(err.response.data));
       });
   };
@@ -74,12 +75,12 @@ function UserInfor() {
   return (
     <>
       {user && (
-        <div className="mx-auto p-[3%] my-[3%] rounded-md bg-[#fff] w-[70%] font-medium">
+        <div className="mx-auto p-[3%] my-[3%] rounded-md bg-[#fff] w-[70%] md:w-full font-medium">
           <div>
             <div className="">
               <div className="">
                 <div className="flex flex-row gap-10 mb-5">
-                  <div className="h-[20rem] w-[20rem] overflow-hidden">
+                  <div className="h-[20rem] md:h-[10rem] w-[20rem] overflow-hidden">
                     {imagePreview ? (
                       <img
                         src={imagePreview}

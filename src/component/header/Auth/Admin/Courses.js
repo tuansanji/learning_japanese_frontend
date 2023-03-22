@@ -1,19 +1,10 @@
 import moment from "moment";
 import CloseIcon from "@material-ui/icons/Close";
-import {
-  Form,
-  Space,
-  Table,
-  Button,
-  Descriptions,
-  message,
-  Popconfirm,
-  Select,
-} from "antd";
+import { Form, Table, Button, Descriptions, Select } from "antd";
 import { Input } from "antd";
 
-import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   deleteCourse,
   deleteManyCourse,
@@ -21,14 +12,9 @@ import {
   getAllCourses,
   postCourse,
 } from "../../../../redux/apiRequest";
-import {
-  success,
-  toastErr,
-  toastSuccess,
-} from "../../../../redux/slice/toastSlice";
+import { toastErr, toastSuccess } from "../../../../redux/slice/toastSlice";
 import Loading from "../../../SupportTab/Loading";
 import { createAxios } from "../../../../redux/createInstance";
-import { getAllCourseSuccess } from "../../../../redux/slice/courseSlice";
 
 const defaultExpandable = {
   expandedRowRender: (record) => <div>{record.description}</div>,
@@ -43,7 +29,7 @@ const MenuCourses = ({ currentUser }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [editCourse, setEditCourse] = useState(false);
   const [listCourses, setListCourses] = useState([]);
-  const [ellipsis, setEllipsis] = useState(false);
+
   const [msg, setMsg] = useState("");
   const [reRender, setRerender] = useState(null);
   const [overlayPost, setOverlayPost] = useState(false);
@@ -58,6 +44,7 @@ const MenuCourses = ({ currentUser }) => {
     pdf: "",
     audio: "",
     desc: "",
+    doc: "",
     author: "dũng mori",
   });
   const [editStates, setEditStates] = useState(Array(listCourses).fill(false));
@@ -72,6 +59,8 @@ const MenuCourses = ({ currentUser }) => {
     pdf: "",
     desc: "",
     audio: "",
+    doc: "",
+
     author: "dũng mori",
   });
   let axiosJWT = createAxios(currentUser, dispatch);
@@ -201,6 +190,7 @@ const MenuCourses = ({ currentUser }) => {
         pdf: course.pdf,
         audio: course.audio,
         timeLine: course.timeLine,
+        doc: course.doc,
         description: (
           <Descriptions
             className="bg-red"
@@ -243,6 +233,7 @@ const MenuCourses = ({ currentUser }) => {
                       desc: course.desc,
                       pdf: course.pdf,
                       audio: course.audio,
+                      doc: course.doc,
                       timeLine: course.timeLine,
                     });
 
@@ -377,23 +368,23 @@ const MenuCourses = ({ currentUser }) => {
                 course.pdf || "đang cập nhật..."
               )}
             </Descriptions.Item>
-            {/* <Descriptions.Item label="desc">
+            <Descriptions.Item label="Doc">
               {editStates[indexCourse] ? (
                 <TextArea
-                  placeholder={course.desc || "cập nhật"}
-                  value={newCourseEdit.desc}
+                  placeholder={course.doc}
+                  value={newCourseEdit.doc}
                   allowClear
                   onChange={(e) => {
                     setNewCourseEdit({
                       ...newCourseEdit,
-                      desc: e.target.value,
+                      doc: e.target.value,
                     });
                   }}
                 />
               ) : (
-                course.desc || "đang cập nhật..."
+                course.doc || "đang cập nhật..."
               )}
-            </Descriptions.Item>{" "} */}
+            </Descriptions.Item>
             <Descriptions.Item label="Audio">
               {editStates[indexCourse] ? (
                 <TextArea
@@ -427,7 +418,6 @@ const MenuCourses = ({ currentUser }) => {
   }
   const tableColumns = columns.map((item) => ({
     ...item,
-    ellipsis,
   }));
 
   // Phần xử lí khi người dùng nháy vào phần mở rộng
@@ -446,6 +436,7 @@ const MenuCourses = ({ currentUser }) => {
       pdf: record.pdf,
       audio: record.audio,
       desc: record.desc,
+      doc: record.doc,
       author: "dũng mori",
     });
     setSelectedRecord(expanded ? record : null);
@@ -587,7 +578,7 @@ const MenuCourses = ({ currentUser }) => {
         }`}
         id="overlay"
       >
-        <div className="flex bg-white rounded-xl overflow-hidden shadow-sm pointer-events-auto  w-[70%] h-[60%] absolute">
+        <div className="flex bg-white rounded-xl overflow-hidden shadow-sm pointer-events-auto  w-[70%] h-[90%] absolute">
           <CloseIcon
             onClick={() => {
               setOverlayPost(false);
@@ -747,7 +738,7 @@ const MenuCourses = ({ currentUser }) => {
             <div className=" flex gap-5 items-center w-full">
               <label
                 className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
-                htmlFor="pdf"
+                htmlFor="audio"
               >
                 Audio :
               </label>
@@ -760,6 +751,27 @@ const MenuCourses = ({ currentUser }) => {
                   });
                 }}
                 id="audio"
+                type="text"
+                placeholder="Điền link mp3..."
+                className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
+              />
+            </div>
+            <div className=" flex gap-5 items-center w-full">
+              <label
+                className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
+                htmlFor="doc"
+              >
+                Doc :
+              </label>
+              <input
+                value={postNewCourse.doc}
+                onChange={(e) => {
+                  setPostNewCourse({
+                    ...postNewCourse,
+                    doc: e.target.value,
+                  });
+                }}
+                id="doc"
                 type="text"
                 placeholder="Điền link mp3..."
                 className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
@@ -792,6 +804,7 @@ const MenuCourses = ({ currentUser }) => {
                     pathVideo: "",
                     pdf: "",
                     desc: "",
+                    doc: "",
                     author: "dũng mori",
                   });
                 }}

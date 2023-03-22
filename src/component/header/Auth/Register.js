@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../../../redux/apiRequest";
 import { resetMsg } from "../../../redux/slice/authSlice";
-
+import { Buffer } from "buffer";
 function Register() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -41,6 +41,13 @@ function Register() {
       password: "",
       passwordConfirmation: "",
       email: "",
+      thumb: {
+        data: Buffer.from(
+          "https://scr.vn/wp-content/uploads/2020/07/Avatar-Facebook-tr%E1%BA%AFng.jpg",
+          "utf-8"
+        ),
+        contentType: "image/jpg",
+      },
     },
 
     onSubmit: (user) => {

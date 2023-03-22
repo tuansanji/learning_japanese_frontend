@@ -7,24 +7,57 @@ import {
   getCurrentIndex,
   getLessonCurrent,
 } from "../../redux/slice/courseSlice";
-import { useEffect } from "react";
-function Support({ listCurrent, stageCourse }) {
+import { useCallback, useEffect, useRef, useState } from "react";
+function Support({ listCurrent, stageCourse, setOpenMenu }) {
   const dispatch = useDispatch();
+  const width = useRef(null);
 
-  const handleGetLesson = (lesson, index) => {
-    dispatch(getLessonCurrent(lesson));
-    dispatch(getCurrentIndex(index));
-  };
-  const handleOpenMenuSub = (e) => {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const handleGetLesson = useCallback((lesson, index) => {
+    dispatch(
+      getLessonCurrent({
+        state: lesson.stage === "AUDIO" ? "audio" : "video",
+        data: lesson,
+      })
+    );
+    dispatch(
+      getCurrentIndex({
+        state: lesson.stage === "AUDIO" ? "audioIndex" : "videoIndex",
+        index: index,
+      })
+    );
+  }, []);
+
+  const handleOpenMenuSub = useCallback((e) => {
     const element = e.target.closest(".content_1");
     const icon = element.querySelector("span.icon");
     icon.classList.toggle("up");
 
     element.nextElementSibling.classList.toggle("hidden");
-  };
+  }, []);
   useEffect(() => {
-    localStorage.getItem("index") &&
-      dispatch(getCurrentIndex(JSON.parse(localStorage.getItem("index"))));
+    if (
+      stageCourse &&
+      Array.isArray(stageCourse) &&
+      stageCourse.length > 0 &&
+      stageCourse[0].stage === "AUDIO"
+    ) {
+      localStorage.getItem("audioIndex") &&
+        dispatch(
+          getCurrentIndex({
+            state: "audioIndex",
+            index: JSON.parse(localStorage.getItem("audioIndex")),
+          })
+        );
+    } else {
+      localStorage.getItem("videoIndex") &&
+        dispatch(
+          getCurrentIndex({
+            state: "videoIndex",
+            index: JSON.parse(localStorage.getItem("videoIndex")),
+          })
+        );
+    }
 
     const activeElement = document.querySelector(".content_2 .active");
     setTimeout(() => {
@@ -38,8 +71,29 @@ function Support({ listCurrent, stageCourse }) {
     }, 100);
   }, []);
   useEffect(() => {
-    localStorage.getItem("index") &&
-      dispatch(getCurrentIndex(JSON.parse(localStorage.getItem("index"))));
+    if (
+      stageCourse &&
+      Array.isArray(stageCourse) &&
+      stageCourse.length > 0 &&
+      stageCourse[0].stage === "AUDIO"
+    ) {
+      localStorage.getItem("audioIndex") &&
+        dispatch(
+          getCurrentIndex({
+            state: "audioIndex",
+            index: JSON.parse(localStorage.getItem("audioIndex")),
+          })
+        );
+    } else {
+      localStorage.getItem("videoIndex") &&
+        dispatch(
+          getCurrentIndex({
+            state: "videoIndex",
+            index: JSON.parse(localStorage.getItem("videoIndex")),
+          })
+        );
+    }
+
     //
     const content2Elements = document.querySelectorAll(".content_2");
     content2Elements.forEach((content2) => {
@@ -56,6 +110,27 @@ function Support({ listCurrent, stageCourse }) {
       }
     });
   }, [listCurrent, stageCourse]);
+  // set khi màn hình tablet phone thì nháy bài học thì list bài học sẽ tự đóng
+
+  useEffect(() => {
+    function handleWindowResize() {
+      setWindowWidth(window.innerWidth);
+    }
+    window.addEventListener("resize", handleWindowResize);
+
+    return () => window.removeEventListener("resize", handleWindowResize);
+  }, []);
+
+  useEffect(() => {
+    if (
+      windowWidth < 800 &&
+      JSON.parse(localStorage.getItem("videoIndex")) === 0
+    ) {
+      setOpenMenu(false);
+    } else {
+      setOpenMenu(true);
+    }
+  }, []);
 
   return (
     <div className="wrapper  bg-[#FFFFFF] h-[74vh] top-0 bottom-0 mt-0 w-full z-[99] border-l-[1px] border-[#e7e7e7]">
@@ -98,11 +173,26 @@ function Support({ listCurrent, stageCourse }) {
                         key={lesson._id}
                         onClick={(e) => {
                           handleGetLesson(lesson, index);
+                          if (windowWidth < 800) {
+                            setOpenMenu(false);
+                          }
                         }}
                         className={`item ${
-                          JSON.parse(localStorage.getItem("lesson")) &&
+                          JSON.parse(
+                            localStorage.getItem(
+                              stageCourse[0].stage === "AUDIO"
+                                ? "audio"
+                                : "video"
+                            )
+                          ) &&
                           lesson._id ===
-                            JSON.parse(localStorage.getItem("lesson"))._id
+                            JSON.parse(
+                              localStorage.getItem(
+                                stageCourse[0].stage === "AUDIO"
+                                  ? "audio"
+                                  : "video"
+                              )
+                            )._id
                             ? "active"
                             : ""
                         } ${
@@ -132,7 +222,7 @@ function Support({ listCurrent, stageCourse }) {
                           </p>
                         </div>
                         <div
-                          className="icon flex items-center learn_icon flex justify-center mr-[1.2rem] w-[3.6rem]
+                          className="icon  items-center learn_icon flex justify-center mr-[1.2rem] w-[3.6rem]
 "
                         >
                           <CheckCircleIcon style={{ fontSize: "2rem" }} />

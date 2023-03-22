@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import axios from "axios";
+import React from "react";
 
 import Introduce from "../../component/content/Introduce/Introduce";
 import { courseHomePage } from "../../data/courseHomePage/courseHomePage";
@@ -19,7 +18,7 @@ function HomePage() {
             isBtn={course.isBtn}
             img={course.img}
           />
-          <div className="divider"></div>
+          <div className="divider w-[70%] mx-auto my-[10rem] md:my-[3rem] "></div>
         </div>
       ))}
     </>

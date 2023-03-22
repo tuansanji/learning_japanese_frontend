@@ -11,9 +11,6 @@ function PDFViewer({ url }) {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
     // Lấy tham chiếu đến canvas và mảng chứa tham chiếu đến các ảnh
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    const images = imagesRef.current;
 
     // Tải tài liệu PDF
     const loadingTask = pdfjs.getDocument(url);
@@ -31,7 +28,7 @@ function PDFViewer({ url }) {
         for (let i = 1; i <= numPages; i++) {
           pdf.getPage(i).then((page) => {
             const viewport = page.getViewport({
-              scale: 2 * window.devicePixelRatio,
+              scale: 1,
             });
             const canvas = document.createElement("canvas");
             canvas.width = viewport.width;
@@ -39,8 +36,8 @@ function PDFViewer({ url }) {
             canvas.style.width = `${viewport.width}px`;
             canvas.style.height = `${viewport.height}px`;
             const ctx = canvas.getContext("2d");
-            ctx.imageSmoothingEnabled = true;
-            const renderTask = page
+            // ctx.imageSmoothingEnabled = true;
+            page
               .render({
                 canvasContext: ctx,
                 viewport: viewport,
@@ -63,16 +60,16 @@ function PDFViewer({ url }) {
         imagesRef.current = newImages;
       },
       (reason) => {
-        console.error("Lỗi khi load tài liệu:", reason);
+        console.error("Lỗi khi load tài liệu");
       }
     );
   }, [url]);
 
   return (
     <div>
-      <canvas ref={canvasRef} className="pdf-canvas" />
+      <canvas ref={canvasRef} className="pdf-canvas h-[2rem]" />
       {loading && <Loading />}
-      <div className="w-[80%] mx-auto">
+      <div className="w-[80%] md:w-[95%] flex flex-col justify-center items-center mx-auto">
         {imagesRef.current
           .slice(0, numImages)
           .sort((a, b) =>
@@ -89,7 +86,7 @@ function PDFViewer({ url }) {
               alt=""
               width={img.width}
               height={img.height}
-              className=""
+              className="w-[80%]"
             />
           ))}
       </div>

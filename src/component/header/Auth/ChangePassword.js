@@ -47,7 +47,7 @@ const ResetPassword = ({ match }) => {
   });
   return (
     <div>
-      <div className=" flex w-[50%] mx-auto h-[39rem] mt-[4rem] bg-slate-100 flex-col ">
+      <div className=" flex w-[50%] xl:w-[65%] md:w-[80%] sm:w-full mx-auto h-[39rem] mt-[4rem] bg-slate-100 flex-col ">
         <div className="w-full bg-[rgb(151,73,245)]  h-[5rem] flex items-center justify-center">
           <h1 className="text-[2.5rem] text-[white]">Thay đổi mật khẩu</h1>
         </div>
@@ -55,11 +55,11 @@ const ResetPassword = ({ match }) => {
         <form
           onSubmit={formik.handleSubmit}
           autoComplete="off"
-          className="flex gap-x-5 mx-auto mt-10 w-[80%] "
+          className="flex gap-x-5 mx-auto mt-10 w-[80%] sm:w-[90%] "
           aria-label="simple-form"
         >
           <Space direction="vertical w-[90%] ">
-            <div className="flex justify-between items-center gap-10">
+            <div className="flex sm:flex-col  sm:gap-2 sm:items-start  justify-between items-center gap-10">
               <label htmlFor="" className="flex-shrink-0">
                 Nhập mật khẩu :
               </label>
@@ -67,7 +67,7 @@ const ResetPassword = ({ match }) => {
                 name="password"
                 onChange={formik.handleChange}
                 value={formik.values.password}
-                className="w-[37rem]"
+                className="max-w-[37rem]"
                 placeholder="Điền mật khẩu"
                 iconRender={(visible) =>
                   visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
@@ -77,7 +77,7 @@ const ResetPassword = ({ match }) => {
                 <p className="error text-[red]">{formik.errors.password}</p>
               )}
             </div>
-            <div className="flex justify-between items-center gap-10">
+            <div className="flex  sm:flex-col sm:gap-2 sm:items-start justify-between items-center gap-10">
               <label htmlFor="" className="flex-shrink-0">
                 Nhập lại mật khẩu :
               </label>
@@ -85,7 +85,7 @@ const ResetPassword = ({ match }) => {
                 name="passwordConfirmation"
                 onChange={formik.handleChange}
                 value={formik.values.passwordConfirmation}
-                className="w-[37rem]"
+                className="max-w-[37rem]"
                 placeholder="Điền lại mật khẩu"
                 iconRender={(visible) =>
                   visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
@@ -117,17 +117,17 @@ const ResetPassword = ({ match }) => {
             <span className="text-black">&nbsp;Lưu ý:</span>
           </span>
           <br />
-          <span className="text-[#222222]">
+          <span className="text-[#222222] leading-7">
             » Mật khẩu có thể gồm các kí tự chuỗi và số ( 6 - 18).
           </span>
           <br />
-          <span className="text-[#222222]">
+          <span className="text-[#222222] leading-7">
             » Mật khẩu chỉ được thay trong thời hạn 1 tiếng kể từ khi bắt đầu
             yêu cầu.
           </span>
           <br />
 
-          <span className="text-[#222222]">
+          <span className="text-[#222222] leading-7">
             » Nếu vẫn không thể thay đổi mật khẩu. Vui lòng liên hệ admin bằng
             thông tin dưới cuối trang.
           </span>

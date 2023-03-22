@@ -44,7 +44,11 @@ function a11yProps(index) {
   };
 }
 
-export default function ScrollableTabsButtonAuto({ stage, openMenu }) {
+export default function ScrollableTabsButtonAuto({
+  stage,
+  openMenu,
+  setOpenMenu,
+}) {
   const dispatch = useDispatch();
   const params = useParams();
 
@@ -54,17 +58,18 @@ export default function ScrollableTabsButtonAuto({ stage, openMenu }) {
 
   useEffect(() => {
     let stageCurrent;
-    if (JSON.parse(localStorage.getItem("lesson")) != null) {
+    if (
+      localStorage.getItem("video") &&
+      JSON.parse(localStorage.getItem("video")) != null
+    ) {
       stageCurrent =
-        stage &&
-        stage.indexOf(JSON.parse(localStorage.getItem("lesson")).stage);
+        stage && stage.indexOf(JSON.parse(localStorage.getItem("video")).stage);
       if (stageCurrent >= 0) {
         setValue(stageCurrent);
-      } else {
-        setValue(0);
       }
     }
   }, [stage]);
+
   useEffect(() => {
     getStageCourse(dispatch, params.level, params.way, stage[value]).then(
       (list) => {
@@ -77,11 +82,11 @@ export default function ScrollableTabsButtonAuto({ stage, openMenu }) {
     let arr = [];
     stageCourse && stageCourse.forEach((way) => way && arr.push(way.lesson));
     setListCurrent([...new Set(arr)]);
-  }, [stageCourse]);
+  }, [stageCourse, value]);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
+  // console.log(stageCourse);
   return (
     <div
       className={` ${
@@ -122,7 +127,11 @@ export default function ScrollableTabsButtonAuto({ stage, openMenu }) {
           index={index}
           className="h-full bg-[#ffff] overflow-auto"
         >
-          <Support stageCourse={stageCourse} listCurrent={listCurrent} />
+          <Support
+            stageCourse={stageCourse}
+            listCurrent={listCurrent}
+            setOpenMenu={setOpenMenu}
+          />
         </TabPanel>
       ))}
     </div>
