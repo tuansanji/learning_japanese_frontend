@@ -2,12 +2,19 @@ import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ReactPlayer from "react-player";
+
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import SyncAltIcon from "@material-ui/icons/SyncAlt";
 import axios from "axios";
 import Hls from "hls.js";
 import Dash from "dashjs";
+import * as base64js from "base64-js";
+// import { encode } from 'base64-js';
+import { encode } from "base-64";
+// import { encode }  from "utf8";
+// import { toBase64 } from "base64";
+
 import Loading from "../../component/SupportTab/Loading";
 import MusicPage from "../musicPage.js/MusicPage";
 import ScrollableTabsButtonAuto from "./Suport2";
@@ -32,6 +39,7 @@ function WayPage() {
   const [isVideoReady, setIsVideoReady] = useState(false);
   const [videoDuration, setVideoDuration] = useState(null);
   const [documentLesson, setDocumentLesson] = useState("pdf");
+  const [loadVideoFirst, setLoadVideoFirst] = useState(false);
   const prevBtn = useRef();
   const nextBtn = useRef();
   const video = useRef();
@@ -43,66 +51,99 @@ function WayPage() {
   const stageCourseList = useSelector(
     (state) => state.courses?.listStageCurrent
   );
+
+  const allCourse = useSelector((state) => state.courses[params.level]);
+  const user = useSelector((state) => {
+    return state.auth.login?.currentUser;
+  });
+
   // hiện tại cứ vậy thôi. sau phải tìm cách fix với giá trị là stageCourseList[0]
-  const handleResetAudio = () => {
-    dispatch(
-      getLessonCurrent({
-        state: "audio",
-        data: {
-          audio: "http://118.27.25.228/Ljapanese/JLPT 1/問題1.mp3",
-          author: "dũng mori",
-          createdAt: "2023-03-08T13:16:38.025Z",
-          lesson: "JLP1",
-          level: "n1",
-          name: "問題1",
-          pathVideo: "",
-          pdf: "",
-          stage: "AUDIO",
-          timeLine: 851,
-          updatedAt: "2023-03-09T13:30:15.474Z",
-          way: "chặng 3",
-          __v: 0,
-          _id: "64088ab603e176079214e70d",
-        },
-      })
-    );
-    dispatch(
-      getCurrentIndex({
-        state: "audioIndex",
-        index: 0,
-      })
-    );
+  const handleResetAudio = (courses) => {
+    if (stageCourseList && stageCourseList.length > 0) {
+      dispatch(
+        getLessonCurrent({
+          state: "audio",
+          data: courses,
+        })
+      );
+      dispatch(
+        getCurrentIndex({
+          state: "audioIndex",
+          index:
+            JSON.parse(
+              localStorage.getItem(
+                lessonCurrent.stage === "AUDIO" ? "audioIndex" : "videoIndex"
+              )
+            ) || 0,
+        })
+      );
+    }
   };
 
-  const handleResetVideo = () => {
-    dispatch(
-      getLessonCurrent({
-        state: "video",
-        data: {
-          author: "dũng mori",
-          createdAt: "2023-02-20T13:51:03.715Z",
-          desc: "111",
-          lesson: "từ vựng 1 đọc chữ hán",
-          level: "n1",
-          name: "bài một",
-          pathVideo: "http://118.27.25.228/Ljapanese/PDF/N1/C1/TV/DCH/1.pdf",
-          pdf: "http://118.27.25.228/Ljapanese/PDF/N1/C1/TV/DCH/1.pdf",
-          stage: "từ vựng",
-          timeLine: 0,
-          updatedAt: "2023-03-09T07:58:03.377Z",
-          way: "chặng 1",
-          __v: 0,
-          _id: "63f37ac7afa55c76b2709e6f",
-        },
-      })
-    );
-    dispatch(
-      getCurrentIndex({
-        state: "videoIndex",
-        index: 0,
-      })
-    );
+  const handleResetVideo = (courses) => {
+    if (stageCourseList && stageCourseList.length > 0) {
+      dispatch(
+        getLessonCurrent({
+          state: "video",
+          data: courses,
+        })
+      );
+      dispatch(
+        getCurrentIndex({
+          state: "videoIndex",
+          index:
+            JSON.parse(
+              localStorage.getItem(
+                lessonCurrent.stage === "AUDIO" ? "audioIndex" : "videoIndex"
+              )
+            ) || 0,
+        })
+      );
+    }
   };
+
+  useEffect(() => {
+    if (lessonCurrent && stageCourseList) {
+      let currentStage =
+        localStorage.getItem(params.way.split("+").join(" ")) &&
+        stageCourseList.filter(
+          (course) =>
+            course.lesson ===
+            JSON.parse(localStorage.getItem(params.way.split("+").join(" ")))
+              .lesson
+        );
+
+      const result = currentStage.filter(
+        (item) =>
+          item._id ===
+          JSON.parse(localStorage.getItem(params.way.split("+").join(" ")))._id
+      );
+      let index = currentStage.indexOf(result[0]);
+
+      localStorage.setItem(
+        lessonCurrent.stage === "AUDIO" ? "audioIndex" : "videoIndex",
+        JSON.stringify(index)
+      );
+    }
+  }, [params.way, stageCourseList]);
+  useEffect(() => {
+    if (
+      lessonCurrent &&
+      lessonCurrent.way === params.way.split("+").join(" ")
+    ) {
+      let index =
+        JSON.parse(
+          localStorage.getItem(
+            lessonCurrent.stage === "AUDIO" ? "audioIndex" : "videoIndex"
+          )
+        ) || 0;
+      localStorage.setItem(
+        params.way.split("+").join(" "),
+        JSON.stringify({ ...lessonCurrent, currentIndex: index })
+      );
+    }
+  }, [lessonCurrent]);
+
   useEffect(() => {
     getWayCourse(dispatch, params.level, params.way)
       .then((stage) => {
@@ -110,23 +151,35 @@ function WayPage() {
         setLoading(false);
 
         if (stage[0] === "AUDIO") {
-          localStorage.getItem("audio")
+          localStorage.getItem("audio") &&
+          JSON.parse(localStorage.getItem("audio")).way ===
+            params.way.split("+").join(" ")
             ? dispatch(
                 getLessonCurrent({
                   state: "audio",
                   data: JSON.parse(localStorage.getItem("audio")),
                 })
               )
-            : handleResetAudio();
+            : handleResetAudio(
+                JSON.parse(
+                  localStorage.getItem(params.way.split("+").join(" "))
+                )
+              );
         } else {
-          localStorage.getItem("video")
+          localStorage.getItem("video") &&
+          JSON.parse(localStorage.getItem("video")).way ===
+            params.way.split("+").join(" ")
             ? dispatch(
                 getLessonCurrent({
                   state: "video",
                   data: JSON.parse(localStorage.getItem("video")),
                 })
               )
-            : stageCourseList && handleResetVideo();
+            : handleResetVideo(
+                JSON.parse(
+                  localStorage.getItem(params.way.split("+").join(" "))
+                )
+              );
         }
       })
       .catch((err) => {
@@ -144,6 +197,7 @@ function WayPage() {
       setCurrentLessonList(lessonList);
     }
   }, [stageCourseList, lessonCurrent]);
+
   //ẩn footer và back to top
   useEffect(() => {
     const footer = document.querySelector("#footer");
@@ -272,7 +326,7 @@ function WayPage() {
         } 
         overflow-y-auto h-full fixed left-0 lg:w-[100%] md:w-full top-[6rem]`}
       >
-        {/* {lessonCurrent &&
+        {lessonCurrent &&
         lessonCurrent !== null &&
         lessonCurrent.stage !== "AUDIO" ? (
           <ReactPlayer
@@ -286,7 +340,7 @@ function WayPage() {
             onProgress={handleProgress}
             onReady={handleReady}
             onDuration={handleDuration}
-            playing={true}
+            playing={false}
             controls={true}
             ref={video}
             playsinline={true}
@@ -304,7 +358,7 @@ function WayPage() {
             lessonCurrent={lessonCurrent}
             currentLessonList={currentLessonList}
           />
-        )} */}
+        )}
         <div className="py-4">
           <p className="animate-charcter text-[3rem] md:text-[2rem]  ">
             {lessonCurrent && `${lessonCurrent.name} - ${lessonCurrent.stage}`}
@@ -341,21 +395,24 @@ function WayPage() {
               Bài tập
             </button>
           </div>
-          <div className="w-full flex flex-row overflow-x-hidden">
-            <div
-              className={`${
-                documentLesson === "pdf" ? "left-0" : "left-[-100%]"
-              } pdfAndHomeWork absolute w-full`}
-            >
-              {<PDFViewer url={lessonCurrent && lessonCurrent.pdf} />}
-            </div>
-            <div
-              className={`${
-                documentLesson === "doc" ? "left-[0]" : "left-[100%]"
-              } pdfAndHomeWork absolute w-full `}
-            >
-              {<HomeWork url={lessonCurrent && lessonCurrent.doc} />}
-            </div>
+          <div className="w-full">
+            {lessonCurrent &&
+              lessonCurrent.pdf !== null &&
+              lessonCurrent.pdf !== undefined &&
+              lessonCurrent.pdf !== "" &&
+              documentLesson === "pdf" && (
+                <PDFViewer
+                  lessonCurrent={lessonCurrent && lessonCurrent}
+                  url={lessonCurrent && lessonCurrent.pdf}
+                />
+              )}
+
+            {lessonCurrent &&
+              lessonCurrent.doc !== null &&
+              lessonCurrent.doc !== "" &&
+              documentLesson === "doc" && (
+                <HomeWork url={lessonCurrent && lessonCurrent.doc} />
+              )}
           </div>
         </div>
       </div>
@@ -388,6 +445,7 @@ function WayPage() {
     }`}
           onClick={() => {
             handlePrevLesson();
+            // setDocumentLesson("pdf")
           }}
         >
           <ArrowBackIosIcon /> bài trước

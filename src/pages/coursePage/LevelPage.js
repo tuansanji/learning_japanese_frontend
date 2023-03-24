@@ -14,6 +14,7 @@ function LevelPage() {
   const isLoading = useSelector(
     (state) => state.courses[params.level].isFetching
   );
+  const allCourse = useSelector((state) => state.courses[params.level]);
 
   useEffect(() => {
     getCourse(dispatch, params.level);
@@ -21,6 +22,21 @@ function LevelPage() {
       .then((arr) => setWayList([...new Set(arr)]))
       .catch((err) => console.log(err));
   }, [params.level]);
+
+  useEffect(() => {
+    if (wayList && wayList.length > 0) {
+      for (let i = 0; i < wayList.length; i++) {
+        if (!localStorage.getItem(wayList[i])) {
+          localStorage.setItem(
+            wayList[i],
+            JSON.stringify(
+              allCourse.allCourse.find((course) => course.way === wayList[i])
+            )
+          );
+        }
+      }
+    }
+  }, [wayList]);
 
   return (
     <div className=" waypages  bg-no-repeat bg-cover">
