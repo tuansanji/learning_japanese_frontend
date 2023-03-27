@@ -3,12 +3,14 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import LockIcon from "@material-ui/icons/Lock";
+import { v4 as uuid } from "uuid";
 import {
   getCurrentIndex,
   getLessonCurrent,
 } from "../../redux/slice/courseSlice";
 import { useCallback, useEffect, useRef, useState } from "react";
-function Support({ listCurrent, stageCourse, setOpenMenu }) {
+function Support({ userTest, listCurrent, stageCourse, setOpenMenu }) {
   const dispatch = useDispatch();
   const width = useRef(null);
 
@@ -168,67 +170,160 @@ function Support({ listCurrent, stageCourse, setOpenMenu }) {
                 <div className="content_2  ">
                   {stageCourse
                     .filter((stage) => stage.lesson === item)
-                    .map((lesson, index) => (
-                      <div
-                        key={lesson._id}
-                        onClick={(e) => {
-                          handleGetLesson(lesson, index);
-                          if (windowWidth < 800) {
-                            setOpenMenu(false);
-                          }
-                        }}
-                        className={`item ${
-                          JSON.parse(
-                            localStorage.getItem(
-                              stageCourse[0].stage === "AUDIO"
-                                ? "audio"
-                                : "video"
-                            )
-                          ) &&
-                          lesson._id ===
-                            JSON.parse(
-                              localStorage.getItem(
-                                stageCourse[0].stage === "AUDIO"
-                                  ? "audio"
-                                  : "video"
-                              )
-                            )._id
-                            ? "active"
-                            : ""
-                        } ${
-                          JSON.parse(
-                            localStorage.getItem("arrVideoFinished")
-                          ) &&
-                          JSON.parse(
-                            localStorage.getItem("arrVideoFinished")
-                          ).includes(lesson._id)
-                            ? "learn"
-                            : ""
-                        } bg-[#FFFFFF] hover:bg-slate-200 flex flex-row py-[10px] pr-0 pl-[2px] relative `}
-                      >
-                        <div className=" cursor-pointer flex-1 ml-7 relative">
-                          <h3 className="text-[#333] text-[1.4rem] font-normal leading-[1.4] relative top-[-2px]">
-                            {index + 1}. {lesson.name}
-                          </h3>
-                          <p className="flex items-center gap-2 text-[1.1rem] mb-0">
-                            <PlayCircleFilledIcon />
-                            <span>
-                              {lesson.timeLine &&
-                                `${Math.floor(lesson.timeLine / 60)}:${
-                                  lesson.timeLine % 60 < 10 ? "0" : ""
-                                }${lesson.timeLine % 60}
-                              `}
-                            </span>
-                          </p>
-                        </div>
-                        <div
-                          className="icon  items-center learn_icon flex justify-center mr-[1.2rem] w-[3.6rem]
+                    .map((lesson, index) => {
+                      if (!userTest) {
+                        return (
+                          <div
+                            key={lesson._id}
+                            onClick={(e) => {
+                              handleGetLesson(lesson, index);
+                              if (windowWidth < 800) {
+                                setOpenMenu(false);
+                              }
+                            }}
+                            className={`item ${
+                              JSON.parse(
+                                localStorage.getItem(
+                                  stageCourse[0].stage === "AUDIO"
+                                    ? "audio"
+                                    : "video"
+                                )
+                              ) &&
+                              lesson._id ===
+                                JSON.parse(
+                                  localStorage.getItem(
+                                    stageCourse[0].stage === "AUDIO"
+                                      ? "audio"
+                                      : "video"
+                                  )
+                                )._id
+                                ? "active"
+                                : ""
+                            } ${
+                              JSON.parse(
+                                localStorage.getItem("arrVideoFinished")
+                              ) &&
+                              JSON.parse(
+                                localStorage.getItem("arrVideoFinished")
+                              ).includes(lesson._id)
+                                ? "learn"
+                                : ""
+                            } bg-[#FFFFFF] hover:bg-slate-200 flex flex-row py-[10px] pr-0 pl-[2px] relative `}
+                          >
+                            <div className=" cursor-pointer flex-1 ml-7 relative">
+                              <h3 className="text-[#333] text-[1.4rem] font-normal leading-[1.4] relative top-[-2px]">
+                                {index + 1}. {lesson.name}
+                              </h3>
+                              <p className="flex items-center gap-2 text-[1.1rem] mb-0">
+                                <PlayCircleFilledIcon />
+                                <span>
+                                  {lesson.timeLine &&
+                                    `${Math.floor(lesson.timeLine / 60)}:${
+                                      lesson.timeLine % 60 < 10 ? "0" : ""
+                                    }${lesson.timeLine % 60}
+                            `}
+                                </span>
+                              </p>
+                            </div>
+                            <div
+                              className="icon  items-center learn_icon flex justify-center mr-[1.2rem] w-[3.6rem]
 "
-                        >
-                          <CheckCircleIcon style={{ fontSize: "2rem" }} />
-                        </div>
-                      </div>
-                    ))}
+                            >
+                              <CheckCircleIcon style={{ fontSize: "2rem" }} />
+                            </div>
+                          </div>
+                        );
+                      } else {
+                        if (index < 4) {
+                          return (
+                            <div
+                              key={lesson._id}
+                              onClick={(e) => {
+                                handleGetLesson(lesson, index);
+                                if (windowWidth < 800) {
+                                  setOpenMenu(false);
+                                }
+                              }}
+                              className={`item ${
+                                JSON.parse(
+                                  localStorage.getItem(
+                                    stageCourse[0].stage === "AUDIO"
+                                      ? "audio"
+                                      : "video"
+                                  )
+                                ) &&
+                                lesson._id ===
+                                  JSON.parse(
+                                    localStorage.getItem(
+                                      stageCourse[0].stage === "AUDIO"
+                                        ? "audio"
+                                        : "video"
+                                    )
+                                  )._id
+                                  ? "active"
+                                  : ""
+                              } ${
+                                JSON.parse(
+                                  localStorage.getItem("arrVideoFinished")
+                                ) &&
+                                JSON.parse(
+                                  localStorage.getItem("arrVideoFinished")
+                                ).includes(lesson._id)
+                                  ? "learn"
+                                  : ""
+                              } bg-[#FFFFFF] hover:bg-slate-200 flex flex-row py-[10px] pr-0 pl-[2px] relative `}
+                            >
+                              <div className=" cursor-pointer flex-1 ml-7 relative">
+                                <h3 className="text-[#333] text-[1.4rem] font-normal leading-[1.4] relative top-[-2px]">
+                                  {index + 1}. {lesson.name}
+                                </h3>
+                                <p className="flex items-center gap-2 text-[1.1rem] mb-0">
+                                  <PlayCircleFilledIcon />
+                                  <span>
+                                    {lesson.timeLine &&
+                                      `${Math.floor(lesson.timeLine / 60)}:${
+                                        lesson.timeLine % 60 < 10 ? "0" : ""
+                                      }${lesson.timeLine % 60}
+                              `}
+                                  </span>
+                                </p>
+                              </div>
+                              <div
+                                className="icon  items-center learn_icon flex justify-center mr-[1.2rem] w-[3.6rem]
+"
+                              >
+                                <CheckCircleIcon style={{ fontSize: "2rem" }} />
+                              </div>
+                            </div>
+                          );
+                        } else {
+                          return (
+                            <div
+                              key={uuid()}
+                              className="bg-[#FFFFFF] hover:bg-slate-200 flex flex-row py-[10px] pr-0 pl-[2px] relative "
+                            >
+                              <div className="  flex-1 ml-7 relative">
+                                <h3 className="text-[#333] text-[1.4rem] font-normal leading-[1.4] relative top-[-2px]">
+                                  {index + 1}. Nội dung bị ẩn
+                                </h3>
+                                <p className="flex items-center gap-2 text-[1.1rem] mb-0">
+                                  <PlayCircleFilledIcon />
+                                  <span>đăng nhập để xem</span>
+                                </p>
+                              </div>
+                              <div
+                                className="icon  items-center learn_icon flex justify-center mr-[1.2rem] w-[3.6rem]
+"
+                              >
+                                <LockIcon
+                                  style={{ fontSize: "2rem", color: "red" }}
+                                />
+                              </div>
+                            </div>
+                          );
+                        }
+                      }
+                    })}
                 </div>
               </section>
             ))}

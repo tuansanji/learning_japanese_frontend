@@ -9,7 +9,9 @@ import { resetMsg } from "../../../redux/slice/authSlice";
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const user = useSelector((state) => {
+    return state.auth.login?.currentUser;
+  });
   const messageLogin = useSelector((state) => {
     return state.auth.login.msg;
   });
@@ -19,6 +21,12 @@ function Login() {
   useEffect(() => {
     dispatch(resetMsg());
   }, []);
+  useEffect(() => {
+    if (user) {
+      navigate("/user/infor");
+    }
+  }, [user]);
+
   const validationSchema = yup.object().shape({
     username: yup
       .string()

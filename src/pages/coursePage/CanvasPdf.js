@@ -75,7 +75,7 @@ const PDFViewer = ({ url, lessonCurrent }) => {
     <div>
       <canvas ref={canvasRef} className="pdf-canvas h-[2rem]" />
       {loading && <Loading />}
-      <div className="w-[80%] md:w-[95%] flex flex-col justify-center items-center mx-auto">
+      <div className="w-[80%] md:w-[95%] sm:W-full flex flex-col justify-center items-center mx-auto">
         {!loading &&
           imagesRef.current
             .slice(0, numImages)
@@ -87,7 +87,7 @@ const PDFViewer = ({ url, lessonCurrent }) => {
                 alt="pdf"
                 width={img.width}
                 height={img.height}
-                className="w-[80%] sm:w-full"
+                className="w-[80%] md:w-full sm:w-[125%] overflow-hidden"
               />
             ))}
       </div>

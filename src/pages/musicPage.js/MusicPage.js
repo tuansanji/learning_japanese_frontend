@@ -72,14 +72,16 @@ function MusicPage({ lessonCurrent, currentLessonList, openMenu }) {
       setLoading(true);
 
       const audio = new Audio(lessonCurrent.audio);
-
+      let id = setTimeout(() => {
+        setLoading(false);
+      }, 15000);
       audio.addEventListener("loadeddata", () => {
         // Set isLoading to false when audio has finished loading
-        setLoading(false);
       });
 
       // Clean up event listener on component unmount
       return () => {
+        clearTimeout(id);
         audio.removeEventListener("loadeddata", handleLoadedData);
       };
     }

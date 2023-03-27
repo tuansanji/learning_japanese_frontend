@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { PoweroffOutlined, DeleteOutlined } from "@ant-design/icons";
@@ -20,6 +20,12 @@ function UserInfor() {
     return state.auth.login?.currentUser;
   });
   let axiosJWT = createAxios(user, dispatch, logOutSuccess);
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/auth/login");
+    }
+  }, [user]);
 
   const handleImagePreview = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -79,8 +85,8 @@ function UserInfor() {
           <div>
             <div className="">
               <div className="">
-                <div className="flex flex-row gap-10 mb-5">
-                  <div className="h-[20rem] md:h-[10rem] w-[20rem] overflow-hidden">
+                <div className="flex flex-row gap-10 mb-5 md:w-full">
+                  <div className="h-[20rem] md:h-[10rem] md:w-[10rem] w-[20rem] overflow-hidden">
                     {imagePreview ? (
                       <img
                         src={imagePreview}
@@ -90,7 +96,12 @@ function UserInfor() {
                     ) : (
                       <img
                         src={`${process.env.REACT_APP_BACKEND_URL}/auth/user/avatar/${user._id}`}
-                        className="h-full"
+                        className="h-full w-full"
+                        onError={(e) => {
+                          e.target.onerror = null; // ngăn chặn vòng lặp vô hạn nếu ảnh mặc định bị lỗi
+                          e.target.src =
+                            "https://scr.vn/wp-content/uploads/2020/07/Avatar-Facebook-tr%E1%BA%AFng.jpg"; // đường dẫn đến ảnh mặc định
+                        }}
                         alt=""
                       />
                     )}
@@ -98,6 +109,7 @@ function UserInfor() {
                   <div className=" my-5">
                     Change Photo
                     <input
+                      className="w-auto flex md:w-[24rem] sm:w-[17rem]"
                       id="avatar-upload"
                       type="file"
                       accept="image/*"
@@ -121,8 +133,8 @@ function UserInfor() {
                   <h6 className="text-[#0062CC] ">
                     {user.isAdmin ? "Chủ trang(ADMIN)" : "Học viên"}
                   </h6>
-                  <p className="mt-10 text-[2rem]">
-                    Tổng só xu hiện có :
+                  <p className="mt-10 text-[2rem] flex items-center">
+                    Tổng số xu hiện có :
                     <span className="text-[red] text-[3rem] ml-8">
                       {user.money}
                     </span>
@@ -144,7 +156,10 @@ function UserInfor() {
                         <label className="font-bold">User Id : </label>
                       </div>
                       <div className=" ml-6">
-                        <p className="text-[#0062CC] font-bold"> {user._id}</p>
+                        <p className="text-[#0062CC] font-bold">
+                          {" "}
+                          {user._id.substring(user._id.length - 10)}
+                        </p>
                       </div>
                     </div>
                     <div className="row flex my-[1rem]">
@@ -173,14 +188,6 @@ function UserInfor() {
                       <div className=" ml-6 mr-5">
                         <p className="text-[red]">{user.courses.length}</p>
                       </div>
-                      <button
-                        className="hover:bg-slate-300 p-1 rounded-lg"
-                        onClick={() => {
-                          alert("ai cho xem mà xem");
-                        }}
-                      >
-                        Xem chi tiết
-                      </button>
                     </div>
                     <div className=" flex my-[1rem]">
                       <div className="">

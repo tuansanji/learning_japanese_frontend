@@ -30,7 +30,7 @@ function Introduce({ address, title, titleSub, description, isBtn, img }) {
                 stroke="black"
               ></circle>
             </svg>
-            <div className="introduce_title h-14 rotate-[-3deg]">
+            <div className="introduce_title h-14 rotate-[-3deg] sm:!text-[22px]">
               <strong>{title}</strong>
             </div>
           </div>

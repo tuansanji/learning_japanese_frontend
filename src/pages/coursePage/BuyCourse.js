@@ -20,18 +20,30 @@ function BuyCourse() {
           alt=""
         />
       </div>
+
       <div className="flex flex-col mt-7 mx-auto w-[90%] mb-[1rem] p-[2rem] leading-4 shadow-desc bg-slate-100 ">
+        {/* <form
+          method="POST"
+          action={`${process.env.REACT_APP_BACKEND_URL}/user/paypal`}
+          className="w-[20rem] bg-[red] h-[4rem]"
+        >
+          <button type="submit" className="">
+            thanh toán{" "}
+          </button>
+        </form> */}
         <span className="font-bold leading-5">
           <span className="text-black">&nbsp;Lưu ý:</span>
         </span>
         <br />
         <span className="text-[red] leading-7">
-          » Vui lòng đăng kí tài khoản trước khi mua
+          » Nội dung chuyển khoản ghi rõ: Email hoặc tài khoản - Khóa học muốn
+          mua. Ví dụ: nguyenvanAgmail.com - n3
         </span>
         <br />
 
         <span className="text-[#222222] leading-7">
-          » Đính kèm tên đăng nhập hoặc email trong ghi chú.
+          » Lưu ý : Bỏ ký tự đặc biệt @ trong địa chỉ mail vì 1 số ngân hàng
+          không giao dịch được.
         </span>
         <br />
         <span className="text-[#222222] leading-7">

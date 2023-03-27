@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ReactPlayer from "react-player";
 
@@ -24,26 +24,28 @@ import {
 } from "../../redux/slice/courseSlice";
 import { getWayCourse } from "../../redux/apiRequest";
 import PDFViewer from "./CanvasPdf";
-import baimot from "../../assets/pdf/baimot.pdf";
+
 import HomeWork from "./homeWork";
+import { toastErr, toastSuccess } from "../../redux/slice/toastSlice";
 
 function WayPage() {
   const params = useParams();
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const [openMenu, setOpenMenu] = useState(true);
   const [stageList, setStageList] = useState([]);
+  const [userTest, setUserTest] = useState(true);
 
   const [loading, setLoading] = useState(true);
   const [currentLessonList, setCurrentLessonList] = useState([]);
   const [isVideoReady, setIsVideoReady] = useState(false);
   const [videoDuration, setVideoDuration] = useState(null);
   const [documentLesson, setDocumentLesson] = useState("pdf");
-  const [loadVideoFirst, setLoadVideoFirst] = useState(false);
+
   const prevBtn = useRef();
   const nextBtn = useRef();
   const video = useRef();
-
+  const indexUserTest = 4;
   const lessonCurrent = useSelector(
     (state) => state.courses.lessonCurrent?.lessonCurrent
   );
@@ -52,10 +54,37 @@ function WayPage() {
     (state) => state.courses?.listStageCurrent
   );
 
-  const allCourse = useSelector((state) => state.courses[params.level]);
   const user = useSelector((state) => {
     return state.auth.login?.currentUser;
   });
+
+  // useEffect(() => {
+  //   if (!user) {
+  //     dispatch(toastErr("Vui lòng đăng nhập trước"));
+  //     navigate("/auth/login");
+  //   } else {
+  //     if (user.courses) {
+  //       if (!user.courses.includes(params.level)) {
+  //         navigate(`/courses/${params.level}`);
+  //         dispatch(toastErr("Vui lòng mua khóa học trước khi xem"));
+  //       }
+  //     }
+  //   }
+  // }, [user]);
+
+  useEffect(() => {
+    if (!user) {
+      setUserTest(true);
+    } else {
+      if (user.courses) {
+        if (user.courses.includes(params.level)) {
+          setUserTest(false);
+        } else {
+          setUserTest(true);
+        }
+      }
+    }
+  }, [user]);
 
   // hiện tại cứ vậy thôi. sau phải tìm cách fix với giá trị là stageCourseList[0]
   const handleResetAudio = (courses) => {
@@ -246,9 +275,34 @@ function WayPage() {
   };
 
   //  xác đình đã học xong bái hay chưa và thêm nó vào localStorage. sau này sẽ thêm nó vào db của user
+  let isPosted = false;
+
   const handleProgress = (state) => {
     const playedSeconds = state.playedSeconds;
-    if (isVideoReady && (playedSeconds / videoDuration) * 100 >= 80) {
+    if (
+      !isPosted &&
+      isVideoReady &&
+      (playedSeconds / videoDuration) * 100 >= 80
+    ) {
+      axios
+        .post(
+          `${process.env.REACT_APP_BACKEND_URL}/user/historyLearn`,
+          {
+            username: user.username,
+            level: lessonCurrent.level,
+            idCourse: lessonCurrent._id,
+          },
+          {
+            headers: {
+              token: `Bearer ${user.accessToken}`,
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          isPosted = true;
+        });
+
       let arr = JSON.parse(localStorage.getItem("arrVideoFinished")) || [];
 
       localStorage.setItem(
@@ -272,7 +326,11 @@ function WayPage() {
         lessonCurrent.stage === "AUDIO" ? "audioIndex" : "videoIndex"
       )
     );
-    if (currentIndex < currentLessonList.length - 1) {
+
+    if (
+      currentIndex <
+      (userTest ? indexUserTest - 1 : currentLessonList.length - 1)
+    ) {
       dispatch(
         getCurrentIndex({
           state: lessonCurrent.stage === "AUDIO" ? "audioIndex" : "videoIndex",
@@ -292,8 +350,15 @@ function WayPage() {
       );
     }
 
-    const activeElement = document.querySelector(".content_2 .active");
-    activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (userTest) {
+      if (currentIndex < indexUserTest - 1) {
+        const activeElement = document.querySelector(".content_2 .active");
+        activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    } else {
+      const activeElement = document.querySelector(".content_2 .active");
+      activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
     // }
   };
   // phần thêm thời gian cho video
@@ -318,122 +383,165 @@ function WayPage() {
   }, [lessonCurrent, videoDuration]);
 
   return (
-    <div className="course-page flex w-full md:flex-col md:items-center  ">
-      {loading && <Loading />}
-      <div
-        className={`course-page__video flex flex-col items-center  ${
-          openMenu ? "laptop:w-[75%] " : "w-full"
-        } 
+    <>
+      <div className="course-page flex w-full md:flex-col md:items-center  ">
+        {loading && <Loading />}
+        <div
+          className={`course-page__video flex flex-col items-center  ${
+            openMenu ? "laptop:w-[75%] " : "w-full"
+          } 
         overflow-y-auto h-full fixed left-0 lg:w-[100%] md:w-full top-[6rem]`}
-      >
-        {lessonCurrent &&
-        lessonCurrent !== null &&
-        lessonCurrent.stage !== "AUDIO" ? (
-          <ReactPlayer
-            width="100%"
-            height="70%"
-            url={
-              lessonCurrent
-                ? lessonCurrent.pathVideo
-                : "https://youtu.be/KI6UWLiGUUQ"
-            }
-            onProgress={handleProgress}
-            onReady={handleReady}
-            onDuration={handleDuration}
-            playing={false}
-            controls={true}
-            ref={video}
-            playsinline={true}
-            config={{
-              file: {
-                attributes: {
-                  controlsList: "nodownload", // Chặn tải xuống.
-                },
-              },
-            }}
-          />
-        ) : (
-          <MusicPage
-            openMenu={openMenu}
-            lessonCurrent={lessonCurrent}
-            currentLessonList={currentLessonList}
-          />
-        )}
-        <div className="py-4">
-          <p className="animate-charcter text-[3rem] md:text-[2rem]  ">
-            {lessonCurrent && `${lessonCurrent.name} - ${lessonCurrent.stage}`}
-          </p>
-        </div>
+        >
+          {lessonCurrent &&
+          lessonCurrent !== null &&
+          lessonCurrent.stage !== "AUDIO" ? (
+            <div className="h-[70%] md:h-[600px] sm:h-[220px] w-full relative">
+              <ReactPlayer
+                width="100%"
+                height="100%"
+                className="react_player"
+                url={lessonCurrent && lessonCurrent.pathVideo}
+                onProgress={handleProgress}
+                onReady={handleReady}
+                onDuration={handleDuration}
+                playing={false}
+                controls={true}
+                ref={video}
+                playsinline={true}
+                config={{
+                  file: {
+                    attributes: {
+                      controlsList: "nodownload", // Chặn tải xuống.
+                    },
+                  },
+                }}
+              />
+              {/* <div>
+                <ReactPlayer
+                  width="100%"
+                  height="100%"
+                  onProgress={handleProgress}
+                  onReady={handleReady}
+                  onDuration={handleDuration}
+                  playing={false}
+                  controls={true}
+                  ref={video}
+                  playsinline={true}
+                  config={{
+                    file: {
+                      attributes: {
+                        controlsList: "nodownload", // Chặn tải xuống.
+                      },
+                    },
 
-        <div className="w-full flex flex-col min-h-[20rem] mb-[6rem] pt-[1rem] md:pt-0">
-          <div
-            className="flex pl-[4rem] py-[2rem] md:py-[1rem] pt-0 items-center gap-[3rem] border-b-[1px] border-dashed border-b-[#333] "
-            aria-label="button-combination"
-          >
-            <button
-              onClick={() => {
-                setDocumentLesson("pdf");
-              }}
-              className={`shadow-2xl inline-flex items-center justify-center px-8 py-4 font-sans font-semibold tracking-wide ${
-                documentLesson === "pdf"
-                  ? "text-white bg-blue-500"
-                  : " text-blue-500 border border-blue-500 "
-              } rounded-lg h-[40px]`}
-            >
-              Tài liệu
-            </button>
-            <button
-              onClick={() => {
-                setDocumentLesson("doc");
-              }}
-              className={`shadow-2xl inline-flex items-center justify-center px-8 py-4 font-sans font-semibold tracking-wide ${
-                documentLesson === "pdf"
-                  ? "  text-blue-500 border border-blue-500"
-                  : "text-white bg-blue-500  "
-              } rounded-lg h-[40px]`}
-            >
-              Bài tập
-            </button>
-          </div>
-          <div className="w-full">
-            {lessonCurrent &&
-              lessonCurrent.pdf !== null &&
-              lessonCurrent.pdf !== undefined &&
-              lessonCurrent.pdf !== "" &&
-              documentLesson === "pdf" && (
-                <PDFViewer
-                  lessonCurrent={lessonCurrent && lessonCurrent}
-                  url={lessonCurrent && lessonCurrent.pdf}
+                    // forceHLS: {
+                    //   xhrSetup: (xhr) => {
+                    //     xhr.withCredentials = true; // Sử dụng credential để tránh việc chia sẻ link video
+                    //   },
+                    // },
+                    // forceDASH: {
+                    //   xhrSetup: (xhr) => {
+                    //     xhr.withCredentials = true; // Sử dụng credential để tránh việc chia sẻ link video
+                    //   },
+                    // },
+                    // headers: {
+                    //   Authorization: `Bearer ${user.accessToken} `, // truyền token vào header Authorization
+                    // },
+                  }}
+                  url={lessonCurrent.pathVideo}
                 />
-              )}
+              </div> */}
+            </div>
+          ) : (
+            <MusicPage
+              openMenu={openMenu}
+              lessonCurrent={lessonCurrent}
+              currentLessonList={currentLessonList}
+            />
+          )}
+          <div className="py-4">
+            <p className="animate-charcter text-[3rem] md:text-[2rem] text-center ">
+              {lessonCurrent &&
+                `${lessonCurrent.name} - ${lessonCurrent.stage}`}
+            </p>
+          </div>
 
-            {lessonCurrent &&
-              lessonCurrent.doc !== null &&
-              lessonCurrent.doc !== "" &&
-              documentLesson === "doc" && (
-                <HomeWork url={lessonCurrent && lessonCurrent.doc} />
-              )}
+          <div className="w-full flex flex-col min-h-[20rem] mb-[6rem] pt-[1rem] md:pt-0">
+            <div
+              className="flex pl-[4rem] py-[2rem] md:py-[1rem] pt-0 items-center gap-[3rem] border-b-[1px] border-dashed border-b-[#333] "
+              aria-label="button-combination"
+            >
+              <button
+                disabled={lessonCurrent && lessonCurrent.pdf === ""}
+                onClick={() => {
+                  setDocumentLesson("pdf");
+                }}
+                className={`shadow-2xl inline-flex items-center justify-center px-8 py-4 font-sans font-semibold tracking-wide ${
+                  documentLesson === "pdf"
+                    ? "text-white bg-blue-500"
+                    : " text-blue-500 border border-blue-500 "
+                } rounded-lg h-[40px]  ${
+                  lessonCurrent && lessonCurrent.pdf === "" && "opacity-30"
+                }`}
+              >
+                Tài liệu
+              </button>
+              <button
+                disabled={lessonCurrent && lessonCurrent.doc === ""}
+                onClick={() => {
+                  setDocumentLesson("doc");
+                }}
+                className={`shadow-2xl inline-flex items-center justify-center px-8 py-4 font-sans font-semibold tracking-wide ${
+                  documentLesson === "pdf"
+                    ? "  text-blue-500 border border-blue-500"
+                    : "text-white bg-blue-500  "
+                } rounded-lg h-[40px]  ${
+                  lessonCurrent && lessonCurrent.doc === "" && "opacity-30"
+                }`}
+              >
+                Bài tập
+              </button>
+            </div>
+            <div className="w-full">
+              {lessonCurrent &&
+                lessonCurrent.pdf !== null &&
+                lessonCurrent.pdf !== undefined &&
+                lessonCurrent.pdf !== "" &&
+                documentLesson === "pdf" && (
+                  <PDFViewer
+                    lessonCurrent={lessonCurrent && lessonCurrent}
+                    url={lessonCurrent && lessonCurrent.pdf}
+                  />
+                )}
+
+              {lessonCurrent &&
+                lessonCurrent.doc !== null &&
+                lessonCurrent.doc !== "" &&
+                documentLesson === "doc" && (
+                  <HomeWork url={lessonCurrent && lessonCurrent.doc} />
+                )}
+            </div>
           </div>
         </div>
-      </div>
 
-      <ScrollableTabsButtonAuto
-        stage={stageList}
-        openMenu={openMenu}
-        setOpenMenu={setOpenMenu}
-      />
-      <div className="menu_sub z-[9999] tablet:justify-center">
-        <button
-          ref={prevBtn}
-          disabled={
-            lessonCurrent &&
-            JSON.parse(
-              localStorage.getItem(
-                lessonCurrent.stage === "AUDIO" ? "audioIndex" : "videoIndex"
-              )
-            ) === 0
-          }
-          className={`btn_control md:!text-[1.2rem] ssm:!text-[1rem] 
+        <ScrollableTabsButtonAuto
+          userTest={userTest}
+          stage={stageList}
+          openMenu={openMenu}
+          setOpenMenu={setOpenMenu}
+        />
+        <div className="menu_sub z-[9999] tablet:justify-center">
+          <button
+            ref={prevBtn}
+            disabled={
+              lessonCurrent &&
+              JSON.parse(
+                localStorage.getItem(
+                  lessonCurrent.stage === "AUDIO" ? "audioIndex" : "videoIndex"
+                )
+              ) === 0
+            }
+            className={`btn_control md:!text-[1.2rem] ssm:!text-[1rem] 
     ${
       lessonCurrent &&
       JSON.parse(
@@ -443,26 +551,26 @@ function WayPage() {
       ) === 0 &&
       "opacity-40"
     }`}
-          onClick={() => {
-            handlePrevLesson();
-            // setDocumentLesson("pdf")
-          }}
-        >
-          <ArrowBackIosIcon /> bài trước
-        </button>
-        <button
-          ref={nextBtn}
-          disabled={
-            lessonCurrent &&
-            JSON.parse(
-              localStorage.getItem(
-                lessonCurrent.stage === "AUDIO" ? "audioIndex" : "videoIndex"
-              )
-            ) ===
-              currentLessonList.length - 1
-          }
-          onClick={handleNextLesson}
-          className={`btn_control md:!text-[1.2rem] ssm:!text-[1rem]
+            onClick={() => {
+              handlePrevLesson();
+              // setDocumentLesson("pdf")
+            }}
+          >
+            <ArrowBackIosIcon /> bài trước
+          </button>
+          <button
+            ref={nextBtn}
+            disabled={
+              lessonCurrent &&
+              JSON.parse(
+                localStorage.getItem(
+                  lessonCurrent.stage === "AUDIO" ? "audioIndex" : "videoIndex"
+                )
+              ) ===
+                (userTest ? indexUserTest - 1 : currentLessonList.length - 1)
+            }
+            onClick={handleNextLesson}
+            className={`btn_control md:!text-[1.2rem] ssm:!text-[1rem]
 
           ${
             lessonCurrent &&
@@ -475,36 +583,37 @@ function WayPage() {
             "opacity-40"
           }
           next`}
-        >
-          bài tiếp theo <ArrowForwardIosIcon />
-        </button>
-        <div className="infor">
-          <p className="animate-charcter text-[2rem] mr-[1rem] md:text-[1.4rem] sm:hidden">
-            {` ${
-              lessonCurrent &&
-              Number(
-                JSON.parse(
-                  localStorage.getItem(
-                    lessonCurrent.stage === "AUDIO"
-                      ? "audioIndex"
-                      : "videoIndex"
-                  )
-                )
-              ) + 1
-            }. 
-            ${lessonCurrent && lessonCurrent.name}  `}
-          </p>
-          <button
-            className="btn "
-            onClick={() => {
-              setOpenMenu(!openMenu);
-            }}
           >
-            <SyncAltIcon className=" " style={{ fontSize: "3rem" }} />
+            bài tiếp theo <ArrowForwardIosIcon />
           </button>
+          <div className="infor">
+            <p className="animate-charcter text-[2rem] mr-[1rem] md:text-[1.4rem] sm:hidden">
+              {` ${
+                lessonCurrent &&
+                Number(
+                  JSON.parse(
+                    localStorage.getItem(
+                      lessonCurrent.stage === "AUDIO"
+                        ? "audioIndex"
+                        : "videoIndex"
+                    )
+                  )
+                ) + 1
+              }. 
+            ${lessonCurrent && lessonCurrent.name}  `}
+            </p>
+            <button
+              className="btn "
+              onClick={() => {
+                setOpenMenu(!openMenu);
+              }}
+            >
+              <SyncAltIcon className=" " style={{ fontSize: "3rem" }} />
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

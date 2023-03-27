@@ -45,6 +45,7 @@ function a11yProps(index) {
 }
 
 export default function ScrollableTabsButtonAuto({
+  userTest,
   stage,
   openMenu,
   setOpenMenu,
@@ -128,6 +129,7 @@ export default function ScrollableTabsButtonAuto({
           className="h-full bg-[#ffff] overflow-auto"
         >
           <Support
+            userTest={userTest}
             stageCourse={stageCourse}
             listCurrent={listCurrent}
             setOpenMenu={setOpenMenu}

@@ -21,9 +21,9 @@
     </script> -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/html-react-parser@latest/dist/html-react-parser.min.js"></script>
-    <script>
-      window.HTMLReactParser(/* string */);
-    </script>
+    <!-- <script>
+      window.HTMLReactParser();
+    </script> -->
     <link rel="icon" type="image/png" href="%PUBLIC_URL%/favi.png" />
 
     <title>Learn Japanese</title>
@@ -35,16 +35,16 @@
     <div id="fb-root"></div>
 
     <!-- Your Plugin chat code -->
-    <!-- <div id="fb-customer-chat" class="fb-customerchat"></div>
+    <div id="fb-customer-chat" class="fb-customerchat"></div>
 
     <script>
       var chatbox = document.getElementById("fb-customer-chat");
       chatbox.setAttribute("page_id", "118002461221056");
       chatbox.setAttribute("attribution", "biz_inbox");
-    </script> -->
+    </script>
 
     <!-- Your SDK code -->
-    <!-- <script>
+    <script>
       window.fbAsyncInit = function () {
         FB.init({
           xfbml: true,
@@ -61,6 +61,6 @@
         js.src = "https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js";
         fjs.parentNode.insertBefore(js, fjs);
       })(document, "script", "facebook-jssdk");
-    </script> -->
+    </script>
   </body>
 </html>

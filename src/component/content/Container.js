@@ -26,6 +26,7 @@ import MsgAdmin from "./msgUser/MsgAdmin";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { toastSuccess } from "../../redux/slice/toastSlice";
+import NotFoundPage from "../../pages/NotFoundPage/NotFoundPage";
 export const socket = io(process.env.REACT_APP_BACKEND_URL);
 
 function Container() {
@@ -86,6 +87,7 @@ function Container() {
           path="/user/forgot-password"
           element={<ForgotPassword />}
         ></Route>
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
       <button
@@ -106,7 +108,7 @@ function Container() {
             setOpenMsg(true);
           }}
           id="btn-msg"
-          className="fixed right-[2rem] bottom-[15rem] rounded-[50%] p-[1rem] z-[7777] bg-[#4747ef] hover:p-[1.5rem] transition-all hover:bg-[green]"
+          className="fixed right-[2rem] bottom-[15rem] rounded-[50%] p-[1rem] sm:p-0 z-[7777] bg-[#4747ef] hover:p-[1.5rem] transition-all hover:bg-[green]"
         >
           <MessageOutlined
             style={{
@@ -125,7 +127,7 @@ function Container() {
             setOpenMsgAdmin(!openMsgAdmin);
           }}
           id="btn-msg"
-          className="fixed right-[2rem] bottom-[15rem] rounded-[50%] p-[1rem] z-[7777] bg-[#4747ef] hover:p-[1.5rem] transition-all ]"
+          className="fixed right-[2rem] bottom-[15rem] rounded-[50%] p-[1rem]  sm:p-0 z-[7777] bg-[#4747ef] hover:p-[1.5rem] transition-all ]"
         >
           <ChatIcon
             style={{
@@ -145,22 +147,6 @@ function Container() {
       {openMsgAdmin && (
         <MsgAdmin setOpenMsgAdmin={setOpenMsgAdmin} setMsg={setMsg} />
       )}
-
-      {/* <button
-        onClick={() => {
-          window.location.href = "https://m.me/118002461221056";
-        }}
-        id="btn-msg"
-        className="fixed right-[6rem] bottom-[15rem] rounded-[50%] p-[1rem] z-[7777] bg-[#4747ef] hover:p-[1.5rem] transition-all hover:bg-[green]"
-      >
-        <MessageOutlined
-          style={{
-            fontSize: "4rem",
-            backgroundColor: "#fff",
-            borderRadius: "50%",
-          }}
-        />
-      </button> */}
     </div>
   );
 }

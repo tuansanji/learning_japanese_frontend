@@ -1,9 +1,5 @@
-import file from "../../assets/doc/doctest.doc";
-import file1 from "../../assets/doc/docx.docx";
-// import file2 from "../../assets/doc/html.html";
 import parse from "html-react-parser";
-
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { toastErr, toastSuccess } from "../../redux/slice/toastSlice";
@@ -19,7 +15,6 @@ function HomeWork({ url }) {
   const btnResultRef = useRef();
 
   useEffect(() => {
-    const backend = "http://localhost:8000/courses/html";
     axios
       .get(url, {
         responseEncoding: "utf8",

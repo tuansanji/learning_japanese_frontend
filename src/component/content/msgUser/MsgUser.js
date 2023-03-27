@@ -29,7 +29,8 @@ function MsgUser({ setOpenMsg, idRoom, setMsg }) {
           id: idRoom || user._id,
         })
         .then((response) => {
-          setMessages([...response.data[0].message.reverse()]);
+          response.data !== undefined &&
+            setMessages([...response.data[0].message.reverse()]);
         })
         .catch((err) => {
           console.log(err);
@@ -77,16 +78,16 @@ function MsgUser({ setOpenMsg, idRoom, setMsg }) {
     }
   }, [user]);
 
-  const props = {
-    action: "",
-    onChange({ file, fileList }) {
-      if (file.status !== "uploading") {
-        console.log(file, fileList);
-      }
-    },
-  };
+  // const props = {
+  //   action: "",
+  //   onChange({ file, fileList }) {
+  //     if (file.status !== "uploading") {
+  //       console.log(file, fileList);
+  //     }
+  //   },
+  // };
   return (
-    <div className="fixed flex flex-col justify-between overflow-hidden w-[34rem] h-[48rem] bottom-[3rem] right-[2rem] z-[7778] bg-[#FFFFFF] rounded-2xl shadow-desc">
+    <div className="fixed flex flex-col justify-between overflow-hidden w-[34rem] sm:w-[30rem] sm:bottom-[9rem] h-[48rem] bottom-[3rem] right-[2rem] z-[7778] bg-[#FFFFFF] rounded-2xl shadow-desc">
       <div className="h-[10rem] bg-[brown] text-[#ffff] flex flex-col justify-center items-center px-[3rem] relative transition-all">
         <CloseIcon
           onClick={() => {
@@ -140,9 +141,9 @@ function MsgUser({ setOpenMsg, idRoom, setMsg }) {
         )}
       </div>
       <div className="min-h-[7rem] flex flex-col gap-2 py-[1rem] w-full">
-        <Upload {...props} className="ml-5">
-          <Button icon={<UploadOutlined />}>Upload</Button>
-        </Upload>
+        {/* <Upload {...props} className="ml-5">
+            <Button icon={<UploadOutlined />}>Upload</Button>
+          </Upload> */}
         <div className="flex w-full gap-[2rem] justify-between px-[1rem] items-center">
           <input
             ref={msgRef}

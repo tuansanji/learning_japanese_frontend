@@ -10,6 +10,9 @@ import { Buffer } from "buffer";
 function Register() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const user = useSelector((state) => {
+    return state.auth.login?.currentUser;
+  });
   const messageRegister = useSelector((state) => {
     return state.auth.register.msg;
   });
@@ -19,6 +22,11 @@ function Register() {
   useEffect(() => {
     dispatch(resetMsg());
   }, []);
+  useEffect(() => {
+    if (user) {
+      navigate("/user/infor");
+    }
+  }, [user]);
   const validationSchema = yup.object().shape({
     username: yup
       .string()
@@ -41,13 +49,6 @@ function Register() {
       password: "",
       passwordConfirmation: "",
       email: "",
-      thumb: {
-        data: Buffer.from(
-          "https://scr.vn/wp-content/uploads/2020/07/Avatar-Facebook-tr%E1%BA%AFng.jpg",
-          "utf-8"
-        ),
-        contentType: "image/jpg",
-      },
     },
 
     onSubmit: (user) => {

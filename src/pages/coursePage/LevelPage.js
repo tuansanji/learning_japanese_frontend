@@ -6,15 +6,29 @@ import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import InforWay from "../../component/content/inforWay/InforWay";
 import Loading from "../../component/SupportTab/Loading";
 import { getCourse, getLevelCourse } from "../../redux/apiRequest";
+import axios from "axios";
 
 function LevelPage() {
   const dispatch = useDispatch();
   const params = useParams();
   const [wayList, setWayList] = useState([]);
+  const [buyCourse, setBuyCourse] = useState(false);
+  const [lessonBefore, setLessonBefore] = useState({});
   const isLoading = useSelector(
     (state) => state.courses[params.level].isFetching
   );
   const allCourse = useSelector((state) => state.courses[params.level]);
+
+  const user = useSelector((state) => {
+    return state.auth.login?.currentUser;
+  });
+  useEffect(() => {
+    if (user && user.courses) {
+      if (user.courses.includes(params.level)) {
+        setBuyCourse(true);
+      }
+    }
+  }, [user]);
 
   useEffect(() => {
     getCourse(dispatch, params.level);
@@ -37,7 +51,18 @@ function LevelPage() {
       }
     }
   }, [wayList]);
-
+  useEffect(() => {
+    if (localStorage.getItem("video") || localStorage.getItem("audio")) {
+      setLessonBefore(
+        JSON.parse(localStorage.getItem("video")) ||
+          JSON.parse(localStorage.getItem("audio"))
+      );
+    } else {
+      if (allCourse) {
+        setLessonBefore(allCourse[0]);
+      }
+    }
+  }, [allCourse]);
   return (
     <div className=" waypages  bg-no-repeat bg-cover">
       <div className="trial_study w-full ssm:px-[1rem] h-[600px] sm:h-[500px] ssm:h-[450px] bg-[rgb(13,16,24)] flex flex-col justify-center items-center md:px-[2rem] ">
@@ -55,22 +80,48 @@ function LevelPage() {
             className="flex items-center gap-x-7"
             aria-label="button-combination"
           >
-            <Link to={`/courses/${params.level}/${wayList[0]}`}>
-              <button className="way_button inline-flex items-center justify-center px-8 py-4 font-sans font-bold tracking-wide text-white bg-blue-500 rounded-2xl h-[55px] text-[1.6rem] ssm:text-[1.2rem] hover:opacity-75 active:opacity-30">
-                Học thử miễn phí{" "}
-                <span className="flex items-center pl-3 relative ">
-                  <ArrowForwardIosIcon style={{ fontSize: "2rem" }} />
-                </span>
-              </button>
-            </Link>
-            <Link to={`/courses/buy/${params.level}`}>
-              <button className="way_button inline-flex items-center justify-center px-8 py-4 font-sans font-bold tracking-wide text-blue-500 border border-blue-500 rounded-2xl h-[55px] text-[1.6rem] hover:opacity-75 active:opacity-30 ssm:text-[1.2rem] ">
-                Mua khóa học{" "}
-                <span className="flex items-center pl-3 relative ">
-                  <ArrowForwardIosIcon style={{ fontSize: "2rem" }} />
-                </span>
-              </button>
-            </Link>
+            {!buyCourse ? (
+              <>
+                <Link
+                  to={
+                    wayList && wayList.length > 1
+                      ? `/courses/${params.level}/${wayList[1]}`
+                      : `/courses/${params.level}`
+                  }
+                >
+                  <button className="way_button inline-flex items-center justify-center px-8 py-4 font-sans font-bold tracking-wide text-white bg-blue-500 rounded-2xl h-[55px] text-[1.6rem] ssm:text-[1.2rem] hover:opacity-75 active:opacity-30">
+                    Học thử miễn phí{" "}
+                    <span className="flex items-center pl-3 relative ">
+                      <ArrowForwardIosIcon style={{ fontSize: "2rem" }} />
+                    </span>
+                  </button>
+                </Link>
+                <Link to={`/courses/buy/${params.level}`}>
+                  <button className="way_button inline-flex items-center justify-center px-8 py-4 font-sans font-bold tracking-wide text-blue-500 border border-blue-500 rounded-2xl h-[55px] text-[1.6rem] hover:opacity-75 active:opacity-30 ssm:text-[1.2rem] ">
+                    Mua khóa học{" "}
+                    <span className="flex items-center pl-3 relative ">
+                      <ArrowForwardIosIcon style={{ fontSize: "2rem" }} />
+                    </span>
+                  </button>
+                </Link>
+              </>
+            ) : (
+              <Link
+                to={
+                  lessonBefore &&
+                  `/courses/${lessonBefore.level}/${lessonBefore.way
+                    .split(" ")
+                    .join("+")}`
+                }
+              >
+                <button className="way_button inline-flex items-center justify-center px-8 py-4 font-sans font-bold tracking-wide text-white bg-blue-500 rounded-2xl h-[55px] text-[1.6rem] ssm:text-[1.2rem] hover:opacity-75 active:opacity-30">
+                  Đi tới bài học gần đây nhất
+                  <span className="flex items-center pl-3 relative ">
+                    <ArrowForwardIosIcon style={{ fontSize: "2rem" }} />
+                  </span>
+                </button>
+              </Link>
+            )}
           </div>
         </div>
       </div>
@@ -78,7 +129,11 @@ function LevelPage() {
       {isLoading ? (
         <Loading />
       ) : (
-        <div className=" flex flex-wrap  py-[6rem] ssm:py-[1rem] mx-auto menu_way ">
+        <div
+          className={`flex flex-wrap  py-[6rem] ssm:py-[1rem] mx-auto menu_way ${
+            !buyCourse ? "opacity-20" : ""
+          }`}
+        >
           {wayList &&
             wayList.map((way, index) => (
               <section
@@ -87,13 +142,19 @@ function LevelPage() {
               >
                 <div className="mb-8 relative">
                   <div
-                    className="shadow-2xl   w-full  overflow-hidden rounded-[13px] hover:bottom-6
-       transition-all relative"
+                    className={`shadow-2xl   w-full  overflow-hidden rounded-[13px] 
+                    transition-all relative ${
+                      buyCourse ? "hover:bottom-6" : "hover:bottom-0"
+                    }`}
                   >
                     <Link
-                      to={`/courses/${params.level}/${way
-                        .split(" ")
-                        .join("+")}`}
+                      to={`${
+                        !buyCourse
+                          ? `/courses/${params.level}`
+                          : `/courses/${params.level}/${way
+                              .split(" ")
+                              .join("+")}`
+                      }`}
                     >
                       <img
                         src="https://thanhgiang.net/wp-content/uploads/2019/01/hoc-tieng-nhat-moi-ngay.jpg"
@@ -114,7 +175,7 @@ function LevelPage() {
               </section>
             ))}
           {wayList.length < 1 && (
-            <p className="text-[4rem] text-[blue]">
+            <p className="text-[3rem] text-[#333]">
               Khóa học đang được cập nhật. Bạn có thể tham khảo các khóa học
               khác
             </p>

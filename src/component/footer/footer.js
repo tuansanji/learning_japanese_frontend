@@ -67,7 +67,7 @@ function Footer() {
                           });
                         }}
                       >
-                        <Link to={`/courses/n1`}>Dũng Mori - N1</Link>
+                        <Link to={`/courses/n1`}>JLPT Learn- N1</Link>
                       </li>
                       <li
                         onClick={() => {
@@ -77,7 +77,7 @@ function Footer() {
                           });
                         }}
                       >
-                        <Link to={`/courses/n2`}>Dũng Mori - N2</Link>
+                        <Link to={`/courses/n2`}>JLPT Learn- N2</Link>
                       </li>
                       <li
                         onClick={() => {
@@ -87,7 +87,7 @@ function Footer() {
                           });
                         }}
                       >
-                        <Link to={`/courses/n3`}>Dũng Mori - N3</Link>
+                        <Link to={`/courses/n3`}>JLPT Learn- N3</Link>
                       </li>
                       <li
                         onClick={() => {
@@ -97,7 +97,7 @@ function Footer() {
                           });
                         }}
                       >
-                        <Link to={`/courses/n4`}>Dũng Mori - N4</Link>
+                        <Link to={`/courses/n4`}>JLPT Learn- N4</Link>
                       </li>
                       <li
                         onClick={() => {
@@ -107,7 +107,7 @@ function Footer() {
                           });
                         }}
                       >
-                        <Link to={`/courses/n5`}>Dũng Mori - N5</Link>
+                        <Link to={`/courses/n5`}>JLPT Learn- N5</Link>
                       </li>
                     </ul>
                   </div>
@@ -144,7 +144,7 @@ function Footer() {
                       </a>
                     </li>
                     <li>
-                      <a href="sms:+84968763453?body=hello">
+                      <a href="tel:+84968763453">
                         <PhoneIcon></PhoneIcon>
                       </a>
                     </li>

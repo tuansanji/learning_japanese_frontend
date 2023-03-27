@@ -22,6 +22,8 @@ import Loading from "../../../SupportTab/Loading";
 
 import { createAxios } from "../../../../redux/createInstance";
 import { getAllUsersSuccess } from "../../../../redux/slice/userSlice";
+import axios from "axios";
+import { toastErr, toastSuccess } from "../../../../redux/slice/toastSlice";
 // import socket from "../../../content/Container";
 const defaultExpandable = {
   expandedRowRender: (record) => <div>{record.description}</div>,
@@ -42,11 +44,12 @@ const MenuUser = ({ currentUser }) => {
     email: "",
     money: "",
   });
-
+  const [buyCourses, setBuyCourses] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const user = useSelector((state) => state.auth.login?.currentUser);
   const dispatch = useDispatch();
   let axiosJWT = createAxios(user, dispatch, getAllUsersSuccess);
+  const [userTest, setUserTest] = useState("");
   // lấy dữ liệu số người đang online từ server
   // useEffect(() => {
   //   socket.on("userCount", (count) => {
@@ -156,6 +159,7 @@ const MenuUser = ({ currentUser }) => {
         name: user.username,
         id: user._id,
         email: user.email,
+        courses: user.courses,
         admin: user.isAdmin ? "Admin" : "Thành viên",
         isEdit: false,
         description: (
@@ -234,14 +238,20 @@ const MenuUser = ({ currentUser }) => {
               )}
             </Descriptions.Item>
             <Descriptions.Item label="Khóa Học">
-              {/* {editUser ? (
-                <TextArea placeholder={user.courses.length} allowClear />
+              {editUser ? (
+                <TextArea
+                  placeholder={user.courses.join(", ")}
+                  allowClear
+                  value={buyCourses}
+                  onChange={(e) => setBuyCourses(e.target.value)}
+                />
               ) : user.courses.length < 1 ? (
-                0
+                "chưa có khóa học nào..."
               ) : (
-                user.courses.filter((course) => <span>course</span>)
-              )} */}
-              {user.courses.length}
+                user.courses.map((course, index) => (
+                  <span key={index}>{course},</span>
+                ))
+              )}
             </Descriptions.Item>
             <Descriptions.Item label="Tiền">
               {editUser ? (
@@ -339,6 +349,7 @@ const MenuUser = ({ currentUser }) => {
       username: record.name,
       email: record.email,
       money: record.money,
+      courses: record.courses,
     });
     setSelectedRecord(expanded ? record : null);
   };
@@ -349,8 +360,45 @@ const MenuUser = ({ currentUser }) => {
     return isRecordSelected(record) ? "userAdmin__active" : "";
   };
 
+  //phần xét tài khoản test
+
+  const handleSetUserTest = () => {
+    axios
+      .post(
+        `${process.env.REACT_APP_BACKEND_URL}/user/setTestUser`,
+        {
+          username: userTest,
+          admin: user.username,
+        },
+        {
+          headers: {
+            token: `Bearer ${user.accessToken}`,
+          },
+        }
+      )
+      .then((res) => {
+        dispatch(toastSuccess(res.data));
+        setUserTest("");
+      })
+      .catch((err) => dispatch(toastErr(err.response.data)));
+  };
+
   // Phần xử lí cập nhật chỉnh sử user
   const handleEditUser = () => {
+    let courses = buyCourses.split(",");
+    axios
+      .post(
+        `${process.env.REACT_APP_BACKEND_URL}/user/buyCourse`,
+        {
+          username: newUserEdit.username,
+          courses: courses,
+        },
+        {
+          headers: { token: `Bearer ${user.accessToken}` },
+        }
+      )
+      .then((response) => dispatch(toastSuccess(response.data)))
+      .catch((err) => dispatch(toastErr(err.response.data)));
     // cận thận vì khi nháy nút edit thì tất cả các thẻ sẽ chuyển sang chế độ isedit bằng true nên. có thể fix bằng cách chỉnh lại logic của onClick nút edit. Chúng ta sẽ ẩn hoặc mở nút Save của chính thẻ đó
     editUserRequest(currentUser.accessToken, newUserEdit, axiosJWT);
     setUpdatedUser(newUserEdit);
@@ -410,6 +458,22 @@ const MenuUser = ({ currentUser }) => {
             value={inputSearch}
             onChange={(e) => {
               setInputSearch(e.target.value);
+            }}
+          ></input>
+        </div>
+        <div className="flex mt-5 h-[3rem] gap-5 items-center">
+          <button
+            onClick={handleSetUserTest}
+            className="rounded-2xl bg-slate-300 active:opacity-25 h-full px-2 border transition-opacity"
+          >
+            Xét tài khoản test:{" "}
+          </button>
+          <input
+            id="inputSearch"
+            className="border border-[#333] outline-none h-full w-[40rem]  rounded-xl px-3"
+            value={userTest}
+            onChange={(e) => {
+              setUserTest(e.target.value);
             }}
           ></input>
         </div>

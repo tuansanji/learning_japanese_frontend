@@ -79,6 +79,11 @@ function Auth() {
               key={keyImg}
               className="w-[4rem] h-[4rem] rounded-[50%]"
               src={`${process.env.REACT_APP_BACKEND_URL}/auth/user/avatar/${user._id}`}
+              onError={(e) => {
+                e.target.onerror = null; // ngăn chặn vòng lặp vô hạn nếu ảnh mặc định bị lỗi
+                e.target.src =
+                  "https://scr.vn/wp-content/uploads/2020/07/Avatar-Facebook-tr%E1%BA%AFng.jpg"; // đường dẫn đến ảnh mặc định
+              }}
               alt=""
             ></img>
           </Link>
