@@ -14,6 +14,7 @@ function LevelPage() {
   const [wayList, setWayList] = useState([]);
   const [buyCourse, setBuyCourse] = useState(false);
   const [lessonBefore, setLessonBefore] = useState({});
+  const [isUserTest, setIsUserTest] = useState(true);
   const isLoading = useSelector(
     (state) => state.courses[params.level].isFetching
   );
@@ -22,6 +23,38 @@ function LevelPage() {
   const user = useSelector((state) => {
     return state.auth.login?.currentUser;
   });
+
+  // cho người dùng test 2 ngày
+  useEffect(() => {
+    if (!localStorage.getItem("userTest")) {
+      let currentTime = Date.now();
+      let twoDaysInMilliseconds = 2 * 24 * 60 * 60 * 1000;
+      localStorage.setItem(
+        "userTest",
+        JSON.stringify({
+          status: true,
+          time: currentTime + twoDaysInMilliseconds,
+        })
+      );
+      setIsUserTest(true);
+    } else {
+      if (JSON.parse(localStorage.getItem("userTest")).status) {
+        let currentTime = Date.now();
+        if (currentTime >= JSON.parse(localStorage.getItem("userTest")).time) {
+          localStorage.setItem(
+            "userTest",
+            JSON.stringify({
+              status: false,
+              time: Date.now(),
+            })
+          );
+        }
+      } else {
+        setIsUserTest(false);
+      }
+    }
+  }, []);
+
   useEffect(() => {
     if (user && user.courses) {
       if (user.courses.includes(params.level)) {
@@ -63,6 +96,7 @@ function LevelPage() {
       }
     }
   }, [allCourse]);
+
   return (
     <div className=" waypages  bg-no-repeat bg-cover">
       <div className="trial_study w-full ssm:px-[1rem] h-[600px] sm:h-[500px] ssm:h-[450px] bg-[rgb(13,16,24)] flex flex-col justify-center items-center md:px-[2rem] ">
@@ -85,7 +119,9 @@ function LevelPage() {
                 <Link
                   to={
                     wayList && wayList.length > 1
-                      ? `/courses/${params.level}/${wayList[1]}`
+                      ? `/courses/${params.level}/${wayList[1]
+                          .split(" ")
+                          .join("+")}`
                       : `/courses/${params.level}`
                   }
                 >
@@ -131,7 +167,7 @@ function LevelPage() {
       ) : (
         <div
           className={`flex flex-wrap  py-[6rem] ssm:py-[1rem] mx-auto menu_way ${
-            !buyCourse ? "opacity-20" : ""
+            !isUserTest && !buyCourse ? "opacity-20" : ""
           }`}
         >
           {wayList &&
@@ -144,12 +180,14 @@ function LevelPage() {
                   <div
                     className={`shadow-2xl   w-full  overflow-hidden rounded-[13px] 
                     transition-all relative ${
-                      buyCourse ? "hover:bottom-6" : "hover:bottom-0"
+                      isUserTest || buyCourse
+                        ? "hover:bottom-6"
+                        : "hover:bottom-0"
                     }`}
                   >
                     <Link
                       to={`${
-                        !buyCourse
+                        !buyCourse && !isUserTest
                           ? `/courses/${params.level}`
                           : `/courses/${params.level}/${way
                               .split(" ")
@@ -157,7 +195,7 @@ function LevelPage() {
                       }`}
                     >
                       <img
-                        src="https://thanhgiang.net/wp-content/uploads/2019/01/hoc-tieng-nhat-moi-ngay.jpg"
+                        src="https://jlpt.site/files/img/hoc-tieng-nhat-moi-ngay.jpg"
                         alt=""
                         className="h-full w-full align-middle"
                       />

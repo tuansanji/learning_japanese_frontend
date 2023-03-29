@@ -7,8 +7,8 @@ function BuyCourse() {
   const params = useParams();
 
   return (
-    <div className="relative flex flex-col items-center bg-[#000836] py-[3rem]">
-      <div className="flex justify-center ssm:flex-col ssm:h-full gap-[8rem] md:gap-[3rem] w-[90%] h-[400px] md:h-[300px] sm:h-[250px] mx-auto mb-[1rem]">
+    <div className="relative flex flex-col items-center bg-[#000836] py-[3rem] h-[400px]">
+      {/* <div className="flex justify-center ssm:flex-col ssm:h-full gap-[8rem] md:gap-[3rem] w-[90%] h-[400px] md:h-[300px] sm:h-[250px] mx-auto mb-[1rem]">
         <img
           className="h-full rounded-2xl ssm:w-[80%] ssm:mx-auto "
           src={momo}
@@ -19,20 +19,22 @@ function BuyCourse() {
           src={viettin}
           alt=""
         />
-      </div>
+      </div> */}
 
       <div className="flex flex-col mt-7 mx-auto w-[90%] mb-[1rem] p-[2rem] leading-4 shadow-desc bg-slate-100 ">
-        {/* <form
-          method="POST"
-          action={`${process.env.REACT_APP_BACKEND_URL}/user/paypal`}
-          className="w-[20rem] bg-[red] h-[4rem]"
-        >
-          <button type="submit" className="">
-            thanh toán{" "}
-          </button>
-        </form> */}
         <span className="font-bold leading-5">
           <span className="text-black">&nbsp;Lưu ý:</span>
+        </span>
+        <br />
+        <span className="text-[red] leading-7">
+          » Để mua khóa học xin vui lòng liên hệ với chúng tôi qua Fanpage
+          <a
+            className="text-blue-500 cursor-pointer ml-4 hover:text-green-400 font-bold text-[1.8rem]"
+            href="https://www.facebook.com/profile.php?id=100090524688743"
+            alt="facebook"
+          >
+            tại đây
+          </a>
         </span>
         <br />
         <span className="text-[red] leading-7">
@@ -55,6 +57,12 @@ function BuyCourse() {
         <span className="text-[#222222] leading-7">
           » Nếu lỡ không đính kèm thông tin thì xin vui lòng gửi kèm biên lai để
           chúng tôi xử lí.
+        </span>
+        <br />
+
+        <span className="text-[#222222] leading-7">
+          » Bạn cũng có thể liên hệ với chúng tôi qua messenger facebook ở góc
+          dưới trái màn hình.
         </span>
       </div>
     </div>

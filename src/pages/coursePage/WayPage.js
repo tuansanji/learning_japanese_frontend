@@ -2,18 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ReactPlayer from "react-player";
+import axios from "axios";
 
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import SyncAltIcon from "@material-ui/icons/SyncAlt";
-import axios from "axios";
-import Hls from "hls.js";
-import Dash from "dashjs";
-import * as base64js from "base64-js";
-// import { encode } from 'base64-js';
-import { encode } from "base-64";
-// import { encode }  from "utf8";
-// import { toBase64 } from "base64";
+import ContactSupportIcon from "@material-ui/icons/ContactSupport";
 
 import Loading from "../../component/SupportTab/Loading";
 import MusicPage from "../musicPage.js/MusicPage";
@@ -27,6 +21,7 @@ import PDFViewer from "./CanvasPdf";
 
 import HomeWork from "./homeWork";
 import { toastErr, toastSuccess } from "../../redux/slice/toastSlice";
+import ErrorPage from "./ErrorPage";
 
 function WayPage() {
   const params = useParams();
@@ -35,13 +30,13 @@ function WayPage() {
   const [openMenu, setOpenMenu] = useState(true);
   const [stageList, setStageList] = useState([]);
   const [userTest, setUserTest] = useState(true);
-
+  const [err, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [currentLessonList, setCurrentLessonList] = useState([]);
   const [isVideoReady, setIsVideoReady] = useState(false);
   const [videoDuration, setVideoDuration] = useState(null);
   const [documentLesson, setDocumentLesson] = useState("pdf");
-
+  const [isUserTest, setIsUserTest] = useState(true);
   const prevBtn = useRef();
   const nextBtn = useRef();
   const video = useRef();
@@ -58,33 +53,47 @@ function WayPage() {
     return state.auth.login?.currentUser;
   });
 
-  // useEffect(() => {
-  //   if (!user) {
-  //     dispatch(toastErr("Vui lòng đăng nhập trước"));
-  //     navigate("/auth/login");
-  //   } else {
-  //     if (user.courses) {
-  //       if (!user.courses.includes(params.level)) {
-  //         navigate(`/courses/${params.level}`);
-  //         dispatch(toastErr("Vui lòng mua khóa học trước khi xem"));
-  //       }
-  //     }
-  //   }
-  // }, [user]);
+  const [code, setCode] = useState("");
 
   useEffect(() => {
-    if (!user) {
-      setUserTest(true);
+    const now = new Date();
+    const secretKey = process.env.REACT_APP_SECRETKEY;
+    const code = btoa(
+      (now.getUTCMinutes() ^ now.getUTCSeconds() ^ 0xffff).toString() +
+        secretKey
+    );
+    setCode(code);
+  }, []);
+  // cho người dùng test 2 ngày
+  useEffect(() => {
+    if (!localStorage.getItem("userTest")) {
+      let currentTime = Date.now();
+      let twoDaysInMilliseconds = 2 * 24 * 60 * 60 * 1000;
+      localStorage.setItem(
+        "userTest",
+        JSON.stringify({
+          status: true,
+          time: currentTime + twoDaysInMilliseconds,
+        })
+      );
+      setIsUserTest(true);
     } else {
-      if (user.courses) {
-        if (user.courses.includes(params.level)) {
-          setUserTest(false);
-        } else {
-          setUserTest(true);
+      if (JSON.parse(localStorage.getItem("userTest")).status) {
+        let currentTime = Date.now();
+        if (currentTime >= JSON.parse(localStorage.getItem("userTest")).time) {
+          localStorage.setItem(
+            "userTest",
+            JSON.stringify({
+              status: false,
+              time: Date.now(),
+            })
+          );
         }
+      } else {
+        setIsUserTest(false);
       }
     }
-  }, [user]);
+  }, []);
 
   // hiện tại cứ vậy thôi. sau phải tìm cách fix với giá trị là stageCourseList[0]
   const handleResetAudio = (courses) => {
@@ -279,6 +288,8 @@ function WayPage() {
 
   const handleProgress = (state) => {
     const playedSeconds = state.playedSeconds;
+    video.current = playedSeconds;
+
     if (
       !isPosted &&
       isVideoReady &&
@@ -329,7 +340,9 @@ function WayPage() {
 
     if (
       currentIndex <
-      (userTest ? indexUserTest - 1 : currentLessonList.length - 1)
+      (userTest && !isUserTest
+        ? indexUserTest - 1
+        : currentLessonList.length - 1)
     ) {
       dispatch(
         getCurrentIndex({
@@ -350,7 +363,7 @@ function WayPage() {
       );
     }
 
-    if (userTest) {
+    if (userTest && !isUserTest) {
       if (currentIndex < indexUserTest - 1) {
         const activeElement = document.querySelector(".content_2 .active");
         activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -400,57 +413,30 @@ function WayPage() {
                 width="100%"
                 height="100%"
                 className="react_player"
-                url={lessonCurrent && lessonCurrent.pathVideo}
+                url={
+                  lessonCurrent.pathVideo !== ""
+                    ? `${process.env.REACT_APP_VIDEO_URL}${lessonCurrent.pathVideo}${process.env.REACT_APP_SUB_VIDEO_URL}=${code}`
+                    : ""
+                }
                 onProgress={handleProgress}
                 onReady={handleReady}
                 onDuration={handleDuration}
                 playing={false}
                 controls={true}
+                onChange={() => {
+                  console.log("tua");
+                }}
                 ref={video}
                 playsinline={true}
                 config={{
                   file: {
                     attributes: {
-                      controlsList: "nodownload", // Chặn tải xuống.
+                      controlsList: "nodownload",
                     },
                   },
                 }}
               />
-              {/* <div>
-                <ReactPlayer
-                  width="100%"
-                  height="100%"
-                  onProgress={handleProgress}
-                  onReady={handleReady}
-                  onDuration={handleDuration}
-                  playing={false}
-                  controls={true}
-                  ref={video}
-                  playsinline={true}
-                  config={{
-                    file: {
-                      attributes: {
-                        controlsList: "nodownload", // Chặn tải xuống.
-                      },
-                    },
-
-                    // forceHLS: {
-                    //   xhrSetup: (xhr) => {
-                    //     xhr.withCredentials = true; // Sử dụng credential để tránh việc chia sẻ link video
-                    //   },
-                    // },
-                    // forceDASH: {
-                    //   xhrSetup: (xhr) => {
-                    //     xhr.withCredentials = true; // Sử dụng credential để tránh việc chia sẻ link video
-                    //   },
-                    // },
-                    // headers: {
-                    //   Authorization: `Bearer ${user.accessToken} `, // truyền token vào header Authorization
-                    // },
-                  }}
-                  url={lessonCurrent.pathVideo}
-                />
-              </div> */}
+              <div>\</div>
             </div>
           ) : (
             <MusicPage
@@ -468,7 +454,7 @@ function WayPage() {
 
           <div className="w-full flex flex-col min-h-[20rem] mb-[6rem] pt-[1rem] md:pt-0">
             <div
-              className="flex pl-[4rem] py-[2rem] md:py-[1rem] pt-0 items-center gap-[3rem] border-b-[1px] border-dashed border-b-[#333] "
+              className="flex pl-[4rem] md:pl-0 md:justify-center py-[2rem] md:py-[1rem] pt-0 items-center gap-[3rem] border-b-[1px] border-dashed border-b-[#333] "
               aria-label="button-combination"
             >
               <button
@@ -501,6 +487,21 @@ function WayPage() {
               >
                 Bài tập
               </button>
+              <button
+                className="inline-flex items-center justify-center px-8 py-4 gap-2 font-sans font-semibold tracking-wide text-white bg-red-500 rounded-lg h-[40px]"
+                onClick={() => {
+                  setError(!err);
+                }}
+              >
+                Báo lỗi
+                <ContactSupportIcon
+                  className="r-[1rem] absalute"
+                  style={{ fontSize: "2rem" }}
+                />
+              </button>
+              {err && (
+                <ErrorPage setError={setError} lessonCurrent={lessonCurrent} />
+              )}
             </div>
             <div className="w-full">
               {lessonCurrent &&
@@ -525,6 +526,7 @@ function WayPage() {
         </div>
 
         <ScrollableTabsButtonAuto
+          isUserTest={isUserTest}
           userTest={userTest}
           stage={stageList}
           openMenu={openMenu}
@@ -534,12 +536,15 @@ function WayPage() {
           <button
             ref={prevBtn}
             disabled={
-              lessonCurrent &&
-              JSON.parse(
-                localStorage.getItem(
-                  lessonCurrent.stage === "AUDIO" ? "audioIndex" : "videoIndex"
-                )
-              ) === 0
+              !lessonCurrent ||
+              (lessonCurrent &&
+                JSON.parse(
+                  localStorage.getItem(
+                    lessonCurrent.stage === "AUDIO"
+                      ? "audioIndex"
+                      : "videoIndex"
+                  )
+                ) === 0)
             }
             className={`btn_control md:!text-[1.2rem] ssm:!text-[1rem] 
     ${
@@ -561,13 +566,24 @@ function WayPage() {
           <button
             ref={nextBtn}
             disabled={
-              lessonCurrent &&
-              JSON.parse(
-                localStorage.getItem(
-                  lessonCurrent.stage === "AUDIO" ? "audioIndex" : "videoIndex"
-                )
-              ) ===
-                (userTest ? indexUserTest - 1 : currentLessonList.length - 1)
+              !lessonCurrent ||
+              (lessonCurrent && !isUserTest
+                ? JSON.parse(
+                    localStorage.getItem(
+                      lessonCurrent.stage === "AUDIO"
+                        ? "audioIndex"
+                        : "videoIndex"
+                    )
+                  ) ===
+                  (userTest ? indexUserTest - 1 : currentLessonList.length - 1)
+                : JSON.parse(
+                    localStorage.getItem(
+                      lessonCurrent.stage === "AUDIO"
+                        ? "audioIndex"
+                        : "videoIndex"
+                    )
+                  ) ===
+                  currentLessonList.length - 1)
             }
             onClick={handleNextLesson}
             className={`btn_control md:!text-[1.2rem] ssm:!text-[1rem]
@@ -587,7 +603,7 @@ function WayPage() {
             bài tiếp theo <ArrowForwardIosIcon />
           </button>
           <div className="infor">
-            <p className="animate-charcter text-[2rem] mr-[1rem] md:text-[1.4rem] sm:hidden">
+            <p className="animate-charcter text-[2rem] mr-[1rem] md:text-[1.4rem] sm:hidden max-w-[40rem] overflow-ellipsis max-h-[4rem]">
               {` ${
                 lessonCurrent &&
                 Number(
@@ -600,8 +616,9 @@ function WayPage() {
                   )
                 ) + 1
               }. 
-            ${lessonCurrent && lessonCurrent.name}  `}
+            ${lessonCurrent && lessonCurrent.name}`}
             </p>
+            <span className="smm:hidden font-medium">MENU</span>
             <button
               className="btn "
               onClick={() => {

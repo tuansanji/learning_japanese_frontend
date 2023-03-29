@@ -43,10 +43,10 @@ function Footer() {
                         <span>Address :</span> Thủ đức - HCM
                       </li>
                       <li>
-                        <span>Phone :</span> 0968763453
+                        <span>Phone :</span> 0968763455
                       </li>
                       <li>
-                        <span>Mail :</span>sanji@gmail.com
+                        <span>Mail :</span>jlptSite@gmail.com
                       </li>
                     </ul>
                   </div>
@@ -123,13 +123,13 @@ function Footer() {
                 <div className="list__contact">
                   <ul>
                     <li>
-                      <a href="https://www.facebook.com/ngheoketaupl/">
+                      <a href="https://www.facebook.com/profile.php?id=100090524688743">
                         <FacebookIcon></FacebookIcon>
                       </a>
                     </li>
                     <li>
                       <a
-                        href="https://github.com/tuansanji/HoangMinhTuan_CIJS77/tree/master/final_project_2"
+                        href="https://www.facebook.com/profile.php?id=100090524688743"
                         style={{ backgroundColor: "brown" }}
                       >
                         <GitHubIcon></GitHubIcon>
@@ -137,14 +137,14 @@ function Footer() {
                     </li>
                     <li>
                       <a
-                        href="mailto:hoangtuansanji@gmail.com"
+                        href="https://www.facebook.com/profile.php?id=100090524688743"
                         style={{ backgroundColor: "red" }}
                       >
                         <EmailIcon></EmailIcon>
                       </a>
                     </li>
                     <li>
-                      <a href="tel:+84968763453">
+                      <a href="https://www.facebook.com/profile.php?id=100090524688743">
                         <PhoneIcon></PhoneIcon>
                       </a>
                     </li>

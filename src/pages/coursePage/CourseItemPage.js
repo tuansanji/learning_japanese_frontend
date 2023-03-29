@@ -2,8 +2,12 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function CourseItemPage({ img, lesson, hour, state, hourLearn, title, level }) {
+  const user = useSelector((state) => {
+    return state.auth.login?.currentUser;
+  });
   return (
     <div className=" w-[960px] h-[145px] top-[95px] border border-[#000000] rounded-[10px] text-[12px] mx-auto my-[4rem] sm:my-[2rem] overflow-hidden xl:w-[90%] md:w-[90%]">
       <div className="flex gap-[5rem] h-[100%] px-[5rem] sm:px-[3rem] sm:pr-0 sm:gap-[2rem] bg-[#ded7e1] overflow-hidden">
@@ -34,12 +38,17 @@ function CourseItemPage({ img, lesson, hour, state, hourLearn, title, level }) {
               Xem chi tiết khóa học
             </Button>
           </Link>
-          <p className="flex items-center justify-center  sm:mt-1 ">
+          <p
+            className={`${user && user.userTest ? "hidden" : "flex"}  ${
+              user && user.courses && user.courses.includes(level)
+                ? "hidden"
+                : "flex"
+            } items-center justify-center  sm:mt-1  `}
+          >
             <span className="text-[1.4rem] sm:text-[1.3rem] mr-2 line-through">
               399.000đ
             </span>
             <span className="text-[#f47425] text-[1.6rem] sm:text-[1.4rem]font-semibold">
-              {" "}
               139.000đ
             </span>
           </p>

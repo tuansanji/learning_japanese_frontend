@@ -49,6 +49,7 @@ export default function ScrollableTabsButtonAuto({
   stage,
   openMenu,
   setOpenMenu,
+  isUserTest,
 }) {
   const dispatch = useDispatch();
   const params = useParams();
@@ -129,6 +130,7 @@ export default function ScrollableTabsButtonAuto({
           className="h-full bg-[#ffff] overflow-auto"
         >
           <Support
+            isUserTest={isUserTest}
             userTest={userTest}
             stageCourse={stageCourse}
             listCurrent={listCurrent}

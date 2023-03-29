@@ -27,12 +27,14 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { toastSuccess } from "../../redux/slice/toastSlice";
 import NotFoundPage from "../../pages/NotFoundPage/NotFoundPage";
+import MsgErrAdmin from "./msgUser/MsgErrAdmin";
 export const socket = io(process.env.REACT_APP_BACKEND_URL);
 
 function Container() {
   const [openMsg, setOpenMsg] = useState(false);
   const [openMsgAdmin, setOpenMsgAdmin] = useState(false);
   const [msg, setMsg] = useState(false);
+  const [msgErr, setMsgErr] = useState(false);
   const dispatch = useDispatch();
 
   const user = useSelector((state) => {
@@ -102,6 +104,18 @@ function Container() {
       >
         <NavigationIcon style={{ fontSize: "40px", color: "yellow" }} />
       </button>
+
+      {user && user.isAdmin && (
+        <button
+          className="fixed right-10 bottom-[50%] z-[7777] p-4 rounded-[50%] bg-white active:opacity-50 transition-opacity hover:bg-green-500"
+          onClick={() => {
+            setMsgErr(!msgErr);
+          }}
+        >
+          <NotificationsIcon style={{ fontSize: "3rem", color: "red" }} />
+        </button>
+      )}
+      {msgErr && <MsgErrAdmin />}
       {!user || !user.isAdmin ? (
         <button
           onClick={() => {

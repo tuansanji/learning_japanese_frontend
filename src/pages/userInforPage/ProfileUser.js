@@ -20,6 +20,9 @@ function UserInfor() {
     return state.auth.login?.currentUser;
   });
   let axiosJWT = createAxios(user, dispatch, logOutSuccess);
+  const MAX_IMAGE_SIZE = 990000; // 1MB
+  const MAX_IMAGE_WIDTH = 1000; // Giới hạn chiều rộng tối đa
+  const MAX_IMAGE_HEIGHT = 1000;
 
   useEffect(() => {
     if (!user) {
@@ -31,11 +34,33 @@ function UserInfor() {
     if (e.target.files && e.target.files[0]) {
       const reader = new FileReader();
       reader.onload = (event) => {
-        setImagePreview(event.target.result);
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          let width = img.width;
+          let height = img.height;
+          if (width > MAX_IMAGE_WIDTH) {
+            height *= MAX_IMAGE_WIDTH / width;
+            width = MAX_IMAGE_WIDTH;
+          }
+          if (height > MAX_IMAGE_HEIGHT) {
+            width *= MAX_IMAGE_HEIGHT / height;
+            height = MAX_IMAGE_HEIGHT;
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, width, height);
+          const dataUrl = canvas.toDataURL("image/jpeg", 0.7); // Giảm chất lượng ảnh xuống còn 70%
+          const blob = dataURLtoBlob(dataUrl);
+          setImagePreview(dataUrl);
+        };
+        img.src = event.target.result;
       };
       reader.readAsDataURL(e.target.files[0]);
     }
   };
+
   function dataURLtoBlob(dataURL) {
     const arr = dataURL.split(",");
     const mime = arr[0].match(/:(.*?);/)[1];
@@ -47,6 +72,7 @@ function UserInfor() {
     }
     return new Blob([u8arr], { type: mime });
   }
+
   const handleUploadImage = async () => {
     if (!imagePreview) {
       console.log("No image selected.");

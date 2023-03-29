@@ -10,7 +10,13 @@ import {
   getLessonCurrent,
 } from "../../redux/slice/courseSlice";
 import { useCallback, useEffect, useRef, useState } from "react";
-function Support({ userTest, listCurrent, stageCourse, setOpenMenu }) {
+function Support({
+  userTest,
+  listCurrent,
+  stageCourse,
+  setOpenMenu,
+  isUserTest,
+}) {
   const dispatch = useDispatch();
   const width = useRef(null);
 
@@ -171,7 +177,7 @@ function Support({ userTest, listCurrent, stageCourse, setOpenMenu }) {
                   {stageCourse
                     .filter((stage) => stage.lesson === item)
                     .map((lesson, index) => {
-                      if (!userTest) {
+                      if (!userTest || isUserTest) {
                         return (
                           <div
                             key={lesson._id}
