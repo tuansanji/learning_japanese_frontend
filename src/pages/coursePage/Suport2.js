@@ -50,45 +50,53 @@ export default function ScrollableTabsButtonAuto({
   openMenu,
   setOpenMenu,
   isUserTest,
+  setAudioOrVideo,
+  audioOrVideo,
 }) {
   const dispatch = useDispatch();
   const params = useParams();
 
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(null);
   const [listCurrent, setListCurrent] = useState([]);
   const stageCourse = useSelector((state) => state.courses?.listStageCurrent);
 
   useEffect(() => {
     let stageCurrent;
-    if (
-      localStorage.getItem("video") &&
-      JSON.parse(localStorage.getItem("video")) != null
-    ) {
+    if (localStorage.getItem("video") || localStorage.getItem("audio")) {
       stageCurrent =
-        stage && stage.indexOf(JSON.parse(localStorage.getItem("video")).stage);
+        stage &&
+        stage.indexOf(
+          JSON.parse(localStorage.getItem(audioOrVideo ? "audio" : "video"))
+            .stage
+        );
       if (stageCurrent >= 0) {
         setValue(stageCurrent);
       }
+    } else {
+      setValue(0);
     }
   }, [stage]);
-
   useEffect(() => {
-    getStageCourse(dispatch, params.level, params.way, stage[value]).then(
-      (list) => {
-        dispatch(getCurrentStageList(list));
-      }
-    );
+    if (stage.length > 0) {
+      let arr = [];
+      stageCourse && stageCourse.forEach((way) => way && arr.push(way.lesson));
+      setListCurrent([...new Set(arr)]);
+    }
+  }, [stageCourse, value, stage]);
+  useEffect(() => {
+    if (stage.length > 0) {
+      getStageCourse(dispatch, params.level, params.way, stage[value]).then(
+        (list) => {
+          dispatch(getCurrentStageList(list));
+        }
+      );
+    }
   }, [value, stage]);
 
-  useEffect(() => {
-    let arr = [];
-    stageCourse && stageCourse.forEach((way) => way && arr.push(way.lesson));
-    setListCurrent([...new Set(arr)]);
-  }, [stageCourse, value]);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  // console.log(stageCourse);
+
   return (
     <div
       className={` ${
@@ -135,6 +143,8 @@ export default function ScrollableTabsButtonAuto({
             stageCourse={stageCourse}
             listCurrent={listCurrent}
             setOpenMenu={setOpenMenu}
+            setAudioOrVideo={setAudioOrVideo}
+            audioOrVideo={audioOrVideo}
           />
         </TabPanel>
       ))}

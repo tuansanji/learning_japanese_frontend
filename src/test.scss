@@ -87,3 +87,41 @@
     transform: rotate(-6deg);
   }
 }
+.basic {
+  padding-left: 2rem !important;
+  padding-right: 2rem !important;
+  span {
+    line-height: 2rem;
+  }
+  p {
+    padding-top: 1rem;
+  }
+}
+.WordSection1 {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+@media (max-width: 500px) {
+  .basic * {
+    font-size: 1.6rem !important;
+  }
+  .basic p {
+    padding-top: 1rem;
+  }
+  .basic span {
+    line-height: 2rem;
+  }
+  #page-container * {
+    max-width: 370px;
+    font-size: 45px !important;
+  }
+  #page-container .t {
+    left: 0 !important;
+  }
+  .app-container *:not(label) {
+    font-size: 16px !important;
+  }
+  .WordSection1 * {
+    font-size: 16px !important;
+  }
+}

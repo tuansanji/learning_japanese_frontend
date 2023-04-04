@@ -71,7 +71,7 @@ function ErrorPage({ setError, lessonCurrent }) {
           }
           label={
             <span className="text-gray-700 font-medium text-[2rem]">
-              Lỗi Video
+              Lỗi Video - Audio
             </span>
           }
         />{" "}

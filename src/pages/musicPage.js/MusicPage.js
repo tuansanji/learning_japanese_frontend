@@ -15,7 +15,12 @@ import {
 import { useDispatch } from "react-redux";
 import Loading from "../../component/SupportTab/Loading";
 import axios from "axios";
-function MusicPage({ lessonCurrent, currentLessonList, openMenu }) {
+function MusicPage({
+  lessonCurrent,
+  currentLessonList,
+  openMenu,
+  setMenuMusic2,
+}) {
   const [play, setPlay] = useState(false);
   const cdRef = useRef(null);
   const audioRef = useRef(null);
@@ -72,16 +77,13 @@ function MusicPage({ lessonCurrent, currentLessonList, openMenu }) {
       setLoading(true);
 
       const audio = new Audio(lessonCurrent.audio);
-      let id = setTimeout(() => {
-        setLoading(false);
-      }, 15000);
+
       audio.addEventListener("loadeddata", () => {
         // Set isLoading to false when audio has finished loading
       });
 
       // Clean up event listener on component unmount
       return () => {
-        clearTimeout(id);
         audio.removeEventListener("loadeddata", handleLoadedData);
       };
     }
@@ -239,7 +241,7 @@ function MusicPage({ lessonCurrent, currentLessonList, openMenu }) {
             ? `h-[20vh] fixed md:h-[14rem]  ${
                 openMenu ? "w-[75%]" : "w-full"
               } left-0`
-            : "h-[80vh]  md:h-[70vh] w-[800px] "
+            : "h-[80vh]  md:h-[63vh] w-[800px] md:w-full "
         }`}
       >
         {loading && (
@@ -257,6 +259,7 @@ function MusicPage({ lessonCurrent, currentLessonList, openMenu }) {
             className="absolute top-[-1rem] right-[3rem] cursor-pointer "
             onClick={() => {
               setMenuMusic(!menuMusic);
+              setMenuMusic2(!menuMusic);
             }}
           >
             <ArrowDropDownIcon style={{ fontSize: "50px" }} />

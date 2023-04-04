@@ -4,7 +4,7 @@ import { Form, Table, Button, Descriptions, Select } from "antd";
 import { Input } from "antd";
 
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   deleteCourse,
   deleteManyCourse,
@@ -15,6 +15,7 @@ import {
 import { toastErr, toastSuccess } from "../../../../redux/slice/toastSlice";
 import Loading from "../../../SupportTab/Loading";
 import { createAxios } from "../../../../redux/createInstance";
+import axios from "axios";
 
 const defaultExpandable = {
   expandedRowRender: (record) => <div>{record.description}</div>,
@@ -23,12 +24,19 @@ const { TextArea } = Input;
 
 const MenuCourses = ({ currentUser }) => {
   const dispatch = useDispatch();
+  const user = useSelector((state) => {
+    return state.auth.login.currentUser;
+  });
   const [isLoading, setIsLoading] = useState(true);
   const [inputSearch, setInputSearch] = useState("");
   const [searchSelector, setSearchSelector] = useState("name");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [editCourse, setEditCourse] = useState(false);
   const [listCourses, setListCourses] = useState([]);
+  const [moveCourse, setMoveCourse] = useState({
+    courseId: "",
+    nextCourseId: "",
+  });
 
   const [msg, setMsg] = useState("");
   const [reRender, setRerender] = useState(null);
@@ -68,7 +76,7 @@ const MenuCourses = ({ currentUser }) => {
   useEffect(() => {
     getAllCourses(currentUser.accessToken, axiosJWT)
       .then((courses) => {
-        setListCourses(courses);
+        setListCourses(courses.sort((a, b) => a.order - b.order));
         setIsLoading(false);
       })
       .catch((err) => console.log(err));
@@ -79,6 +87,10 @@ const MenuCourses = ({ currentUser }) => {
       title: "Name",
       dataIndex: "name",
       sorter: (a, b) => a.name.localeCompare(b.name),
+    },
+    {
+      title: "order",
+      dataIndex: "order",
     },
     {
       title: "Lesson",
@@ -191,6 +203,7 @@ const MenuCourses = ({ currentUser }) => {
         audio: course.audio,
         timeLine: course.timeLine,
         doc: course.doc,
+        order: course.order,
         description: (
           <Descriptions
             className="bg-red"
@@ -437,6 +450,7 @@ const MenuCourses = ({ currentUser }) => {
       audio: record.audio,
       desc: record.desc,
       doc: record.doc,
+
       author: "dũng mori",
     });
     setSelectedRecord(expanded ? record : null);
@@ -537,6 +551,22 @@ const MenuCourses = ({ currentUser }) => {
     }
   };
 
+  const handleMoveCourse = () => {
+    if (moveCourse.courseId && moveCourse.nextCourseId) {
+      axios
+        .post(`${process.env.REACT_APP_BACKEND_URL}/courses/move`, moveCourse, {
+          headers: { token: `Bearer ${user.accessToken}` },
+        })
+        .then((res) => {
+          dispatch(toastSuccess(res.data));
+          setRerender(res.data);
+        })
+        .catch((err) => dispatch(toastErr(err.response.data)));
+    } else {
+      dispatch(toastErr("Vui lòng điền đầy đủ"));
+    }
+  };
+
   return (
     <>
       {isLoading && (
@@ -570,11 +600,45 @@ const MenuCourses = ({ currentUser }) => {
               setInputSearch(e.target.value);
             }}
           ></input>
+        </div>{" "}
+        <div className="flex h-[3rem] my-4 gap-5 items-center">
+          <Button
+            className="shadow-desc hover:bg-[#e13917] "
+            onClick={() => {
+              handleMoveCourse();
+            }}
+          >
+            Di chuyển
+          </Button>
+          <label className="text-[red]">ID: </label>
+          <input
+            className="border border-[#333] outline-none h-full w-[40rem]  rounded-xl px-3"
+            value={moveCourse.courseId}
+            placeholder="Điền id bài học..."
+            onChange={(e) => {
+              setMoveCourse({
+                ...moveCourse,
+                courseId: e.target.value,
+              });
+            }}
+          ></input>{" "}
+          <label className="text-[red]">Order: </label>
+          <input
+            className="border border-[#333] outline-none h-full w-[40rem]  rounded-xl px-3"
+            value={moveCourse.nextCourseId}
+            placeholder="Điền order bài học..."
+            onChange={(e) => {
+              setMoveCourse({
+                ...moveCourse,
+                nextCourseId: e.target.value,
+              });
+            }}
+          ></input>
         </div>
       </div>
       <div
         className={`fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-75 transition-opacity ease-out duration-300 pointer-events-none  ${
-          overlayPost ? "opacity-1 z-[99999]" : "opacity-0 z-[-99999]"
+          overlayPost ? "opacity-1 z-[1111]" : "opacity-0 z-[-9999]"
         }`}
         id="overlay"
       >

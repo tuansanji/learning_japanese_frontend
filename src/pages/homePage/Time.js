@@ -1,6 +1,6 @@
 import { Col, Row, Statistic } from "antd";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toastSuccess } from "../../redux/slice/toastSlice";
 const { Countdown } = Statistic;
 
@@ -8,13 +8,32 @@ const Time = () => {
   const [time, setTime] = useState(0);
   const [userTest, setUserTest] = useState(true);
   const dispatch = useDispatch();
+  const user = useSelector((state) => {
+    return state.auth.login?.currentUser;
+  });
+
   useEffect(() => {
-    if (localStorage.getItem("userTest")) {
-      if (JSON.parse(localStorage.getItem("userTest")).status) {
-        const timeUser = JSON.parse(localStorage.getItem("userTest")).time;
-        setTime(timeUser - Date.now());
-      } else {
+    if (!user) {
+      if (localStorage.getItem("userTest")) {
+        if (JSON.parse(localStorage.getItem("userTest")).status) {
+          const timeUser = JSON.parse(localStorage.getItem("userTest")).time;
+          setTime(timeUser - Date.now());
+        } else {
+          setUserTest(false);
+        }
+      }
+    } else {
+      if (user.courses.length > 0) {
         setUserTest(false);
+      } else {
+        if (localStorage.getItem("userTest")) {
+          if (JSON.parse(localStorage.getItem("userTest")).status) {
+            const timeUser = JSON.parse(localStorage.getItem("userTest")).time;
+            setTime(timeUser - Date.now());
+          } else {
+            setUserTest(false);
+          }
+        }
       }
     }
   }, []);

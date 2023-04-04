@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ReactPlayer from "react-player";
 import axios from "axios";
-
+import { AudioPlaylist } from "ts-audio";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import SyncAltIcon from "@material-ui/icons/SyncAlt";
@@ -35,8 +35,10 @@ function WayPage() {
   const [currentLessonList, setCurrentLessonList] = useState([]);
   const [isVideoReady, setIsVideoReady] = useState(false);
   const [videoDuration, setVideoDuration] = useState(null);
-  const [documentLesson, setDocumentLesson] = useState("pdf");
+  const [documentLesson, setDocumentLesson] = useState("");
   const [isUserTest, setIsUserTest] = useState(true);
+  const [menuMusic, setMenuMusic2] = useState(false);
+  const [audioOrVideo, setAudioOrVideo] = useState(false);
   const prevBtn = useRef();
   const nextBtn = useRef();
   const video = useRef();
@@ -54,6 +56,26 @@ function WayPage() {
   });
 
   const [code, setCode] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      if (user.courses.includes(params.level)) {
+        setUserTest(false);
+      }
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (lessonCurrent) {
+      if (lessonCurrent.pathVideo === "" && lessonCurrent.audio !== "") {
+        setAudioOrVideo(true);
+      } else if (lessonCurrent.pathVideo === "" && lessonCurrent.audio === "") {
+        setAudioOrVideo(false);
+      } else if (lessonCurrent.pathVideo !== "") {
+        setAudioOrVideo(false);
+      }
+    }
+  }, [lessonCurrent]);
 
   useEffect(() => {
     const now = new Date();
@@ -109,9 +131,7 @@ function WayPage() {
           state: "audioIndex",
           index:
             JSON.parse(
-              localStorage.getItem(
-                lessonCurrent.stage === "AUDIO" ? "audioIndex" : "videoIndex"
-              )
+              localStorage.getItem(audioOrVideo ? "audioIndex" : "videoIndex")
             ) || 0,
         })
       );
@@ -131,9 +151,7 @@ function WayPage() {
           state: "videoIndex",
           index:
             JSON.parse(
-              localStorage.getItem(
-                lessonCurrent.stage === "AUDIO" ? "audioIndex" : "videoIndex"
-              )
+              localStorage.getItem(audioOrVideo ? "audioIndex" : "videoIndex")
             ) || 0,
         })
       );
@@ -159,7 +177,7 @@ function WayPage() {
       let index = currentStage.indexOf(result[0]);
 
       localStorage.setItem(
-        lessonCurrent.stage === "AUDIO" ? "audioIndex" : "videoIndex",
+        audioOrVideo ? "audioIndex" : "videoIndex",
         JSON.stringify(index)
       );
     }
@@ -171,9 +189,7 @@ function WayPage() {
     ) {
       let index =
         JSON.parse(
-          localStorage.getItem(
-            lessonCurrent.stage === "AUDIO" ? "audioIndex" : "videoIndex"
-          )
+          localStorage.getItem(audioOrVideo ? "audioIndex" : "videoIndex")
         ) || 0;
       localStorage.setItem(
         params.way.split("+").join(" "),
@@ -183,41 +199,58 @@ function WayPage() {
   }, [lessonCurrent]);
 
   useEffect(() => {
+    if (lessonCurrent) {
+      if (lessonCurrent.pdf !== "") {
+        setDocumentLesson("pdf");
+      } else {
+        if (lessonCurrent.doc !== "") {
+          setDocumentLesson("doc");
+        }
+      }
+    }
+  }, [lessonCurrent]);
+
+  useEffect(() => {
     getWayCourse(dispatch, params.level, params.way)
       .then((stage) => {
         setStageList([...new Set(stage)]);
         setLoading(false);
 
-        if (stage[0] === "AUDIO") {
-          localStorage.getItem("audio") &&
-          JSON.parse(localStorage.getItem("audio")).way ===
-            params.way.split("+").join(" ")
-            ? dispatch(
-                getLessonCurrent({
-                  state: "audio",
-                  data: JSON.parse(localStorage.getItem("audio")),
-                })
-              )
-            : handleResetAudio(
-                JSON.parse(
-                  localStorage.getItem(params.way.split("+").join(" "))
+        if (localStorage.getItem(params.way.split("+").join(" "))) {
+          if (
+            JSON.parse(localStorage.getItem(params.way.split("+").join(" ")))
+              .audio !== ""
+          ) {
+            localStorage.getItem("audio") &&
+            JSON.parse(localStorage.getItem("audio")).way ===
+              params.way.split("+").join(" ")
+              ? dispatch(
+                  getLessonCurrent({
+                    state: "audio",
+                    data: JSON.parse(localStorage.getItem("audio")),
+                  })
                 )
-              );
-        } else {
-          localStorage.getItem("video") &&
-          JSON.parse(localStorage.getItem("video")).way ===
-            params.way.split("+").join(" ")
-            ? dispatch(
-                getLessonCurrent({
-                  state: "video",
-                  data: JSON.parse(localStorage.getItem("video")),
-                })
-              )
-            : handleResetVideo(
-                JSON.parse(
-                  localStorage.getItem(params.way.split("+").join(" "))
+              : handleResetAudio(
+                  JSON.parse(
+                    localStorage.getItem(params.way.split("+").join(" "))
+                  )
+                );
+          } else {
+            localStorage.getItem("video") &&
+            JSON.parse(localStorage.getItem("video")).way ===
+              params.way.split("+").join(" ")
+              ? dispatch(
+                  getLessonCurrent({
+                    state: "video",
+                    data: JSON.parse(localStorage.getItem("video")),
+                  })
                 )
-              );
+              : handleResetVideo(
+                  JSON.parse(
+                    localStorage.getItem(params.way.split("+").join(" "))
+                  )
+                );
+          }
         }
       })
       .catch((err) => {
@@ -241,38 +274,38 @@ function WayPage() {
     const footer = document.querySelector("#footer");
     const btnBackToTop = document.querySelector("#btn_BackToTop");
     const btnMsg = document.querySelector("#btn-msg");
+    const messenger = document.querySelector("#fb-root");
+    // fb-customer-chat
     footer.style.display = "none";
+    messenger.style.display = "none";
     btnBackToTop.style.display = "none";
     btnMsg.style.display = "none";
 
     return () => {
       footer.style.display = "block";
+      messenger.style.display = "block";
       btnBackToTop.style.display = "block";
       btnMsg.style.display = "block";
     };
   }, []);
   const handlePrevLesson = () => {
     let currentIndex = JSON.parse(
-      localStorage.getItem(
-        lessonCurrent.stage === "AUDIO" ? "audioIndex" : "videoIndex"
-      )
+      localStorage.getItem(audioOrVideo ? "audioIndex" : "videoIndex")
     );
 
     if (currentIndex > 0) {
       dispatch(
         getCurrentIndex({
-          state: lessonCurrent.stage === "AUDIO" ? "audioIndex" : "videoIndex",
+          state: audioOrVideo ? "audioIndex" : "videoIndex",
           index: currentIndex - 1,
         })
       );
       let newIndex = JSON.parse(
-        localStorage.getItem(
-          lessonCurrent.stage === "AUDIO" ? "audioIndex" : "videoIndex"
-        )
+        localStorage.getItem(audioOrVideo ? "audioIndex" : "videoIndex")
       );
       dispatch(
         getLessonCurrent({
-          state: lessonCurrent.stage === "AUDIO" ? "audio" : "video",
+          state: audioOrVideo ? "audio" : "video",
           data: currentLessonList[newIndex],
         })
       );
@@ -310,7 +343,6 @@ function WayPage() {
           }
         )
         .then((response) => {
-          console.log(response);
           isPosted = true;
         });
 
@@ -333,9 +365,7 @@ function WayPage() {
   //next bài học
   const handleNextLesson = () => {
     let currentIndex = JSON.parse(
-      localStorage.getItem(
-        lessonCurrent.stage === "AUDIO" ? "audioIndex" : "videoIndex"
-      )
+      localStorage.getItem(audioOrVideo ? "audioIndex" : "videoIndex")
     );
 
     if (
@@ -346,18 +376,16 @@ function WayPage() {
     ) {
       dispatch(
         getCurrentIndex({
-          state: lessonCurrent.stage === "AUDIO" ? "audioIndex" : "videoIndex",
+          state: audioOrVideo ? "audioIndex" : "videoIndex",
           index: currentIndex + 1,
         })
       );
       let newIndex = JSON.parse(
-        localStorage.getItem(
-          lessonCurrent.stage === "AUDIO" ? "audioIndex" : "videoIndex"
-        )
+        localStorage.getItem(audioOrVideo ? "audioIndex" : "videoIndex")
       );
       dispatch(
         getLessonCurrent({
-          state: lessonCurrent.stage === "AUDIO" ? "audio" : "video",
+          state: audioOrVideo ? "audio" : "video",
           data: currentLessonList[newIndex],
         })
       );
@@ -405,9 +433,7 @@ function WayPage() {
           } 
         overflow-y-auto h-full fixed left-0 lg:w-[100%] md:w-full top-[6rem]`}
         >
-          {lessonCurrent &&
-          lessonCurrent !== null &&
-          lessonCurrent.stage !== "AUDIO" ? (
+          {lessonCurrent && lessonCurrent !== null && !audioOrVideo ? (
             <div className="h-[70%] md:h-[600px] sm:h-[220px] w-full relative">
               <ReactPlayer
                 width="100%"
@@ -423,9 +449,6 @@ function WayPage() {
                 onDuration={handleDuration}
                 playing={false}
                 controls={true}
-                onChange={() => {
-                  console.log("tua");
-                }}
                 ref={video}
                 playsinline={true}
                 config={{
@@ -443,16 +466,21 @@ function WayPage() {
               openMenu={openMenu}
               lessonCurrent={lessonCurrent}
               currentLessonList={currentLessonList}
+              setMenuMusic2={setMenuMusic2}
             />
           )}
-          <div className="py-4">
+          <div className={`${menuMusic ? "pt-[15rem]" : "py-4"}`}>
             <p className="animate-charcter text-[3rem] md:text-[2rem] text-center ">
               {lessonCurrent &&
                 `${lessonCurrent.name} - ${lessonCurrent.stage}`}
             </p>
           </div>
 
-          <div className="w-full flex flex-col min-h-[20rem] mb-[6rem] pt-[1rem] md:pt-0">
+          <div
+            className={`w-full flex flex-col min-h-[20rem] mb-[6rem]  md:pt-0 ${
+              menuMusic ? "pt-[1rem]" : "pt-[1rem]"
+            }`}
+          >
             <div
               className="flex pl-[4rem] md:pl-0 md:justify-center py-[2rem] md:py-[1rem] pt-0 items-center gap-[3rem] border-b-[1px] border-dashed border-b-[#333] "
               aria-label="button-combination"
@@ -530,6 +558,8 @@ function WayPage() {
           userTest={userTest}
           stage={stageList}
           openMenu={openMenu}
+          audioOrVideo={audioOrVideo}
+          setAudioOrVideo={setAudioOrVideo}
           setOpenMenu={setOpenMenu}
         />
         <div className="menu_sub z-[9999] tablet:justify-center">
@@ -540,9 +570,7 @@ function WayPage() {
               (lessonCurrent &&
                 JSON.parse(
                   localStorage.getItem(
-                    lessonCurrent.stage === "AUDIO"
-                      ? "audioIndex"
-                      : "videoIndex"
+                    audioOrVideo ? "audioIndex" : "videoIndex"
                   )
                 ) === 0)
             }
@@ -550,9 +578,7 @@ function WayPage() {
     ${
       lessonCurrent &&
       JSON.parse(
-        localStorage.getItem(
-          lessonCurrent.stage === "AUDIO" ? "audioIndex" : "videoIndex"
-        )
+        localStorage.getItem(audioOrVideo ? "audioIndex" : "videoIndex")
       ) === 0 &&
       "opacity-40"
     }`}
@@ -570,17 +596,13 @@ function WayPage() {
               (lessonCurrent && !isUserTest
                 ? JSON.parse(
                     localStorage.getItem(
-                      lessonCurrent.stage === "AUDIO"
-                        ? "audioIndex"
-                        : "videoIndex"
+                      audioOrVideo ? "audioIndex" : "videoIndex"
                     )
                   ) ===
                   (userTest ? indexUserTest - 1 : currentLessonList.length - 1)
                 : JSON.parse(
                     localStorage.getItem(
-                      lessonCurrent.stage === "AUDIO"
-                        ? "audioIndex"
-                        : "videoIndex"
+                      audioOrVideo ? "audioIndex" : "videoIndex"
                     )
                   ) ===
                   currentLessonList.length - 1)
@@ -591,9 +613,7 @@ function WayPage() {
           ${
             lessonCurrent &&
             JSON.parse(
-              localStorage.getItem(
-                lessonCurrent.stage === "AUDIO" ? "audioIndex" : "videoIndex"
-              )
+              localStorage.getItem(audioOrVideo ? "audioIndex" : "videoIndex")
             ) ===
               currentLessonList.length - 1 &&
             "opacity-40"
@@ -609,16 +629,14 @@ function WayPage() {
                 Number(
                   JSON.parse(
                     localStorage.getItem(
-                      lessonCurrent.stage === "AUDIO"
-                        ? "audioIndex"
-                        : "videoIndex"
+                      audioOrVideo ? "audioIndex" : "videoIndex"
                     )
                   )
                 ) + 1
               }. 
             ${lessonCurrent && lessonCurrent.name}`}
             </p>
-            <span className="smm:hidden font-medium">MENU</span>
+            <span className="smm:hidden font-medium">Chọn bài</span>
             <button
               className="btn "
               onClick={() => {

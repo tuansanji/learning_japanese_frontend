@@ -10,6 +10,11 @@
       content="Ngoài các Khóa tiếng Nhật tổng quát cơ bản, JLPT.SITE còn cung cấp nhiều lựa chọn khác như: khóa học tiếng Nhật cao cấp, khóa học giao tiếp tiếng Nhật, khóa luyện thi chứng chỉ năng lực Nhật ngữ JLPT, khóa học theo yêu cầu thiết kế riêng. Khóa học tiếng Nhật tổng quát cơ bản giúp học viên rèn luyện tổng hợp 4 kỹ năng Nghe – Nói – Đọc – Viết. Trong đó Kỹ năng giao tiếp được đặc biệt chú trọng."
     />
 
+    <meta
+      property="og:image"
+      content="https://jlpt.site/files/img/hoc-tieng-nhat-moi-ngay.jpg"
+    />
+
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
@@ -19,6 +24,21 @@
         event.preventDefault()
       );
     </script> -->
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-WXYKP10TPF"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-WXYKP10TPF");
+    </script>
+
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/html-react-parser@latest/dist/html-react-parser.min.js"></script>
     <script src="https://player.vimeo.com/api/player.js"></script>

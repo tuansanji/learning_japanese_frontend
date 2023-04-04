@@ -471,6 +471,7 @@ const MenuUser = ({ currentUser }) => {
           <input
             id="inputSearch"
             className="border border-[#333] outline-none h-full w-[40rem]  rounded-xl px-3"
+            placeholder="Điền username..."
             value={userTest}
             onChange={(e) => {
               setUserTest(e.target.value);

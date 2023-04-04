@@ -1,0 +1,9 @@
+@media screen and (max-width: 500px) {
+  * {
+    font-size: 14px !important;
+  }
+  body {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+}
