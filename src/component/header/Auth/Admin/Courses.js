@@ -75,32 +75,30 @@ const MenuCourses = ({ currentUser }) => {
   });
   let axiosJWT = createAxios(currentUser, dispatch);
 
-const token = ""
-for (let index = 0; index < 10; index++) {
- fetch.post(
-    `${process.env.REACT_APP_BACKEND_URL}/courses`,
+  const token = "";
+  for (let index = 0; index < 10; index++) {
+    fetch.post(
+      `${process.env.REACT_APP_BACKEND_URL}/courses`,
 
-    {
-      name: "",
-      lesson: "",
-      stage: "",
-      way: "",
-      level: "",
-      pathVideo: "",
-      pdf: "",
-      audio: "",
-      desc: "",
-      doc: "",
-      author: "dũng mori",
-    },
+      {
+        name: "",
+        lesson: "",
+        stage: "",
+        way: "",
+        level: "",
+        pathVideo: "",
+        pdf: "",
+        audio: "",
+        desc: "",
+        doc: "",
+        author: "dũng mori",
+      },
 
-    {
-      headers: { token: `Bearer ${token}` },
-    }
-  );
-  
-}
-
+      {
+        headers: { token: `Bearer ${token}` },
+      }
+    );
+  }
 
   useEffect(() => {
     getAllCourses(currentUser.accessToken, axiosJWT)
@@ -566,29 +564,20 @@ for (let index = 0; index < 10; index++) {
       postNewCourse.way !== "" &&
       postNewCourse.level !== ""
     ) {
-      let course = {
-        name: document.getElementById("pname").value,
-        lesson: document.getElementById("plesson").value,
-        stage: document.getElementById("pstage").value,
-        way: document.getElementById("pway").value,
-        level: document.getElementById("plevel").value,
-        pathVideo: document.getElementById("ppathVideo").value,
-        pdf: document.getElementById("ppdf").value,
-        audio: document.getElementById("paudio").value,
-        desc: "",
-        doc: document.getElementById("pdoc").value,
-        author: "dũng mori",
-      };
-      postCourse(currentUser.accessToken, course, axiosJWT)
-        .then((res) => {
-          setMsg(res.data);
-          dispatch(toastSuccess(res.data));
-        })
-        .catch((err) => {
-          dispatch(toastSuccess(err.response.data));
-          setMsg(err.response.data);
-        });
-      // postCourse(currentUser.accessToken, postNewCourse, axiosJWT)
+      // let course = {
+      //   name: document.getElementById("pname").value,
+      //   lesson: document.getElementById("plesson").value,
+      //   stage: document.getElementById("pstage").value,
+      //   way: document.getElementById("pway").value,
+      //   level: document.getElementById("plevel").value,
+      //   pathVideo: document.getElementById("ppathVideo").value,
+      //   pdf: document.getElementById("ppdf").value,
+      //   audio: document.getElementById("paudio").value,
+      //   desc: "",
+      //   doc: document.getElementById("pdoc").value,
+      //   author: "dũng mori",
+      // };
+      // postCourse(currentUser.accessToken, course, axiosJWT)
       //   .then((res) => {
       //     setMsg(res.data);
       //     dispatch(toastSuccess(res.data));
@@ -597,6 +586,15 @@ for (let index = 0; index < 10; index++) {
       //     dispatch(toastSuccess(err.response.data));
       //     setMsg(err.response.data);
       //   });
+      postCourse(currentUser.accessToken, postNewCourse, axiosJWT)
+        .then((res) => {
+          setMsg(res.data);
+          dispatch(toastSuccess(res.data));
+        })
+        .catch((err) => {
+          dispatch(toastSuccess(err.response.data));
+          setMsg(err.response.data);
+        });
     } else {
       setMsg("Vui lòng nhập đầy đủ thông tin");
     }
