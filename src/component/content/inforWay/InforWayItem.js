@@ -37,7 +37,7 @@ function InforWayItem({
         <div
           className={`
            static h-[5.6rem] rotate-[-3deg] font-sans text-[3rem] sm:text-[2rem] ssm:text-[1.6rem] font-bold py-[1.5rem] pl-[3rem] pr-[4rem] top-[-3px] left-[8px] z-0 border-transparent border border-r-0 flex items-center before:border-b-[2.7rem] 
-        before:border-t-[2.7rem] 
+        before:border-t-[3rem] 
         before:content-[''] before:w-full     before:h-full before:absolute before:left-0 before:top-0 before:z-[-1] before:border-r-transparent before:border-r-[25px]   before:border-t-${colorBg}   before:border-b-${colorBg}
           `}
         >

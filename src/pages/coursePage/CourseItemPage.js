@@ -14,8 +14,12 @@ function CourseItemPage({ img, lesson, hour, state, hourLearn, title, level }) {
         <div className=" justify-center items-center flex">
           <img src={img} alt="" />
         </div>
-        <div className="grid gap-4 grid-cols-2 md:grid-cols-1  flex-1  text-[1.8rem] xl:text-[1.3rem] sm:hidden">
-          <div className="w-[100%] h-[100%] m-auto items-center flex  md:flex md:justify-center ">
+        <div className=" flex flex-col justify-center items-start flex-1  text-[1.7rem] xl:text-[1.3rem] sm:hidden ">
+          {title.map((item) => (
+            <p className=" text-[#333] "> {item}</p>
+          ))}
+
+          {/* <div className="w-[100%] h-[100%] m-auto items-center flex  md:flex md:justify-center ">
             <span className="text-[red] mr-5">{lesson}</span> bài học
           </div>
           <div className="w-[100%] h-[100%]  m-auto items-center flex  md:flex md:justify-center ">
@@ -26,7 +30,7 @@ function CourseItemPage({ img, lesson, hour, state, hourLearn, title, level }) {
           </div>
           <div className="w-[100%] h-[100%]  m-auto items-center flex  md:flex md:justify-center  ">
             <span className="text-[red] mr-5">{hourLearn}</span> giờ luyện thi
-          </div>
+          </div> */}
         </div>
         <div className="flex flex-2 justify-center items-center flex-col gap-3 sm:w-[80%] ">
           <Link className="pt-[2rem]" to={`/courses/${level}`}>

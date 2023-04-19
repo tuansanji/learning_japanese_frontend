@@ -5,7 +5,7 @@ import "./introduce.scss";
 
 function Introduce({ address, title, titleSub, description, isBtn, img }) {
   return (
-    <div className="introduce  laptop:w-[80%] lg:w-[90%] px-[15px] mx-auto">
+    <div className="introduce  laptop:w-[80%] lg:w-[90%] px-[15px] mx-auto mt-[10rem] md:mt-[5rem]">
       <div className={`row flex  mt-[60px] mx-[-15px] ${address}`}>
         <div className="tablet:w-[50%] tablet:float-left relative px-[15px] sm:w-[100%]">
           <div className=" animate-title flex relative rotate-0 origin-bottom-left">
@@ -15,6 +15,7 @@ function Introduce({ address, title, titleSub, description, isBtn, img }) {
               viewBox="0 0 17 82"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              className="z-10"
             >
               <path
                 d="M6.66699 7.04883L10.5573 81.2806"
@@ -41,7 +42,7 @@ function Introduce({ address, title, titleSub, description, isBtn, img }) {
               <li className="pt-4 pr-4  border-r-2 border-[#293142]">
                 <Link
                   to="/courses"
-                  className="tab_inner p-[1rem]  bg-[#96D962] cursor-default"
+                  className="tab_inner p-[1rem]  bg-[#627ad9] text-[#fff] cursor-default"
                 >
                   jlpt
                 </Link>
@@ -49,7 +50,7 @@ function Introduce({ address, title, titleSub, description, isBtn, img }) {
               <li className="pl-4 pt-4 p-[1rem] border-r-2 border-[#293142]">
                 <Link
                   to="/courses"
-                  className="tab_inner hover:bg-[#96D962]  cursor-default"
+                  className="tab_inner hover:bg-[#627ad9] hover:text-[#fff]   cursor-default"
                 >
                   kaiwa
                 </Link>
@@ -57,7 +58,7 @@ function Introduce({ address, title, titleSub, description, isBtn, img }) {
               <li className="pt-4 pl-4 p-[1rem]  border-r-0 border-[#293142]">
                 <Link
                   to="/courses"
-                  className="tab_inner hover:bg-[#96D962] cursor-default"
+                  className="tab_inner hover:bg-[#627ad9] hover:text-[#fff]  cursor-default"
                 >
                   eju
                 </Link>
@@ -65,34 +66,34 @@ function Introduce({ address, title, titleSub, description, isBtn, img }) {
             </ul>
             <div className="block">
               <div className="flex mt-[3rem]  items-center flex-wrap">
-                <div className="text-[14px] mr-[1.4rem] font-sans">
+                <div className="text-[14px] mr-[1.4rem] font-sans flex gap-10">
                   <Link
                     to="/courses/n1"
-                    className="mt-[3rem]  py-1 px-2   sm:px-[3px]  border border-[#41A336] text-[#41A336] tab_link "
+                    className="mt-[3rem]  py-1 px-5   sm:px-[3px]  border border-[#41A336] text-[#41A336] tab_link "
                   >
                     N1
                   </Link>
                   <Link
                     to="/courses/n2"
-                    className="mt-[3rem] border  py-1 px-2   sm:px-[3px] border-[#41A336] text-[#41A336] tab_link "
+                    className="mt-[3rem] border  py-1 px-5   sm:px-[3px] border-[#41A336] text-[#41A336] tab_link "
                   >
                     N2
                   </Link>
                   <Link
                     to="/courses/n3"
-                    className="mt-[3rem] border py-1 px-2   sm:px-[3px] border-[#41A336] text-[#41A336] tab_link "
+                    className="mt-[3rem] border py-1 px-5   sm:px-[3px] border-[#41A336] text-[#41A336] tab_link "
                   >
                     N3
                   </Link>
                   <Link
                     to="/courses/n4"
-                    className="mt-[3rem] border  py-1 px-2   sm:px-[3px]  border-[#41A336] text-[#41A336] tab_link "
+                    className="mt-[3rem] border  py-1 px-5   sm:px-[3px]  border-[#41A336] text-[#41A336] tab_link "
                   >
                     N4
                   </Link>
                   <Link
                     to="/courses/n5"
-                    className="mt-[3rem] border py-1 px-2   sm:px-[3px]  border-[#41A336] text-[#41A336] tab_link "
+                    className="mt-[3rem] border py-1 px-5   sm:px-[3px]  border-[#41A336] text-[#41A336] tab_link "
                   >
                     N5
                   </Link>
@@ -111,7 +112,7 @@ function Introduce({ address, title, titleSub, description, isBtn, img }) {
 
         <div className="tablet:w-[50%] sm:hidden tablet:float-left relative px-[15px]">
           <div className="preview">
-            <div className="preview_inside xl:h-[100%] ">
+            <div className="preview_inside xl:h-[100%] max-h-[100%]">
               <img
                 src={img}
                 alt=""

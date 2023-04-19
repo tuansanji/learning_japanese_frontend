@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo, useCallback } from "react";
 import PropTypes from "prop-types";
 // import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -44,7 +44,7 @@ function a11yProps(index) {
   };
 }
 
-export default function ScrollableTabsButtonAuto({
+function ScrollableTabsButtonAuto({
   userTest,
   stage,
   openMenu,
@@ -93,9 +93,9 @@ export default function ScrollableTabsButtonAuto({
     }
   }, [value, stage]);
 
-  const handleChange = (event, newValue) => {
+  const handleChange = useCallback((event, newValue) => {
     setValue(newValue);
-  };
+  }, []);
 
   return (
     <div
@@ -151,3 +151,4 @@ export default function ScrollableTabsButtonAuto({
     </div>
   );
 }
+export default ScrollableTabsButtonAuto;

@@ -1,40 +1,38 @@
 export const courseHomePage = [
   {
     address: "",
-    title: "Tiếng Nhật ONLINE",
-    titleSub: "Học online qua video bài giảng, hệ thống bài test",
-    description:
-      "Với lộ trình được cá nhân hóa và hệ thống bài giảng lên tới hàng nghìn video/bài test, khóa học cam kết cung cấp đầy đủ kiến thức theo từng level khác nhau.",
+    title: "Lộ Trình Tiếng Nhật",
+    titleSub:
+      "Hướng dẫn học tiếng Nhật cho người mới bắt đầu - Lộ trình từ A đến Z",
+    description: `Nhu cầu học tiếng Nhật chưa bao giờ hết "hot" tại Việt Nam. Học tiếng Nhật để đi du học, để đi xuất khẩu lao động hoặc làm việc tại các công ty Việt nam có vốn đầu tư Nhật Bản, biên phiên dịch tiếng Nhật,... Dù với mục đích gì, học tiếng Nhật cũng không hề dễ dàng. Bài viết này chia sẻ đến các bạn cách học tiếng Nhật cho người mới bắt đầu của Du học HVC. Đừng bỏ lỡ nhé!.`,
     isBtn: true,
-    img: "https://jlpt.site/files/img/kaiwa-bg-jlpt-site.jpg",
+    img: "https://jlpt.site/files/img/home-ts-jlpt-site.jpeg",
   },
   {
     address: "flex-row-reverse",
-    title: "Tiếng Nhật ONLINE VIP",
-    titleSub: "Học trực tiếp với giáo viên qua Zoom, Livestream",
+    title: "Tổng Quan Cấp Độ",
+    titleSub: "Tổng quan các cấp độ kiến thức học tiếng Nhật",
     description:
-      "Là hình thức học kết hợp giữa khóa online, với các buổi học trực tiếp với giáo viên qua Zoom, Livestream, khóa học theo sát quá trình học tập của học viên, đảm bảo kết quả đầu ra.",
+      "Năng lực của một người cao hay thấp đều được đánh giá thông qua chứng chỉ JLPT được cấp bởi Hiệp hội và các tổ chức giáo dục Nhật bản. Mỗi loại chứng chỉ ngoại ngữ sẽ có đặc điểm riêng và chứng chỉ tiếng Nhật JLPT cũng vậy. Hiện chứng chỉ này được chia thành các cấp độ N.",
     isBtn: false,
-    img: "https://jlpt.site/files/img/online-vip-bg-jlpt-site.jpeg",
+    img: "https://jlpt.site/files/img/kaiwa-bg-jlpt-site.jpeg",
   },
   {
     address: "",
-    title: "Tiếng Nhật OFFLINE",
-    titleSub:
-      "Học trực tiếp cùng Giảng viên Việt Nam và Giảng viên Nhật Bản giàu kinh nghiệm",
+    title: "Mục Tiêu Học Tập",
+    titleSub: "Xác định mục tiêu học tiếng Nhật",
     description:
-      "Lớp học trực tiếp tại Trung tâm Dũng Mori cơ sở Hà Nội, cam kết đầu ra đảm bảo thi đỗ JLPT sau khi hoàn thành khóa học",
+      "Khi có mục tiêu chúng ta sẽ nỗ lực và nhanh về đích hơn. Mục tiêu của bạn là gì? Học tiếng Nhật để đi Nhật du học? Học tiếng Nhật để đi làm việc? Học tiếng Nhật để xem phim bằng tiếng Nhật? Hãy có mục tiêu rõ ràng trước khi bắt tay học nhé!",
     isBtn: true,
-    img: "https://jlpt.site/files/img/offline-bg-jlpt-site.jpeg",
+    img: "https://jlpt.site/files/img/offline-bg-jlpt-site.jpg",
   },
   {
     address: "flex-row-reverse",
-    title: "Tủ sách Dũng Mori",
-    titleSub:
-      "Tủ sách được viết bằng phương pháp nghiên cứu độc quyền từ Dũng Mori",
+    title: "Bắt Đầu Từ Đâu",
+    titleSub: "Học tiếng Nhật nên bắt đầu từ đâu thì tốt nhất",
     description:
-      "Sau gần 10 năm nghiên cứu và phát triển phương pháp dạy chữ Hán, ngữ pháp, Dũng Mori hiện đã cho ra mắt bộ sách để học kèm cùng các khóa học luyện thi JLPT của Dũng Mori, giúp tăng gấp 3 hiệu quả",
+      "Tiếng Nhật có 2 bảng chữ cái cơ bản là Hiragana và Katakana. Mỗi bảng có 46 chữ cái. Đây là những thành phần cấu tạo nên từ trong tiếng Nhật. Học 2 bảng chữ Hiragana và Katakana là điều đầu tiên, vô cùng quan trọng mà lộ trình tiếng Nhật cho người mới bắt đầu cần có. Thông thường, mọi người sẽ mất khoảng 1 tuần để thuộc 2 bảng này. Bạn hãy chăm chỉ VIẾT – ĐỌC để ghi nhớ chữ cái....",
     isBtn: true,
-    img: "https://jlpt.site/files/img/home-ts-jlpt-site.png",
+    img: "https://jlpt.site/files/img/online-vip-bg-jlpt-site.jpg",
   },
 ];

@@ -3,7 +3,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import { Form, Table, Button, Descriptions, Select } from "antd";
 import { Input } from "antd";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo, useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteCourse,
@@ -16,6 +16,7 @@ import { toastErr, toastSuccess } from "../../../../redux/slice/toastSlice";
 import Loading from "../../../SupportTab/Loading";
 import { createAxios } from "../../../../redux/createInstance";
 import axios from "axios";
+import MockTest from "./MockTest";
 
 const defaultExpandable = {
   expandedRowRender: (record) => <div>{record.description}</div>,
@@ -27,6 +28,7 @@ const MenuCourses = ({ currentUser }) => {
   const user = useSelector((state) => {
     return state.auth.login.currentUser;
   });
+  const [mockTest, setMockTest] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [inputSearch, setInputSearch] = useState("");
   const [searchSelector, setSearchSelector] = useState("name");
@@ -72,6 +74,33 @@ const MenuCourses = ({ currentUser }) => {
     author: "dũng mori",
   });
   let axiosJWT = createAxios(currentUser, dispatch);
+
+const token = ""
+for (let index = 0; index < 10; index++) {
+ fetch.post(
+    `${process.env.REACT_APP_BACKEND_URL}/courses`,
+
+    {
+      name: "",
+      lesson: "",
+      stage: "",
+      way: "",
+      level: "",
+      pathVideo: "",
+      pdf: "",
+      audio: "",
+      desc: "",
+      doc: "",
+      author: "dũng mori",
+    },
+
+    {
+      headers: { token: `Bearer ${token}` },
+    }
+  );
+  
+}
+
 
   useEffect(() => {
     getAllCourses(currentUser.accessToken, axiosJWT)
@@ -146,7 +175,7 @@ const MenuCourses = ({ currentUser }) => {
       key: "action",
       render: (text, record) => (
         <Button
-          className="bg-red-500 flex items-center"
+          className="flex items-center bg-red-500"
           type="primary"
           onClick={() => {
             if (window.confirm("Bạn có chắc chắn muốn xóa? ")) {
@@ -228,7 +257,7 @@ const MenuCourses = ({ currentUser }) => {
                   Save
                 </Button>
                 <Button
-                  className="bg-green-500 flex items-center"
+                  className="flex items-center bg-green-500"
                   type="primary"
                   onClick={() => {
                     const index = indexCourse;
@@ -483,7 +512,7 @@ const MenuCourses = ({ currentUser }) => {
           </span>
           {selectedRows.length > 0 && (
             <Button
-              className="bg-red-500 flex items-center"
+              className="flex items-center bg-red-500"
               type="primary"
               onClick={() => {
                 if (window.confirm(`Bạn có chắc chắn muốn xóa ?`)) {
@@ -537,7 +566,20 @@ const MenuCourses = ({ currentUser }) => {
       postNewCourse.way !== "" &&
       postNewCourse.level !== ""
     ) {
-      postCourse(currentUser.accessToken, postNewCourse, axiosJWT)
+      let course = {
+        name: document.getElementById("pname").value,
+        lesson: document.getElementById("plesson").value,
+        stage: document.getElementById("pstage").value,
+        way: document.getElementById("pway").value,
+        level: document.getElementById("plevel").value,
+        pathVideo: document.getElementById("ppathVideo").value,
+        pdf: document.getElementById("ppdf").value,
+        audio: document.getElementById("paudio").value,
+        desc: "",
+        doc: document.getElementById("pdoc").value,
+        author: "dũng mori",
+      };
+      postCourse(currentUser.accessToken, course, axiosJWT)
         .then((res) => {
           setMsg(res.data);
           dispatch(toastSuccess(res.data));
@@ -546,6 +588,15 @@ const MenuCourses = ({ currentUser }) => {
           dispatch(toastSuccess(err.response.data));
           setMsg(err.response.data);
         });
+      // postCourse(currentUser.accessToken, postNewCourse, axiosJWT)
+      //   .then((res) => {
+      //     setMsg(res.data);
+      //     dispatch(toastSuccess(res.data));
+      //   })
+      //   .catch((err) => {
+      //     dispatch(toastSuccess(err.response.data));
+      //     setMsg(err.response.data);
+      //   });
     } else {
       setMsg("Vui lòng nhập đầy đủ thông tin");
     }
@@ -570,7 +621,7 @@ const MenuCourses = ({ currentUser }) => {
   return (
     <>
       {isLoading && (
-        <div className="fixed z-50 inset-0 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
           <Loading />
         </div>
       )}
@@ -652,7 +703,7 @@ const MenuCourses = ({ currentUser }) => {
           />
 
           <div className=" flex flex-col gap-7 px-[4rem] py-[2rem] w-full h-full">
-            <div className=" flex gap-5 items-center w-full">
+            <div className="flex items-center w-full gap-5 ">
               <label
                 className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
                 htmlFor="name"
@@ -667,13 +718,13 @@ const MenuCourses = ({ currentUser }) => {
                     name: e.target.value,
                   });
                 }}
-                id="name"
+                id="pname"
                 type="text"
                 placeholder="Điền tên bài học..."
                 className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
               />
             </div>
-            <div className=" flex gap-5 items-center w-full">
+            <div className="flex items-center w-full gap-5 ">
               <label
                 className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
                 htmlFor="lesson"
@@ -688,13 +739,13 @@ const MenuCourses = ({ currentUser }) => {
                     lesson: e.target.value,
                   });
                 }}
-                id="lesson"
+                id="plesson"
                 type="text"
                 placeholder="Điền bài học...."
                 className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
               />
             </div>{" "}
-            <div className=" flex gap-5 items-center w-full">
+            <div className="flex items-center w-full gap-5 ">
               <label
                 className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
                 htmlFor="stage"
@@ -709,13 +760,13 @@ const MenuCourses = ({ currentUser }) => {
                     stage: e.target.value,
                   });
                 }}
-                id="stage"
+                id="pstage"
                 type="text"
                 placeholder="Điền tiến trình...."
                 className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
               />
             </div>{" "}
-            <div className=" flex gap-5 items-center w-full">
+            <div className="flex items-center w-full gap-5 ">
               <label
                 className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
                 htmlFor="way"
@@ -730,13 +781,13 @@ const MenuCourses = ({ currentUser }) => {
                     way: e.target.value,
                   });
                 }}
-                id="way"
+                id="pway"
                 type="text"
                 placeholder="Điền chặng đường..."
                 className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
               />
             </div>{" "}
-            <div className=" flex gap-5 items-center w-full">
+            <div className="flex items-center w-full gap-5 ">
               <label
                 className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
                 htmlFor="level"
@@ -751,13 +802,13 @@ const MenuCourses = ({ currentUser }) => {
                     level: e.target.value,
                   });
                 }}
-                id="level"
+                id="plevel"
                 type="text"
                 placeholder="Điền trình độ..."
                 className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
               />
             </div>
-            <div className=" flex gap-5 items-center w-full">
+            <div className="flex items-center w-full gap-5 ">
               <label
                 className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
                 htmlFor="pathVideo"
@@ -772,13 +823,13 @@ const MenuCourses = ({ currentUser }) => {
                     pathVideo: e.target.value,
                   });
                 }}
-                id="pathVideo"
+                id="ppathVideo"
                 type="text"
                 placeholder="Điền trình độ..."
                 className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
               />
             </div>{" "}
-            <div className=" flex gap-5 items-center w-full">
+            <div className="flex items-center w-full gap-5 ">
               <label
                 className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
                 htmlFor="pdf"
@@ -793,13 +844,13 @@ const MenuCourses = ({ currentUser }) => {
                     pdf: e.target.value,
                   });
                 }}
-                id="pdf"
+                id="ppdf"
                 type="text"
                 placeholder="Điền trình độ..."
                 className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
               />
             </div>
-            <div className=" flex gap-5 items-center w-full">
+            <div className="flex items-center w-full gap-5 ">
               <label
                 className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
                 htmlFor="audio"
@@ -814,13 +865,13 @@ const MenuCourses = ({ currentUser }) => {
                     audio: e.target.value,
                   });
                 }}
-                id="audio"
+                id="paudio"
                 type="text"
                 placeholder="Điền link mp3..."
                 className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
               />
             </div>
-            <div className=" flex gap-5 items-center w-full">
+            <div className="flex items-center w-full gap-5 ">
               <label
                 className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
                 htmlFor="doc"
@@ -835,7 +886,7 @@ const MenuCourses = ({ currentUser }) => {
                     doc: e.target.value,
                   });
                 }}
-                id="doc"
+                id="pdoc"
                 type="text"
                 placeholder="Điền link mp3..."
                 className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
@@ -879,7 +930,7 @@ const MenuCourses = ({ currentUser }) => {
             <div className="h-[10rem] border-b-2 text-[red] text-[1.6rem] font-bold pt-5">
               <span>Thông báo:</span> <p className="text-[blue] mt-3">{msg}</p>
             </div>
-            <div className=" mt-10 shadow-desc p-4">
+            <div className="p-4 mt-10 shadow-desc">
               <span className="text-[#222222]">
                 » Hiện tại là chỉ đăng theo kiểu đại trà nên chưa xử lí tự động
                 đóng hay là một option tùy chọn riêng
@@ -896,7 +947,7 @@ const MenuCourses = ({ currentUser }) => {
           </div>
         </div>
       </div>
-
+      <MockTest mockTest={mockTest} setMockTest={setMockTest} />
       <Button
         className="shadow-desc hover:bg-[#d9a1d5] "
         onClick={() => {
@@ -904,6 +955,14 @@ const MenuCourses = ({ currentUser }) => {
         }}
       >
         Thêm khóa học
+      </Button>
+      <Button
+        className="shadow-desc hover:bg-[#d9a1d5] ml-10 "
+        onClick={() => {
+          setMockTest(true);
+        }}
+      >
+        Thêm bài thi
       </Button>
       <Form
         layout="inline"
@@ -923,4 +982,4 @@ const MenuCourses = ({ currentUser }) => {
     </>
   );
 };
-export default MenuCourses;
+export default memo(MenuCourses);

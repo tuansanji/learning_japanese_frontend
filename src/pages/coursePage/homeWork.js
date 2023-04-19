@@ -1,5 +1,5 @@
 import parse from "html-react-parser";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, memo, useCallback } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { toastErr, toastSuccess } from "../../redux/slice/toastSlice";
@@ -301,7 +301,7 @@ function HomeWork({ url }) {
     }
   }, [docX, isDocXNew, url, loadDataDoc]);
 
-  const handleResultTest = () => {
+  const handleResultTest = useCallback(() => {
     if (docX && btnResultRef.current) {
       let arrResult = [];
       let arrInput = [];
@@ -494,9 +494,9 @@ function HomeWork({ url }) {
         );
       }
     }
-  };
+  }, []);
 
-  const handleResult = () => {
+  const handleResult = useCallback(() => {
     if (docX) {
       let arrResult = [];
       let arrInput = [];
@@ -797,7 +797,7 @@ function HomeWork({ url }) {
         }
       });
     }
-  };
+  }, []);
 
   return (
     <div className="mb-[20rem] relative">
@@ -806,7 +806,7 @@ function HomeWork({ url }) {
       {haveResult && (
         <div className="fixed bottom-[6rem] left-5 z-[4444]  ">
           <div
-            className="flex items-center gap-y-5 flex-col"
+            className="flex flex-col items-center gap-y-5"
             aria-label="button-combination"
           >
             <button
@@ -828,4 +828,4 @@ function HomeWork({ url }) {
     </div>
   );
 }
-export default HomeWork;
+export default memo(HomeWork);

@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { MessageOutlined } from "@ant-design/icons";
 import ChatIcon from "@material-ui/icons/Chat";
 import io from "socket.io-client";
 import NotificationsIcon from "@material-ui/icons/Notifications";
+import { useLocation } from "react-router-dom";
 
 import HomePage from "../../pages/homePage/HomePage";
 import LevelPage from "../../pages/coursePage/LevelPage";
@@ -28,10 +29,14 @@ import axios from "axios";
 import { toastSuccess } from "../../redux/slice/toastSlice";
 import NotFoundPage from "../../pages/NotFoundPage/NotFoundPage";
 import MsgErrAdmin from "./msgUser/MsgErrAdmin";
+import MockTest from "../../pages/mockTest/MockTest";
+import LessonTest from "../../pages/mockTest/LessonTest";
+import PagesMockTest from "../../pages/mockTest/PagesMockTest";
 export const socket = io(process.env.REACT_APP_BACKEND_URL);
 
 function Container() {
   const [openMsg, setOpenMsg] = useState(false);
+  const [reload, setReload] = useState(false);
   const [openMsgAdmin, setOpenMsgAdmin] = useState(false);
   const [msg, setMsg] = useState(false);
   const [msgErr, setMsgErr] = useState(false);
@@ -40,6 +45,31 @@ function Container() {
   const user = useSelector((state) => {
     return state.auth.login.currentUser;
   });
+  const { pathname } = useLocation();
+
+  // Sử dụng useLayoutEffect để cuộn lên đầu trang khi component được render lại
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  useEffect(() => {
+    if (user) {
+      axios
+        .post(
+          `${process.env.REACT_APP_BACKEND_URL}/auth/getCourses`,
+          {
+            id: user._id,
+          },
+          {
+            headers: { token: `Bearer ${user.accessToken}` },
+          }
+        )
+        .then((res) => {
+          setReload(true);
+          user.courses = res.data;
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [reload]);
 
   useEffect(() => {
     if (user && !user.isAdmin) {
@@ -72,6 +102,15 @@ function Container() {
         <Route path="/guide" element={<GuidePages />} />
         <Route path="/guide/:question" element={<GuidePage />} />
         <Route path={`/courses`} element={<CoursePage />} />
+        <Route path="/courses/mockTest" element={<MockTest />}></Route>
+        <Route
+          path="/courses/mockTest/:level/:lesson"
+          element={<LessonTest />}
+        ></Route>{" "}
+        <Route
+          path="/courses/mockTest/:level/:lesson/:id"
+          element={<PagesMockTest />}
+        ></Route>
         <Route path={`/courses/:level`} element={<LevelPage />} />
         <Route path={`/courses/:level/:way`} element={<WayPage />} />
         <Route path={`/courses/buy/:level`} element={<BuyCourse />} />
@@ -80,7 +119,6 @@ function Container() {
         <Route path="/auth/register" element={<Register />}></Route>
         <Route path="/user/infor" element={<UserInfor />}></Route>
         <Route path="/auth/admin" element={<ADMIN />}></Route>
-
         <Route
           path="/user/change-password/:token"
           element={<ResetPassword />}

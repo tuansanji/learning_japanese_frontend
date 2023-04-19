@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, memo, useCallback } from "react";
 import LoopIcon from "@material-ui/icons/Loop";
 import SkipNextIcon from "@material-ui/icons/SkipNext";
 import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
@@ -52,11 +52,11 @@ function MusicPage({
   }, [play]);
 
   //load data
-  const handleLoadedData = () => {
+  const handleLoadedData = useCallback(() => {
     setLoading(false);
     setDuration(audioRef.current.duration);
     if (play) audioRef.current.play();
-  };
+  }, []);
 
   //thêm thời gian video
   useEffect(() => {
@@ -89,7 +89,7 @@ function MusicPage({
     }
   }, [lessonCurrent]);
   //xử lí input bài hát
-  const handleSeek = (e) => {
+  const handleSeek = useCallback((e) => {
     const seekTime = Number((e.target.value / 100) * audioRef.current.duration);
     audioRef.current.currentTime = seekTime;
     setProgress(e.target.value);
@@ -97,19 +97,19 @@ function MusicPage({
       setPlay(true);
       audioRef.current.play();
     }
-  };
+  }, []);
   // phát lại bài hát
-  const handleRepeat = () => {
+  const handleRepeat = useCallback(() => {
     setRepeat(!repeat);
     setRepeatOne(false);
-  };
+  }, []);
   //phát lại một bài hát
-  const handleRepeatOne = () => {
+  const handleRepeatOne = useCallback(() => {
     setRepeatOne(!repeatOne);
     setRepeat(false);
-  };
+  }, []);
   //tạm dừng và tiếp tục
-  const handlePlayAndPause = () => {
+  const handlePlayAndPause = useCallback(() => {
     if (play) {
       audioRef.current.pause();
     } else {
@@ -117,9 +117,9 @@ function MusicPage({
     }
 
     setPlay(!play);
-  };
+  }, []);
   //next bài hát
-  const handleNextLesson = () => {
+  const handleNextLesson = useCallback(() => {
     let currentIndex = JSON.parse(localStorage.getItem("audioIndex"));
     if (currentIndex < currentLessonList.length - 1) {
       dispatch(
@@ -139,9 +139,9 @@ function MusicPage({
       const activeElement = document.querySelector(".content_2 .active");
       activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
     }
-  };
+  }, []);
   //lùi bài hát
-  const handlePrevLesson = () => {
+  const handlePrevLesson = useCallback(() => {
     let currentIndex = JSON.parse(localStorage.getItem("audioIndex"));
     if (currentIndex > 0) {
       dispatch(
@@ -162,19 +162,18 @@ function MusicPage({
       const activeElement = document.querySelector(".content_2 .active");
       activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
     }
-  };
+  }, []);
 
-  const handleProgress = (e) => {
+  const handleProgress = useCallback((e) => {
     let arr = JSON.parse(localStorage.getItem("arrVideoFinished")) || [];
 
     localStorage.setItem(
       "arrVideoFinished",
       JSON.stringify([...new Set([...arr, lessonCurrent._id])])
     );
-  };
-
+  }, []);
   //xử lí video kết thúc( xử lí repeat )
-  const handleEndAudio = () => {
+  const handleEndAudio = useCallback(() => {
     if (!repeatOne) {
       if (repeat) {
         let currentIndex = JSON.parse(localStorage.getItem("audioIndex"));
@@ -209,7 +208,7 @@ function MusicPage({
       audioRef.current.play();
       setPlay(true);
     }
-  };
+  }, []);
 
   // thêm thời gian video
   useEffect(() => {
@@ -390,4 +389,4 @@ function MusicPage({
   );
 }
 
-export default MusicPage;
+export default memo(MusicPage);

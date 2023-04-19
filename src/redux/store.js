@@ -8,6 +8,7 @@ import { authSlice } from "./slice/authSlice";
 import { courseSlice } from "./slice/courseSlice";
 import { toastSlice } from "./slice/toastSlice";
 import { userSlice } from "./slice/userSlice";
+import { mockTestSlice } from "./slice/mockTestSlice";
 
 const persistConfig = {
   key: "root",
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   courses: courseSlice.reducer,
   toast: toastSlice.reducer,
   admin: adminSlice.reducer,
+  mockTest: mockTestSlice.reducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

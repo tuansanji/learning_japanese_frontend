@@ -30,7 +30,7 @@ function Footer() {
           </div>
         </div>
         <div className="content flex  justify-center relative top-[2rem] sm:top-[-2.5rem]">
-          <div className="content__row flex  w-[80%] sm:flex-col-reverse">
+          <div className="content__row sm:w-full flex  w-[80%] sm:flex-col-reverse">
             <div className="column column-1">
               <div className="table">
                 <div className="text">
@@ -116,7 +116,7 @@ function Footer() {
             </div>
 
             <div className="column column-4 ">
-              <div className="table">
+              {/* <div className="table">
                 <div className="title">
                   <h5>Liên hệ</h5>
                 </div>
@@ -150,6 +150,26 @@ function Footer() {
                     </li>
                   </ul>
                 </div>
+              </div> */}
+              <div
+                class="fb-page"
+                data-href="https://www.facebook.com/profile.php?id=100090524688743"
+                data-tabs="tin nh&#x1eaf;n"
+                data-width=""
+                data-height=""
+                data-small-header="false"
+                data-adapt-container-width="true"
+                data-hide-cover="false"
+                data-show-facepile="true"
+              >
+                <blockquote
+                  cite="https://www.facebook.com/profile.php?id=100090524688743"
+                  class="fb-xfbml-parse-ignore"
+                >
+                  <a href="https://www.facebook.com/profile.php?id=100090524688743">
+                    JLPT{" "}
+                  </a>
+                </blockquote>
               </div>
             </div>
           </div>

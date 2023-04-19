@@ -98,7 +98,7 @@ function LevelPage() {
   }, [allCourse]);
 
   return (
-    <div className=" waypages  bg-no-repeat bg-cover">
+    <div className="bg-no-repeat bg-cover waypages">
       <div className="trial_study w-full ssm:px-[1rem] h-[600px] sm:h-[500px] ssm:h-[450px] bg-[rgb(13,16,24)] flex flex-col justify-center items-center md:px-[2rem] ">
         <h1 className="text-center max-w-[1000px] my-0 mx-auto text-[6.4rem] md:text-[4rem] ssm:text-[3rem] font-bold leading-[1.2] text-[#fff] ">
           Cách dễ nhất để học <strong>TIẾNG NHẬT</strong> cho người mới bắt đầu!
@@ -127,7 +127,7 @@ function LevelPage() {
                 >
                   <button className="way_button inline-flex items-center justify-center px-8 py-4 font-sans font-bold tracking-wide text-white bg-blue-500 rounded-2xl h-[55px] text-[1.6rem] ssm:text-[1.2rem] hover:opacity-75 active:opacity-30">
                     Học thử miễn phí{" "}
-                    <span className="flex items-center pl-3 relative ">
+                    <span className="relative flex items-center pl-3 ">
                       <ArrowForwardIosIcon style={{ fontSize: "2rem" }} />
                     </span>
                   </button>
@@ -135,7 +135,7 @@ function LevelPage() {
                 <Link to={`/courses/buy/${params.level}`}>
                   <button className="way_button inline-flex items-center justify-center px-8 py-4 font-sans font-bold tracking-wide text-blue-500 border border-blue-500 rounded-2xl h-[55px] text-[1.6rem] hover:opacity-75 active:opacity-30 ssm:text-[1.2rem] ">
                     Mua khóa học{" "}
-                    <span className="flex items-center pl-3 relative ">
+                    <span className="relative flex items-center pl-3 ">
                       <ArrowForwardIosIcon style={{ fontSize: "2rem" }} />
                     </span>
                   </button>
@@ -152,7 +152,7 @@ function LevelPage() {
               >
                 <button className="way_button inline-flex items-center justify-center px-8 py-4 font-sans font-bold tracking-wide text-white bg-blue-500 rounded-2xl h-[55px] text-[1.6rem] ssm:text-[1.2rem] hover:opacity-75 active:opacity-30">
                   Đi tới bài học gần đây nhất
-                  <span className="flex items-center pl-3 relative ">
+                  <span className="relative flex items-center pl-3 ">
                     <ArrowForwardIosIcon style={{ fontSize: "2rem" }} />
                   </span>
                 </button>
@@ -176,7 +176,7 @@ function LevelPage() {
                 key={index}
                 className="w-[25%] lg:w-[28rem] md:w-[24rem] sm:w-[50%] px-[2.5rem] mt-[3rem] "
               >
-                <div className="mb-8 relative">
+                <div className="relative mb-8">
                   <div
                     className={`shadow-2xl   w-full  overflow-hidden rounded-[13px] 
                     transition-all relative ${
@@ -197,7 +197,7 @@ function LevelPage() {
                       <img
                         src="https://jlpt.site/files/img/hoc-tieng-nhat-moi-ngay.jpg"
                         alt=""
-                        className="h-full w-full align-middle"
+                        className="w-full h-full align-middle"
                       />
 
                       <p
@@ -222,10 +222,16 @@ function LevelPage() {
       )}
       <div className="mb-[6rem] md:mb-[2rem]">
         <h1 className="animate-charcter text-[3rem] sm:text-[2.2rem] w-full text-center font-extrabold border-t-2 border-[#333] pt-[5rem] sm:pt-[2rem]">
-          LỘ TRÌNH 4 CHẶNG BÀI BẢN
+          BẠN PHẢI BIẾT MÌNH CẦN PHẢI HỌC ĐẾN TRÌNH ĐỘ NÀO VÀ PHẢI HỌC BAO LÂU.
         </h1>
       </div>
       <InforWay />
+      {/* <div
+        class="fb-comments"
+        data-href="https://www.facebook.com/profile.php?id=100090524688743"
+        data-width="500"
+        data-numposts="10"
+      ></div> */}
     </div>
   );
 }

@@ -9,7 +9,7 @@ import {
   getCurrentIndex,
   getLessonCurrent,
 } from "../../redux/slice/courseSlice";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, memo, useState, useMemo } from "react";
 function Support({
   userTest,
   listCurrent,
@@ -180,7 +180,7 @@ function Support({
             Nội dung khóa học
           </h1>
         </div>
-        <div className="content overflow-y-auto flex-1 ">
+        <div className="flex-1 overflow-y-auto content ">
           {listCurrent &&
             listCurrent.map((item, index) => (
               <section key={index}>
@@ -205,7 +205,7 @@ function Support({
                     <KeyboardArrowUpIcon style={{ fontSize: "3rem" }} />
                   </span>
                 </div>
-                <div className="content_2  ">
+                <div className="content_2 ">
                   {stageCourse &&
                     stageCourse
 
@@ -247,7 +247,7 @@ function Support({
                                   : ""
                               } bg-[#FFFFFF] hover:bg-slate-200 flex flex-row py-[10px] pr-0 pl-[2px] relative `}
                             >
-                              <div className=" cursor-pointer flex-1 ml-7 relative">
+                              <div className="relative flex-1 cursor-pointer ml-7">
                                 <h3 className="text-[#333] text-[1.4rem] font-normal leading-[1.4] relative top-[-2px]">
                                   {index + 1}. {lesson.name}
                                 </h3>
@@ -306,7 +306,7 @@ function Support({
                                     : ""
                                 } bg-[#FFFFFF] hover:bg-slate-200 flex flex-row py-[10px] pr-0 pl-[2px] relative `}
                               >
-                                <div className=" cursor-pointer flex-1 ml-7 relative">
+                                <div className="relative flex-1 cursor-pointer ml-7">
                                   <h3 className="text-[#333] text-[1.4rem] font-normal leading-[1.4] relative top-[-2px]">
                                     {index + 1}. {lesson.name}
                                   </h3>
@@ -337,7 +337,7 @@ function Support({
                                 key={uuid()}
                                 className="bg-[#FFFFFF] hover:bg-slate-200 flex flex-row py-[10px] pr-0 pl-[2px] relative "
                               >
-                                <div className="  flex-1 ml-7 relative">
+                                <div className="relative flex-1 ml-7">
                                   <h3 className="text-[#333] text-[1.4rem] font-normal leading-[1.4] relative top-[-2px]">
                                     {index + 1}. Nội dung bị ẩn
                                   </h3>

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, memo } from "react";
 import * as pdfjs from "pdfjs-dist";
 import Loading from "../../component/SupportTab/Loading";
 
@@ -95,4 +95,4 @@ const PDFViewer = ({ url, lessonCurrent }) => {
   );
 };
 
-export default PDFViewer;
+export default memo(PDFViewer);

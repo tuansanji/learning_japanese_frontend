@@ -1,6 +1,6 @@
 import moment from "moment";
 import { io } from "socket.io-client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo, useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Form,
@@ -414,7 +414,6 @@ const MenuUser = ({ currentUser }) => {
       onExpand: handleExpand,
       expandRowByClick: false,
     },
-
     footer: defaultFooter,
     rowSelection: {
       type: "checkbox",
@@ -423,6 +422,7 @@ const MenuUser = ({ currentUser }) => {
     },
     rowClassName: getRowClassName,
   };
+
   return (
     <>
       {isLoading && (
@@ -494,9 +494,9 @@ const MenuUser = ({ currentUser }) => {
         }}
         columns={tableColumns}
         dataSource={data}
-        scroll={scroll}
+        scroll={{}}
       />
     </>
   );
 };
-export default MenuUser;
+export default memo(MenuUser);

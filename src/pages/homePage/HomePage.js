@@ -37,6 +37,7 @@ function HomePage() {
         <Time />
       </div>
       <CoursePage />
+
       {courseHomePage.map((course, index) => (
         <div key={index}>
           <Introduce

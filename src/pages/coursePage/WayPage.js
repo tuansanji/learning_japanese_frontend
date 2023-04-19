@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, memo, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ReactPlayer from "react-player";
 import axios from "axios";
-import { AudioPlaylist } from "ts-audio";
+
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import SyncAltIcon from "@material-ui/icons/SyncAlt";
@@ -117,8 +117,7 @@ function WayPage() {
     }
   }, []);
 
-  // hiện tại cứ vậy thôi. sau phải tìm cách fix với giá trị là stageCourseList[0]
-  const handleResetAudio = (courses) => {
+  const handleResetAudio = useCallback((courses) => {
     if (stageCourseList && stageCourseList.length > 0) {
       dispatch(
         getLessonCurrent({
@@ -136,9 +135,9 @@ function WayPage() {
         })
       );
     }
-  };
+  }, []);
 
-  const handleResetVideo = (courses) => {
+  const handleResetVideo = useCallback((courses) => {
     if (stageCourseList && stageCourseList.length > 0) {
       dispatch(
         getLessonCurrent({
@@ -156,7 +155,7 @@ function WayPage() {
         })
       );
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (lessonCurrent && stageCourseList) {
@@ -425,7 +424,7 @@ function WayPage() {
 
   return (
     <>
-      <div className="course-page flex w-full md:flex-col md:items-center  ">
+      <div className="flex w-full course-page md:flex-col md:items-center ">
         {loading && <Loading />}
         <div
           className={`course-page__video flex flex-col items-center  ${
@@ -636,14 +635,14 @@ function WayPage() {
               }. 
             ${lessonCurrent && lessonCurrent.name}`}
             </p>
-            <span className="smm:hidden font-medium">Chọn bài</span>
+            <span className="font-medium smm:hidden">Chọn bài</span>
             <button
               className="btn "
               onClick={() => {
                 setOpenMenu(!openMenu);
               }}
             >
-              <SyncAltIcon className=" " style={{ fontSize: "3rem" }} />
+              <SyncAltIcon className="" style={{ fontSize: "3rem" }} />
             </button>
           </div>
         </div>
@@ -652,4 +651,4 @@ function WayPage() {
   );
 }
 
-export default WayPage;
+export default memo(WayPage);

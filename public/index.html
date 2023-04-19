@@ -14,7 +14,23 @@
       property="og:image"
       content="https://jlpt.site/files/img/hoc-tieng-nhat-moi-ngay.jpg"
     />
+    <!-- Thẻ meta cho ia:markup_url -->
+    <meta name="ia:markup_url" content="https://jlpt.site/ia/markup" />
 
+    <!-- Thẻ meta cho ia:markup_url_dev -->
+    <meta name="ia:markup_url_dev" content="https://jlpt.site/ia/markup-dev" />
+
+    <!-- Thẻ meta cho ia:rules_url -->
+    <meta name="ia:rules_url" content="https://jlpt.site/ia/rules" />
+
+    <!-- Thẻ meta cho ia:rules_url_dev -->
+    <meta name="ia:rules_url_dev" content="https://jlpt.site/ia/rules-dev" />
+
+    <!-- Thẻ meta cho og:image:alt -->
+    <meta
+      property="og:image:alt"
+      content="Bao gồm nhiều khóa học tiếng nhật phục vụ cho các cuộc thi JLPT"
+    />
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
@@ -24,6 +40,22 @@
         event.preventDefault()
       );
     </script> -->
+    <!-- https://schema.org/ 
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org/",
+        "@type": "Organization",
+        "name": "Tên công ty của bạn",
+        "description": "Mô tả công ty của bạn",
+        "url": "https://website-cua-ban.com",
+        "logo": "https://website-cua-ban.com/logo.png",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+1-123-456-7890",
+          "contactType": "customer service"
+        }
+      }
+      </script> -->
     <!-- Google tag (gtag.js) -->
     <script
       async
@@ -52,8 +84,22 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <!-- Messenger Plugin chat Code -->
     <div id="fb-root"></div>
+    <script
+      async
+      defer
+      crossorigin="anonymous"
+      src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v16.0&appId=528596942527565&autoLogAppEvents=1"
+      nonce="3Vd3fIdS"
+    ></script>
+    <script
+      async
+      defer
+      crossorigin="anonymous"
+      src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v16.0&appId=528596942527565&autoLogAppEvents=1"
+      nonce="is2qcRxd"
+    ></script>
+    <!-- Messenger Plugin chat Code -->
 
     <!-- Your Plugin chat code -->
     <div id="fb-customer-chat" class="fb-customerchat"></div>

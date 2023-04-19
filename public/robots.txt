@@ -1,3 +1,9 @@
 # https://www.robotstxt.org/robotstxt.html
+# *
 User-agent: *
-Disallow:
+Allow: /
+
+# Host
+Host: https://jlpt.site
+# Sitemaps
+Sitemap: https://jlpt.site/sitemap.xml

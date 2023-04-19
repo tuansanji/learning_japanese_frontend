@@ -182,6 +182,22 @@ span.MuiTypography-body1.MuiTypography-displayBlock {
 .menuCourses {
   transition: all 0.4s ease-in-out;
   animation: anim-lineUp 0.6s ease-in;
+  header {
+    .MuiTabs-root {
+      .MuiTab-root {
+        min-width: 60px !important;
+        .MuiTab-wrapper {
+          font-weight: bold;
+        }
+      }
+      .MuiTabScrollButton-root {
+        .MuiSvgIcon-fontSizeSmall {
+          font-size: 5rem !important;
+          color: red;
+        }
+      }
+    }
+  }
 }
 
 @keyframes anim-lineUp {
@@ -445,5 +461,51 @@ span.MuiTypography-body1.MuiTypography-displayBlock {
   }
   .t.m0.x3.h3.y8f.ff1.fs1.fc1.sc1.ls3.ws4 {
     left: 0px !important;
+  }
+}
+// phần css của bài thi
+.mock_test {
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  padding: 15px 15px;
+  margin-bottom: 30px;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  border: 1px solid #e4e4e4;
+  font-family: Quicksand, sans-serif;
+  color: #232323 !important;
+  -webkit-font-smoothing: antialiased;
+  &:hover {
+    -moz-transform: scale(1.02);
+    -webkit-transform: scale(1.02);
+    -o-transform: scale(1.02);
+    transform: scale(1.02);
+    box-shadow: 0 11px 9px -10px rgba(0, 0, 0, 0.52);
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+  }
+  .icon_level {
+    text-transform: uppercase;
+    font-size: 12px;
+    padding: 5px 10px;
+    background: #337ab7;
+    border-radius: 3px;
+    position: absolute;
+
+    font-weight: 600;
+    color: #fff;
+    top: 15px;
+    right: 15px;
+
+    font-size: 14px;
+    border-radius: 2px;
+    line-height: 24px;
   }
 }

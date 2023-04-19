@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://jlpt.site/guide</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jlpt.site/courses</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+   <url>
+    <loc>https://jlpt.site/courses/mockTest</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+   <url>
+    <loc>https://jlpt.site/auth/login</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+   <url>
+    <loc>https://jlpt.site/auth/register</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <!-- Thêm các URL khác của trang web của bạn vào đây -->
+</urlset>

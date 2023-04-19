@@ -8,7 +8,7 @@ import "./test.scss";
 
 function App() {
   return (
-    <div className="App md:overflow-hidden">
+    <div className="App ">
       <ToastContainer
         position="top-center"
         autoClose={5000}
