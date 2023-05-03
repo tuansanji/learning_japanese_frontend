@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, memo, useCallback } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ReactPlayer from "react-player";
 import axios from "axios";
@@ -20,13 +20,13 @@ import { getWayCourse } from "../../redux/apiRequest";
 import PDFViewer from "./CanvasPdf";
 
 import HomeWork from "./homeWork";
-import { toastErr, toastSuccess } from "../../redux/slice/toastSlice";
+
 import ErrorPage from "./ErrorPage";
 
 function WayPage() {
   const params = useParams();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+
   const [openMenu, setOpenMenu] = useState(true);
   const [stageList, setStageList] = useState([]);
   const [userTest, setUserTest] = useState(true);
@@ -117,45 +117,51 @@ function WayPage() {
     }
   }, []);
 
-  const handleResetAudio = useCallback((courses) => {
-    if (stageCourseList && stageCourseList.length > 0) {
-      dispatch(
-        getLessonCurrent({
-          state: "audio",
-          data: courses,
-        })
-      );
-      dispatch(
-        getCurrentIndex({
-          state: "audioIndex",
-          index:
-            JSON.parse(
-              localStorage.getItem(audioOrVideo ? "audioIndex" : "videoIndex")
-            ) || 0,
-        })
-      );
-    }
-  }, []);
+  const handleResetAudio = useCallback(
+    (courses) => {
+      if (stageCourseList && stageCourseList.length > 0) {
+        dispatch(
+          getLessonCurrent({
+            state: "audio",
+            data: courses,
+          })
+        );
+        dispatch(
+          getCurrentIndex({
+            state: "audioIndex",
+            index:
+              JSON.parse(
+                localStorage.getItem(audioOrVideo ? "audioIndex" : "videoIndex")
+              ) || 0,
+          })
+        );
+      }
+    },
+    [stageCourseList, audioOrVideo]
+  );
 
-  const handleResetVideo = useCallback((courses) => {
-    if (stageCourseList && stageCourseList.length > 0) {
-      dispatch(
-        getLessonCurrent({
-          state: "video",
-          data: courses,
-        })
-      );
-      dispatch(
-        getCurrentIndex({
-          state: "videoIndex",
-          index:
-            JSON.parse(
-              localStorage.getItem(audioOrVideo ? "audioIndex" : "videoIndex")
-            ) || 0,
-        })
-      );
-    }
-  }, []);
+  const handleResetVideo = useCallback(
+    (courses) => {
+      if (stageCourseList && stageCourseList.length > 0) {
+        dispatch(
+          getLessonCurrent({
+            state: "video",
+            data: courses,
+          })
+        );
+        dispatch(
+          getCurrentIndex({
+            state: "videoIndex",
+            index:
+              JSON.parse(
+                localStorage.getItem(audioOrVideo ? "audioIndex" : "videoIndex")
+              ) || 0,
+          })
+        );
+      }
+    },
+    [stageCourseList, audioOrVideo]
+  );
 
   useEffect(() => {
     if (lessonCurrent && stageCourseList) {
@@ -276,18 +282,18 @@ function WayPage() {
     const messenger = document.querySelector("#fb-root");
     // fb-customer-chat
     footer.style.display = "none";
-    messenger.style.display = "none";
+    if (messenger) messenger.style.display = "none";
     btnBackToTop.style.display = "none";
-    btnMsg.style.display = "none";
+    if (btnMsg) btnMsg.style.display = "none";
 
     return () => {
       footer.style.display = "block";
-      messenger.style.display = "block";
+      if (messenger) messenger.style.display = "block";
       btnBackToTop.style.display = "block";
-      btnMsg.style.display = "block";
+      if (btnMsg) btnMsg.style.display = "block";
     };
   }, []);
-  const handlePrevLesson = () => {
+  const handlePrevLesson = useCallback(() => {
     let currentIndex = JSON.parse(
       localStorage.getItem(audioOrVideo ? "audioIndex" : "videoIndex")
     );
@@ -311,58 +317,60 @@ function WayPage() {
     }
 
     const activeElement = document.querySelector(".content_2 .active");
-    activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
-    // }
-  };
+    if (activeElement)
+      activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [currentLessonList, audioOrVideo]);
 
   //  xác đình đã học xong bái hay chưa và thêm nó vào localStorage. sau này sẽ thêm nó vào db của user
   let isPosted = false;
 
-  const handleProgress = (state) => {
-    const playedSeconds = state.playedSeconds;
-    video.current = playedSeconds;
+  const handleProgress = useCallback(
+    (state) => {
+      const playedSeconds = state.playedSeconds;
+      video.current = playedSeconds;
 
-    if (
-      !isPosted &&
-      isVideoReady &&
-      (playedSeconds / videoDuration) * 100 >= 80
-    ) {
-      axios
-        .post(
-          `${process.env.REACT_APP_BACKEND_URL}/user/historyLearn`,
-          {
-            username: user.username,
-            level: lessonCurrent.level,
-            idCourse: lessonCurrent._id,
-          },
-          {
-            headers: {
-              token: `Bearer ${user.accessToken}`,
+      if (
+        !isPosted &&
+        isVideoReady &&
+        (playedSeconds / videoDuration) * 100 >= 80
+      ) {
+        axios
+          .post(
+            `${process.env.REACT_APP_BACKEND_URL}/user/historyLearn`,
+            {
+              username: user.username,
+              level: lessonCurrent.level,
+              idCourse: lessonCurrent._id,
             },
-          }
-        )
-        .then((response) => {
-          isPosted = true;
-        });
+            {
+              headers: {
+                token: `Bearer ${user.accessToken}`,
+              },
+            }
+          )
+          .then((response) => {
+            isPosted = true;
+          });
 
-      let arr = JSON.parse(localStorage.getItem("arrVideoFinished")) || [];
+        let arr = JSON.parse(localStorage.getItem("arrVideoFinished")) || [];
 
-      localStorage.setItem(
-        "arrVideoFinished",
-        JSON.stringify([...new Set([...arr, lessonCurrent._id])])
-      );
-    }
-  };
+        localStorage.setItem(
+          "arrVideoFinished",
+          JSON.stringify([...new Set([...arr, lessonCurrent._id])])
+        );
+      }
+    },
+    [lessonCurrent]
+  );
 
-  const handleReady = () => {
+  const handleReady = useCallback(() => {
     setIsVideoReady(true);
-  };
-  const handleDuration = (duration) => {
+  }, []);
+  const handleDuration = useCallback((duration) => {
     setVideoDuration(duration);
-  };
-
+  }, []);
   //next bài học
-  const handleNextLesson = () => {
+  const handleNextLesson = useCallback(() => {
     let currentIndex = JSON.parse(
       localStorage.getItem(audioOrVideo ? "audioIndex" : "videoIndex")
     );
@@ -393,14 +401,16 @@ function WayPage() {
     if (userTest && !isUserTest) {
       if (currentIndex < indexUserTest - 1) {
         const activeElement = document.querySelector(".content_2 .active");
-        activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        if (activeElement)
+          activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
       }
     } else {
       const activeElement = document.querySelector(".content_2 .active");
-      activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
+      if (activeElement)
+        activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
     }
     // }
-  };
+  }, [currentLessonList, userTest, isUserTest]);
   // phần thêm thời gian cho video
   useEffect(() => {
     if (
@@ -420,7 +430,7 @@ function WayPage() {
           return;
         });
     }
-  }, [lessonCurrent, videoDuration]);
+  }, [lessonCurrent]);
 
   return (
     <>
@@ -446,7 +456,7 @@ function WayPage() {
                 onProgress={handleProgress}
                 onReady={handleReady}
                 onDuration={handleDuration}
-                playing={false}
+                playing
                 controls={true}
                 ref={video}
                 playsinline={true}
@@ -485,7 +495,7 @@ function WayPage() {
               aria-label="button-combination"
             >
               <button
-                disabled={lessonCurrent && lessonCurrent.pdf === ""}
+                disabled={lessonCurrent && !lessonCurrent.pdf}
                 onClick={() => {
                   setDocumentLesson("pdf");
                 }}
@@ -494,13 +504,13 @@ function WayPage() {
                     ? "text-white bg-blue-500"
                     : " text-blue-500 border border-blue-500 "
                 } rounded-lg h-[40px]  ${
-                  lessonCurrent && lessonCurrent.pdf === "" && "opacity-30"
+                  lessonCurrent && !lessonCurrent.pdf && "opacity-30"
                 }`}
               >
                 Tài liệu
               </button>
               <button
-                disabled={lessonCurrent && lessonCurrent.doc === ""}
+                disabled={lessonCurrent && !lessonCurrent.doc}
                 onClick={() => {
                   setDocumentLesson("doc");
                 }}
@@ -509,7 +519,7 @@ function WayPage() {
                     ? "  text-blue-500 border border-blue-500"
                     : "text-white bg-blue-500  "
                 } rounded-lg h-[40px]  ${
-                  lessonCurrent && lessonCurrent.doc === "" && "opacity-30"
+                  lessonCurrent && !lessonCurrent.doc && "opacity-30"
                 }`}
               >
                 Bài tập
@@ -532,9 +542,7 @@ function WayPage() {
             </div>
             <div className="w-full">
               {lessonCurrent &&
-                lessonCurrent.pdf !== null &&
-                lessonCurrent.pdf !== undefined &&
-                lessonCurrent.pdf !== "" &&
+                lessonCurrent.pdf &&
                 documentLesson === "pdf" && (
                   <PDFViewer
                     lessonCurrent={lessonCurrent && lessonCurrent}
@@ -543,8 +551,7 @@ function WayPage() {
                 )}
 
               {lessonCurrent &&
-                lessonCurrent.doc !== null &&
-                lessonCurrent.doc !== "" &&
+                lessonCurrent.doc &&
                 documentLesson === "doc" && (
                   <HomeWork url={lessonCurrent && lessonCurrent.doc} />
                 )}

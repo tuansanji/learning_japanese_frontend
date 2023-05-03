@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Divider, Steps } from "antd";
+import { Steps } from "antd";
 import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -48,7 +48,7 @@ function LessonTest() {
     <div className="bg-[#ffffff] pb-[10rem]">
       <div className="h-[15rem] md:h-[12rem] w-full bg-[#002147] flex flex-col justify-around items-center">
         <h1 className=" text-[3rem] md:text-[2rem] text-[#33FF00] font-bold">
-          2023年7月 日本語能力試験 {params.lesson}
+          2023年 日本語能力試験 {params.lesson}
         </h1>
         <div className="flex gap-5">
           <span className="px-10 rounded-3xl py-4 border border-[#fff] font-semibold text-white">

@@ -9,7 +9,6 @@ function MockTest() {
   const dispatch = useDispatch();
   const listLesson = useSelector((state) => state.mockTest?.list);
   const [lesson, setLesson] = useState([]);
-  const [listLevel, setListLevel] = useState([]);
 
   useEffect(() => {
     axios
@@ -41,8 +40,6 @@ function MockTest() {
       ).map(({ level, lesson }) => ({ level, lesson }));
 
       setLesson(result);
-
-      setListLevel([...new Set(arrLevel)]);
     }
   }, [listLesson]);
 

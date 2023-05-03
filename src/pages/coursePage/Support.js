@@ -67,12 +67,11 @@ function Support({
       }
     }
   };
-
+  //phần icon lên xuống khi bật hiện list
   const handleOpenMenuSub = useCallback((e) => {
     const element = e.target.closest(".content_1");
     const icon = element.querySelector("span.icon");
     icon.classList.toggle("up");
-
     element.nextElementSibling.classList.toggle("hidden");
   }, []);
   useEffect(() => {

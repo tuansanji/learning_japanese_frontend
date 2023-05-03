@@ -1,6 +1,8 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 axios.defaults.withCredentials = true;
+
+//phục vụ cho việc refresh token khi token hết hạn
 const refreshToken = async () => {
   try {
     const res = await axios.post(

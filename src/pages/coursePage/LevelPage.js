@@ -6,7 +6,6 @@ import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import InforWay from "../../component/content/inforWay/InforWay";
 import Loading from "../../component/SupportTab/Loading";
 import { getCourse, getLevelCourse } from "../../redux/apiRequest";
-import axios from "axios";
 
 function LevelPage() {
   const dispatch = useDispatch();

@@ -1,9 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import FacebookIcon from "@material-ui/icons/Facebook";
-import GitHubIcon from "@material-ui/icons/GitHub";
-import EmailIcon from "@material-ui/icons/Email";
-import PhoneIcon from "@material-ui/icons/Phone";
+
 import "./footer.scss";
 
 function Footer() {
@@ -59,54 +56,19 @@ function Footer() {
                   <h5>Khóa học</h5>
                   <div className="text">
                     <ul>
-                      <li
-                        onClick={() => {
-                          window.scrollTo({
-                            top: 0,
-                            behavior: `smooth`,
-                          });
-                        }}
-                      >
+                      <li>
                         <Link to={`/courses/n1`}>JLPT Learn- N1</Link>
                       </li>
-                      <li
-                        onClick={() => {
-                          window.scrollTo({
-                            top: 0,
-                            behavior: `smooth`,
-                          });
-                        }}
-                      >
+                      <li>
                         <Link to={`/courses/n2`}>JLPT Learn- N2</Link>
                       </li>
-                      <li
-                        onClick={() => {
-                          window.scrollTo({
-                            top: 0,
-                            behavior: `smooth`,
-                          });
-                        }}
-                      >
+                      <li>
                         <Link to={`/courses/n3`}>JLPT Learn- N3</Link>
                       </li>
-                      <li
-                        onClick={() => {
-                          window.scrollTo({
-                            top: 0,
-                            behavior: `smooth`,
-                          });
-                        }}
-                      >
+                      <li>
                         <Link to={`/courses/n4`}>JLPT Learn- N4</Link>
                       </li>
-                      <li
-                        onClick={() => {
-                          window.scrollTo({
-                            top: 0,
-                            behavior: `smooth`,
-                          });
-                        }}
-                      >
+                      <li>
                         <Link to={`/courses/n5`}>JLPT Learn- N5</Link>
                       </li>
                     </ul>
@@ -116,41 +78,6 @@ function Footer() {
             </div>
 
             <div className="column column-4 ">
-              {/* <div className="table">
-                <div className="title">
-                  <h5>Liên hệ</h5>
-                </div>
-                <div className="list__contact">
-                  <ul>
-                    <li>
-                      <a href="https://www.facebook.com/profile.php?id=100090524688743">
-                        <FacebookIcon></FacebookIcon>
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="https://www.facebook.com/profile.php?id=100090524688743"
-                        style={{ backgroundColor: "brown" }}
-                      >
-                        <GitHubIcon></GitHubIcon>
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="https://www.facebook.com/profile.php?id=100090524688743"
-                        style={{ backgroundColor: "red" }}
-                      >
-                        <EmailIcon></EmailIcon>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.facebook.com/profile.php?id=100090524688743">
-                        <PhoneIcon></PhoneIcon>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div> */}
               <div
                 class="fb-page"
                 data-href="https://www.facebook.com/profile.php?id=100090524688743"
@@ -164,7 +91,7 @@ function Footer() {
               >
                 <blockquote
                   cite="https://www.facebook.com/profile.php?id=100090524688743"
-                  class="fb-xfbml-parse-ignore"
+                  className="fb-xfbml-parse-ignore"
                 >
                   <a href="https://www.facebook.com/profile.php?id=100090524688743">
                     JLPT{" "}

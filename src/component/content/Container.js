@@ -1,37 +1,18 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { MessageOutlined } from "@ant-design/icons";
 import ChatIcon from "@material-ui/icons/Chat";
 import io from "socket.io-client";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import { useLocation } from "react-router-dom";
-
-import HomePage from "../../pages/homePage/HomePage";
-import LevelPage from "../../pages/coursePage/LevelPage";
-import Login from "../header/Auth/Login";
-import Register from "../header/Auth/Register";
-import UserInfor from "../../pages/userInforPage/ProfileUser";
-import WayPage from "../../pages/coursePage/WayPage";
-import GuidePage from "../../pages/guidePage/GuidePage";
-import BuyCourse from "../../pages/coursePage/BuyCourse";
-import CoursePage from "../../pages/coursePage/CoursePage";
-import GuidePages from "../../pages/guidePage/GuidePages";
-import ADMIN from "../header/Auth/Admin/Admin";
 import NavigationIcon from "@material-ui/icons/Navigation";
-import ResetPassword from "../header/Auth/ChangePassword";
-import ForgotPassword from "../header/Auth/ForgotPassword";
-import MyCourse from "../../pages/historyCourse/MyCourse";
-
-import MsgUser from "./msgUser/MsgUser";
-import MsgAdmin from "./msgUser/MsgAdmin";
-import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+
+import { MsgAdmin, MsgUser, MsgErrAdmin } from "./msgUser";
+
 import { toastSuccess } from "../../redux/slice/toastSlice";
-import NotFoundPage from "../../pages/NotFoundPage/NotFoundPage";
-import MsgErrAdmin from "./msgUser/MsgErrAdmin";
-import MockTest from "../../pages/mockTest/MockTest";
-import LessonTest from "../../pages/mockTest/LessonTest";
-import PagesMockTest from "../../pages/mockTest/PagesMockTest";
+import { routes } from "../../routes/routes";
 export const socket = io(process.env.REACT_APP_BACKEND_URL);
 
 function Container() {
@@ -51,6 +32,7 @@ function Container() {
   useLayoutEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
+  // cập nhật dư liệu courses của user
   useEffect(() => {
     if (user) {
       axios
@@ -69,12 +51,11 @@ function Container() {
         })
         .catch((err) => console.log(err));
     }
-  }, [reload]);
-
+  }, [reload, user]);
+  // join room ngay khi vào trang - phục vụ cho việc hiện thông báo khi có tin nhắn
   useEffect(() => {
     if (user && !user.isAdmin) {
       socket.emit("joinRoom", user._id);
-
       socket.on("notification", (data) => {
         if (data.username !== user.username) {
           dispatch(toastSuccess("You have a new message"));
@@ -90,7 +71,6 @@ function Container() {
       });
     }
     return () => {
-      // socket.emit("leaveRoom", user._id);
       socket.removeListener("notification");
     };
   }, [user]);
@@ -98,38 +78,11 @@ function Container() {
   return (
     <div className="container_main md:mt-[7rem]">
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/guide" element={<GuidePages />} />
-        <Route path="/guide/:question" element={<GuidePage />} />
-        <Route path={`/courses`} element={<CoursePage />} />
-        <Route path="/courses/mockTest" element={<MockTest />}></Route>
-        <Route
-          path="/courses/mockTest/:level/:lesson"
-          element={<LessonTest />}
-        ></Route>{" "}
-        <Route
-          path="/courses/mockTest/:level/:lesson/:id"
-          element={<PagesMockTest />}
-        ></Route>
-        <Route path={`/courses/:level`} element={<LevelPage />} />
-        <Route path={`/courses/:level/:way`} element={<WayPage />} />
-        <Route path={`/courses/buy/:level`} element={<BuyCourse />} />
-        <Route path={`/me/courses`} element={<MyCourse />} />
-        <Route path="/auth/login" element={<Login />}></Route>
-        <Route path="/auth/register" element={<Register />}></Route>
-        <Route path="/user/infor" element={<UserInfor />}></Route>
-        <Route path="/auth/admin" element={<ADMIN />}></Route>
-        <Route
-          path="/user/change-password/:token"
-          element={<ResetPassword />}
-        ></Route>
-        <Route
-          path="/user/forgot-password"
-          element={<ForgotPassword />}
-        ></Route>
-        <Route path="*" element={<NotFoundPage />} />
+        {routes.map((route) => (
+          <Route key={route.path} path={route.path} element={route.element} />
+        ))}
       </Routes>
-
+      {/* btn back to top */}
       <button
         className="fixed bottom-[6rem] right-10 border rounded-[50%] z-[7777] "
         id="btn_BackToTop"
@@ -142,7 +95,7 @@ function Container() {
       >
         <NavigationIcon style={{ fontSize: "40px", color: "yellow" }} />
       </button>
-
+      {/* btn hiện danh sách thông báo lỗi - chỉ hiện với admin */}
       {user && user.isAdmin && (
         <button
           className="fixed right-10 bottom-[50%] z-[7777] p-4 rounded-[50%] bg-white active:opacity-50 transition-opacity hover:bg-green-500"
@@ -154,6 +107,7 @@ function Container() {
         </button>
       )}
       {msgErr && <MsgErrAdmin />}
+      {/* btn ẩn hiện bảng message với thay đổi tùy theo admin hay là user thường */}
       {!user || !user.isAdmin ? (
         <button
           onClick={() => {

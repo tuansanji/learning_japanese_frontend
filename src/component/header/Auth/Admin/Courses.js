@@ -2,9 +2,9 @@ import moment from "moment";
 import CloseIcon from "@material-ui/icons/Close";
 import { Form, Table, Button, Descriptions, Select } from "antd";
 import { Input } from "antd";
-
-import { useEffect, useState, memo, useMemo, useCallback } from "react";
+import { useEffect, useState, memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import {
   deleteCourse,
   deleteManyCourse,
@@ -17,11 +17,28 @@ import Loading from "../../../SupportTab/Loading";
 import { createAxios } from "../../../../redux/createInstance";
 import axios from "axios";
 import MockTest from "./MockTest";
+import InputFc from "./InputFc";
 
 const defaultExpandable = {
   expandedRowRender: (record) => <div>{record.description}</div>,
 };
 const { TextArea } = Input;
+
+const defaultCourse = {
+  name: "",
+  lesson: "",
+  stage: "",
+  way: "",
+  level: "",
+  pathVideo: "",
+  pdf: "",
+  desc: "",
+  audio: "",
+  doc: "",
+  author: "dũng mori",
+};
+
+// phần admin không tối ưu với useCallback, useMemo, memo
 
 const MenuCourses = ({ currentUser }) => {
   const dispatch = useDispatch();
@@ -33,13 +50,11 @@ const MenuCourses = ({ currentUser }) => {
   const [inputSearch, setInputSearch] = useState("");
   const [searchSelector, setSearchSelector] = useState("name");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [editCourse, setEditCourse] = useState(false);
   const [listCourses, setListCourses] = useState([]);
   const [moveCourse, setMoveCourse] = useState({
     courseId: "",
     nextCourseId: "",
   });
-
   const [msg, setMsg] = useState("");
   const [reRender, setRerender] = useState(null);
   const [overlayPost, setOverlayPost] = useState(false);
@@ -60,45 +75,9 @@ const MenuCourses = ({ currentUser }) => {
   const [editStates, setEditStates] = useState(Array(listCourses).fill(false));
   const [newCourseEdit, setNewCourseEdit] = useState({
     id: "",
-    name: "",
-    lesson: "",
-    stage: "",
-    way: "",
-    level: "",
-    pathVideo: "",
-    pdf: "",
-    desc: "",
-    audio: "",
-    doc: "",
-
-    author: "dũng mori",
+    ...defaultCourse,
   });
   let axiosJWT = createAxios(currentUser, dispatch);
-
-  const token = "";
-  for (let index = 0; index < 10; index++) {
-    fetch.post(
-      `${process.env.REACT_APP_BACKEND_URL}/courses`,
-
-      {
-        name: "",
-        lesson: "",
-        stage: "",
-        way: "",
-        level: "",
-        pathVideo: "",
-        pdf: "",
-        audio: "",
-        desc: "",
-        doc: "",
-        author: "dũng mori",
-      },
-
-      {
-        headers: { token: `Bearer ${token}` },
-      }
-    );
-  }
 
   useEffect(() => {
     getAllCourses(currentUser.accessToken, axiosJWT)
@@ -160,12 +139,8 @@ const MenuCourses = ({ currentUser }) => {
       ],
       onFilter: (value, record) => {
         const domain = record.level;
-        if (value === "n1") {
-          return domain === "n1";
-        } else if (value === "n2") {
-          return domain === "n2";
-        }
-        return false;
+
+        return domain === `n${value[1]}`;
       },
     },
     {
@@ -201,7 +176,6 @@ const MenuCourses = ({ currentUser }) => {
       .then((res) => {
         dispatch(toastSuccess(res.data));
         setRerender(newCourseEdit.id);
-        setEditCourse(false);
       })
       .catch((err) => {
         dispatch(toastErr(err.response.data));
@@ -276,8 +250,6 @@ const MenuCourses = ({ currentUser }) => {
                       doc: course.doc,
                       timeLine: course.timeLine,
                     });
-
-                    // setEditCourse(!editCourse);
                   }}
                 >
                   {editStates[indexCourse] ? "Cancel" : "Edit"}
@@ -463,8 +435,7 @@ const MenuCourses = ({ currentUser }) => {
   // Phần xử lí khi người dùng nháy vào phần mở rộng
   const handleExpand = (expanded, record) => {
     // "expanded" (boolean) và "record" (đối tượng dữ liệu của hàng được mở rộng)
-    console.log(record.id);
-    setEditCourse(false);
+
     setNewCourseEdit({
       id: record.id,
       name: record.name,
@@ -556,36 +527,15 @@ const MenuCourses = ({ currentUser }) => {
     },
     rowClassName: getRowClassName,
   };
+  //post course
   const handlePostCourse = () => {
     if (
-      postNewCourse.name !== "" &&
-      postNewCourse.lesson !== "" &&
-      postNewCourse.stage !== "" &&
-      postNewCourse.way !== "" &&
-      postNewCourse.level !== ""
+      postNewCourse.name &&
+      postNewCourse.lesson &&
+      postNewCourse.stage &&
+      postNewCourse.way &&
+      postNewCourse.level
     ) {
-      // let course = {
-      //   name: document.getElementById("pname").value,
-      //   lesson: document.getElementById("plesson").value,
-      //   stage: document.getElementById("pstage").value,
-      //   way: document.getElementById("pway").value,
-      //   level: document.getElementById("plevel").value,
-      //   pathVideo: document.getElementById("ppathVideo").value,
-      //   pdf: document.getElementById("ppdf").value,
-      //   audio: document.getElementById("paudio").value,
-      //   desc: "",
-      //   doc: document.getElementById("pdoc").value,
-      //   author: "dũng mori",
-      // };
-      // postCourse(currentUser.accessToken, course, axiosJWT)
-      //   .then((res) => {
-      //     setMsg(res.data);
-      //     dispatch(toastSuccess(res.data));
-      //   })
-      //   .catch((err) => {
-      //     dispatch(toastSuccess(err.response.data));
-      //     setMsg(err.response.data);
-      //   });
       postCourse(currentUser.accessToken, postNewCourse, axiosJWT)
         .then((res) => {
           setMsg(res.data);
@@ -599,7 +549,7 @@ const MenuCourses = ({ currentUser }) => {
       setMsg("Vui lòng nhập đầy đủ thông tin");
     }
   };
-
+  // phần xư lí di chuyển của course
   const handleMoveCourse = () => {
     if (moveCourse.courseId && moveCourse.nextCourseId) {
       axios
@@ -660,29 +610,26 @@ const MenuCourses = ({ currentUser }) => {
             Di chuyển
           </Button>
           <label className="text-[red]">ID: </label>
-          <input
+          <InputFc
+            course={moveCourse}
+            type="number"
+            field={"courseId"}
+            handle={setMoveCourse}
+            text={"id bài học"}
             className="border border-[#333] outline-none h-full w-[40rem]  rounded-xl px-3"
-            value={moveCourse.courseId}
-            placeholder="Điền id bài học..."
-            onChange={(e) => {
-              setMoveCourse({
-                ...moveCourse,
-                courseId: e.target.value,
-              });
-            }}
-          ></input>{" "}
+            search={true}
+          />
+
           <label className="text-[red]">Order: </label>
-          <input
+          <InputFc
+            type="number"
+            course={moveCourse}
+            field={"nextCourseId"}
+            handle={setMoveCourse}
+            text={" nextCourseId"}
             className="border border-[#333] outline-none h-full w-[40rem]  rounded-xl px-3"
-            value={moveCourse.nextCourseId}
-            placeholder="Điền order bài học..."
-            onChange={(e) => {
-              setMoveCourse({
-                ...moveCourse,
-                nextCourseId: e.target.value,
-              });
-            }}
-          ></input>
+            search={true}
+          />
         </div>
       </div>
       <div
@@ -701,195 +648,60 @@ const MenuCourses = ({ currentUser }) => {
           />
 
           <div className=" flex flex-col gap-7 px-[4rem] py-[2rem] w-full h-full">
-            <div className="flex items-center w-full gap-5 ">
-              <label
-                className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
-                htmlFor="name"
-              >
-                Name :
-              </label>
-              <input
-                value={postNewCourse.name}
-                onChange={(e) => {
-                  setPostNewCourse({
-                    ...postNewCourse,
-                    name: e.target.value,
-                  });
-                }}
-                id="pname"
-                type="text"
-                placeholder="Điền tên bài học..."
-                className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
-              />
-            </div>
-            <div className="flex items-center w-full gap-5 ">
-              <label
-                className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
-                htmlFor="lesson"
-              >
-                Lesson :
-              </label>
-              <input
-                value={postNewCourse.lesson}
-                onChange={(e) => {
-                  setPostNewCourse({
-                    ...postNewCourse,
-                    lesson: e.target.value,
-                  });
-                }}
-                id="plesson"
-                type="text"
-                placeholder="Điền bài học...."
-                className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
-              />
-            </div>{" "}
-            <div className="flex items-center w-full gap-5 ">
-              <label
-                className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
-                htmlFor="stage"
-              >
-                Stage :
-              </label>
-              <input
-                value={postNewCourse.stage}
-                onChange={(e) => {
-                  setPostNewCourse({
-                    ...postNewCourse,
-                    stage: e.target.value,
-                  });
-                }}
-                id="pstage"
-                type="text"
-                placeholder="Điền tiến trình...."
-                className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
-              />
-            </div>{" "}
-            <div className="flex items-center w-full gap-5 ">
-              <label
-                className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
-                htmlFor="way"
-              >
-                Way :
-              </label>
-              <input
-                value={postNewCourse.way}
-                onChange={(e) => {
-                  setPostNewCourse({
-                    ...postNewCourse,
-                    way: e.target.value,
-                  });
-                }}
-                id="pway"
-                type="text"
-                placeholder="Điền chặng đường..."
-                className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
-              />
-            </div>{" "}
-            <div className="flex items-center w-full gap-5 ">
-              <label
-                className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
-                htmlFor="level"
-              >
-                Level :
-              </label>
-              <input
-                value={postNewCourse.level}
-                onChange={(e) => {
-                  setPostNewCourse({
-                    ...postNewCourse,
-                    level: e.target.value,
-                  });
-                }}
-                id="plevel"
-                type="text"
-                placeholder="Điền trình độ..."
-                className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
-              />
-            </div>
-            <div className="flex items-center w-full gap-5 ">
-              <label
-                className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
-                htmlFor="pathVideo"
-              >
-                PathVideo :
-              </label>
-              <input
-                value={postNewCourse.pathVideo}
-                onChange={(e) => {
-                  setPostNewCourse({
-                    ...postNewCourse,
-                    pathVideo: e.target.value,
-                  });
-                }}
-                id="ppathVideo"
-                type="text"
-                placeholder="Điền trình độ..."
-                className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
-              />
-            </div>{" "}
-            <div className="flex items-center w-full gap-5 ">
-              <label
-                className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
-                htmlFor="pdf"
-              >
-                Pdf :
-              </label>
-              <input
-                value={postNewCourse.pdf}
-                onChange={(e) => {
-                  setPostNewCourse({
-                    ...postNewCourse,
-                    pdf: e.target.value,
-                  });
-                }}
-                id="ppdf"
-                type="text"
-                placeholder="Điền trình độ..."
-                className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
-              />
-            </div>
-            <div className="flex items-center w-full gap-5 ">
-              <label
-                className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
-                htmlFor="audio"
-              >
-                Audio :
-              </label>
-              <input
-                value={postNewCourse.audio}
-                onChange={(e) => {
-                  setPostNewCourse({
-                    ...postNewCourse,
-                    audio: e.target.value,
-                  });
-                }}
-                id="paudio"
-                type="text"
-                placeholder="Điền link mp3..."
-                className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
-              />
-            </div>
-            <div className="flex items-center w-full gap-5 ">
-              <label
-                className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
-                htmlFor="doc"
-              >
-                Doc :
-              </label>
-              <input
-                value={postNewCourse.doc}
-                onChange={(e) => {
-                  setPostNewCourse({
-                    ...postNewCourse,
-                    doc: e.target.value,
-                  });
-                }}
-                id="pdoc"
-                type="text"
-                placeholder="Điền link mp3..."
-                className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
-              />
-            </div>
+            <InputFc
+              course={postNewCourse}
+              field={"name"}
+              handle={setPostNewCourse}
+              text={"tên bài học..."}
+            />
+            <InputFc
+              course={postNewCourse}
+              field={"lesson"}
+              handle={setPostNewCourse}
+              text={"bài học..."}
+            />
+            <InputFc
+              course={postNewCourse}
+              field={"stage"}
+              handle={setPostNewCourse}
+              text={"giai đoạn..."}
+            />
+            <InputFc
+              course={postNewCourse}
+              field={"way"}
+              handle={setPostNewCourse}
+              text={"chặg..."}
+            />
+            <InputFc
+              course={postNewCourse}
+              field={"level"}
+              handle={setPostNewCourse}
+              text={"trình độ..."}
+            />
+            <InputFc
+              course={postNewCourse}
+              field={"pathVideo"}
+              handle={setPostNewCourse}
+              text={"link video..."}
+            />
+            <InputFc
+              course={postNewCourse}
+              field={"pdf"}
+              handle={setPostNewCourse}
+              text={"link pdf..."}
+            />
+            <InputFc
+              course={postNewCourse}
+              field={"audio"}
+              handle={setPostNewCourse}
+              text={"audio..."}
+            />
+            <InputFc
+              course={postNewCourse}
+              field={"doc"}
+              handle={setPostNewCourse}
+              text={"link doc - html..."}
+            />
           </div>
           <div className="w-[500px] bg-slate-50 flex flex-col p-[2rem] ">
             <div
@@ -908,18 +720,7 @@ const MenuCourses = ({ currentUser }) => {
               <button
                 className="inline-flex items-center justify-center px-8 py-4 font-sans font-semibold tracking-wide text-blue-500 border border-blue-500 hover:bg-gray-300 rounded-lg h-[60px]"
                 onClick={() => {
-                  setPostNewCourse({
-                    name: "",
-                    lesson: "",
-                    stage: "",
-                    way: "",
-                    level: "",
-                    pathVideo: "",
-                    pdf: "",
-                    desc: "",
-                    doc: "",
-                    author: "dũng mori",
-                  });
+                  setPostNewCourse(defaultCourse);
                 }}
               >
                 RESET
@@ -954,14 +755,7 @@ const MenuCourses = ({ currentUser }) => {
       >
         Thêm khóa học
       </Button>
-      <Button
-        className="shadow-desc hover:bg-[#d9a1d5] ml-10 "
-        onClick={() => {
-          setMockTest(true);
-        }}
-      >
-        Thêm bài thi
-      </Button>
+
       <Form
         layout="inline"
         className="components-table-demo-control-bar"

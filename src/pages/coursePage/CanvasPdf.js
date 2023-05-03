@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, memo } from "react";
 import * as pdfjs from "pdfjs-dist";
 import Loading from "../../component/SupportTab/Loading";
 
-const PDFViewer = ({ url, lessonCurrent }) => {
+const PDFViewer = ({ url }) => {
   const canvasRef = useRef();
   const imagesRef = useRef([]);
   const [numImages, setNumImages] = useState(0);
@@ -20,8 +20,6 @@ const PDFViewer = ({ url, lessonCurrent }) => {
     // Xử lý khi tài liệu được load thành công
     loadingTask.promise.then(
       (pdf) => {
-        console.log("Tài liệu được load thành công");
-
         // Lấy số lượng trang của tài liệu PDF
         const numPages = pdf.numPages;
 

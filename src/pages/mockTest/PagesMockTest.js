@@ -1,6 +1,6 @@
 import parse from "html-react-parser";
 import { useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -59,7 +59,6 @@ function PagesMockTest() {
         let index2 = bodyContent.indexOf("回答");
 
         if (index > 1) {
-          console.log("đây là doc");
           setDocx(false);
           setHaveResult(true);
 
@@ -133,7 +132,6 @@ function PagesMockTest() {
           setHaveResult(true);
 
           setDocx(true);
-          console.log("đây là docX");
 
           setHtmlContent(`
   <html>
@@ -146,7 +144,7 @@ function PagesMockTest() {
 `);
         } else if (index < 1 && index2 < 1) {
           setDocx(true);
-          console.log("đây là bài tập không có kết quả");
+
           setHaveResult(false);
           if (styleContent) {
             setHtmlContent(`
@@ -171,7 +169,7 @@ function PagesMockTest() {
   }, [currentLesson]);
 
   useEffect(() => {
-    if (currentLesson && docX && loadDataDoc) {
+    if (url && docX && loadDataDoc) {
       const answerA = "a.",
         answerB = "b.",
         answerC = "c.",
@@ -184,7 +182,7 @@ function PagesMockTest() {
         countas = 0,
         st = true;
       const elements = document.querySelectorAll(".t");
-      let countA = 0,
+      let countA = -1,
         countB = 0,
         countC = 0,
         countD = 0;
@@ -198,13 +196,14 @@ function PagesMockTest() {
           }
         }
         if (text.includes(answerA) && st) {
+          countA++;
+          countB = countC = countD = countA;
           element.insertAdjacentHTML(
             "afterbegin",
             ' <label ><input class="input_homeWork" type="radio" name="' +
               countA +
               '" value="a"></ label>'
           );
-          countA++;
         }
         if (text.includes(answerB) && st) {
           element.insertAdjacentHTML(
@@ -213,7 +212,6 @@ function PagesMockTest() {
               countB +
               '" value="b"> </label >'
           );
-          countB++;
         }
         if (text.includes(answerC) && st) {
           element.insertAdjacentHTML(
@@ -222,7 +220,6 @@ function PagesMockTest() {
               countC +
               '" value="c"> </label >'
           );
-          countC++;
         }
         if (text.includes(answerD) && st) {
           element.insertAdjacentHTML(
@@ -231,8 +228,8 @@ function PagesMockTest() {
               countD +
               '" value="d"> </label >'
           );
-          countD++;
         }
+
         if (
           text.includes(kekkaA) ||
           text.includes(kekkaB) ||
@@ -246,13 +243,9 @@ function PagesMockTest() {
       }
       setArrResult2([]);
 
-      As.forEach((element) => {
-        element.style.opacity = 0;
-        setArrResult2((result) => [...result, element]);
-      });
+      As.forEach((element) => setArrResult2((result) => [...result, element]));
       setLoadDataDoc(false);
     } else if (url && !docX && isDocXNew) {
-      console.log("đây là docx new");
       const answerA = "a.",
         answerB = "b.",
         answerC = "c.",
@@ -269,13 +262,14 @@ function PagesMockTest() {
         const element = elements[i];
 
         if (element.innerText === answerA) {
+          countA++;
+
           element.insertAdjacentHTML(
             "afterbegin",
             ' <label ><input class="cursor-pointer scale-150 " type="radio" name="' +
               countA +
               '" value="a"></ label>'
           );
-          countA++;
         }
         if (element.innerText === answerB) {
           element.insertAdjacentHTML(
@@ -284,7 +278,6 @@ function PagesMockTest() {
               countB +
               '" value="b"> </label >'
           );
-          countB++;
         }
         if (element.innerText === answerC) {
           element.insertAdjacentHTML(
@@ -293,7 +286,6 @@ function PagesMockTest() {
               countC +
               '" value="c"> </label >'
           );
-          countC++;
         }
         if (element.innerText === answerD) {
           element.insertAdjacentHTML(
@@ -302,13 +294,11 @@ function PagesMockTest() {
               countD +
               '" value="d"> </label >'
           );
-          countD++;
         }
       }
       let tables = document.querySelectorAll(".table-result");
       let arrTable = [];
       tables.forEach((table) => {
-        table.style.opacity = 0;
         const td = table.querySelectorAll("td");
         td.forEach((result, index) => {
           if (index >= td.length / 2) {
@@ -323,11 +313,6 @@ function PagesMockTest() {
         setArrResult2((result) => [...result, element])
       );
       setLoadDataDoc(false);
-    } else if (!docX) {
-      let tables = document.querySelectorAll("table");
-      tables.forEach((table) => {
-        table.style.opacity = 0;
-      });
     }
   }, [docX, isDocXNew, url, loadDataDoc]);
 
@@ -496,7 +481,6 @@ function PagesMockTest() {
         );
       }
     } else if (isDocXNew) {
-      console.log(333);
       let arrResult = [];
       let arrInput = [];
       let number = Number(0);
@@ -594,7 +578,6 @@ function PagesMockTest() {
                 paragraph.textContent.trim()[
                   paragraph.textContent.trim().length - 1
                 ];
-              console.log(paragraph.textContent);
               paragraph.textContent = `${arrInput[i]} -> ${paragraph.textContent}`;
             }
           }
@@ -724,7 +707,6 @@ function PagesMockTest() {
                   paragraph.textContent.trim()[
                     paragraph.textContent.trim().length - 1
                   ];
-                console.log(paragraph.textContent);
                 paragraph.textContent = `${arrInput[i]} -> ${paragraph.textContent}`;
               }
             }
@@ -788,7 +770,6 @@ function PagesMockTest() {
                     paragraph.textContent.trim()[
                       paragraph.textContent.trim().length - 1
                     ];
-                  console.log(paragraph.textContent);
                   paragraph.textContent = `${arrInput[i]} -> ${paragraph.textContent}`;
                 }
               }
@@ -852,12 +833,12 @@ function PagesMockTest() {
     const footer = document.querySelector("#footer");
     footer.style.display = "none";
 
-    messenger.style.display = "none";
+    if (messenger) messenger.style.display = "none";
 
     return () => {
       footer.style.display = "block";
 
-      messenger.style.display = "block";
+      if (messenger) messenger.style.display = "block";
     };
   }, []);
   const onFinish = () => {
@@ -880,7 +861,7 @@ function PagesMockTest() {
               audio={currentLesson.audio}
             />
           ) : (
-            <div className="fixed top-0 left-0 right-0 flex flex-row flex-1   items-center gap-4 sm:top-[7rem] sm:z-[8888]">
+            <div className="fixed top-0 left-0 right-0 flex flex-row flex-1   items-center gap-4 sm:top-[7rem] sm:z-[9999]">
               <p className="font-semibold md:hidden">Thời gian còn lại:</p>
               <Row gutter={16}>
                 <Col span={12}>
@@ -906,7 +887,7 @@ function PagesMockTest() {
           {haveResult && (
             <div className="fixed bottom-[6rem] left-5 z-[4444]  ">
               <div
-                className="flex items-center gap-y-5 flex-col"
+                className="flex flex-col items-center gap-y-5"
                 aria-label="button-combination"
               >
                 <button

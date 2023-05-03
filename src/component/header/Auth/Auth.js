@@ -17,21 +17,6 @@ function Auth() {
   let axiosJWT = createAxios(user, dispatch, logOutSuccess);
   const keyImg = useSelector((state) => state.users.inforUser?.keyImg);
 
-  // const [userGmail, setUser] = useState(null);
-
-  // useEffect(() => {
-  //   axios
-  //     .get(`${process.env.REACT_APP_BACKEND_URL}/auth/user/api`, {
-  //       headers: { token: `Bearer ${Cookies.get("tokenGmail")}` },
-  //     })
-  //     .then((response) => {
-  //       console.log(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // }, []);
-
   const items = [
     {
       key: "1",

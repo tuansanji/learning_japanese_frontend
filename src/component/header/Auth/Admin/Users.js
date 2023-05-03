@@ -1,6 +1,6 @@
 import moment from "moment";
-import { io } from "socket.io-client";
-import { useEffect, useState, memo, useMemo, useCallback } from "react";
+
+import { useEffect, useState, memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Form,
@@ -24,11 +24,13 @@ import { createAxios } from "../../../../redux/createInstance";
 import { getAllUsersSuccess } from "../../../../redux/slice/userSlice";
 import axios from "axios";
 import { toastErr, toastSuccess } from "../../../../redux/slice/toastSlice";
-// import socket from "../../../content/Container";
+
 const defaultExpandable = {
   expandedRowRender: (record) => <div>{record.description}</div>,
 };
-// const socket = io(process.env.REACT_APP_BACKEND_URL);
+
+// phần admin không tối ưu với useCallback, useMemo, memo
+
 const MenuUser = ({ currentUser }) => {
   const [onlineUsers, setOnlineUsers] = useState(0);
   const [searchSelector, setSearchSelector] = useState("username");
@@ -333,7 +335,6 @@ const MenuUser = ({ currentUser }) => {
       </div>
     );
   };
-  const scroll = {};
 
   const tableColumns = columns.map((item) => ({
     ...item,

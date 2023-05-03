@@ -4,7 +4,11 @@ import Container from "./component/content/Container";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.scss";
-import "./test.scss";
+
+// phần xử lí khi người dùng sử dụng chế độ debug
+// if (typeof window.__REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined") {
+//   console.log("Chế độ debug đang được bật!");
+// }
 
 function App() {
   return (

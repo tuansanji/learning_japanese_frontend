@@ -50,7 +50,7 @@ const Time = () => {
   return (
     <>
       {userTest && (
-        <div className="flex flex-col md:flex-row md:items-center md:gap-4">
+        <div className="flex flex-col md:flex-row md:items-center md:gap-4 z-50">
           <p className="font-semibold">Thời gian còn lại:</p>
           <Row gutter={16}>
             <Col span={12}>

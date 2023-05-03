@@ -3,7 +3,9 @@ import CloseIcon from "@material-ui/icons/Close";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { toastErr, toastSuccess } from "../../../../redux/slice/toastSlice";
-function MockTest({ mockTest, setMockTest }) {
+import InputFc from "./InputFc";
+
+function MockTest({ mockTest, setMockTest, increaseCount }) {
   const dispatch = useDispatch();
   const [lessonTest, setLessonTest] = useState({
     level: "",
@@ -19,10 +21,10 @@ function MockTest({ mockTest, setMockTest }) {
   });
   const handlePostMockTest = () => {
     if (
-      lessonTest.level === "" ||
-      lessonTest.name === "" ||
-      lessonTest.lesson === "" ||
-      lessonTest.html === ""
+      !lessonTest.level ||
+      !lessonTest.name ||
+      !lessonTest.lesson ||
+      !lessonTest.html
     ) {
       dispatch(toastErr("Điền đây đủ đi mày"));
     } else {
@@ -38,6 +40,7 @@ function MockTest({ mockTest, setMockTest }) {
         )
         .then((res) => {
           dispatch(toastSuccess(res.data));
+          increaseCount();
         })
         .catch((err) => {
           dispatch(toastErr(err.response.data));
@@ -62,153 +65,50 @@ function MockTest({ mockTest, setMockTest }) {
           />
 
           <div className=" flex flex-col gap-7 px-[4rem] py-[2rem] w-full h-full">
-            <div className=" flex gap-5 items-center w-full">
-              <label
-                className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
-                htmlFor="name"
-              >
-                Name :
-              </label>
-              <input
-                value={lessonTest.name}
-                onChange={(e) => {
-                  setLessonTest({
-                    ...lessonTest,
-                    name: e.target.value,
-                  });
-                }}
-                id="name"
-                type="text"
-                placeholder="Điền tên bài học..."
-                className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
-              />
-            </div>
-            <div className=" flex gap-5 items-center w-full">
-              <label
-                className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
-                htmlFor="level"
-              >
-                Level :
-              </label>
-              <input
-                value={lessonTest.level}
-                onChange={(e) => {
-                  setLessonTest({
-                    ...lessonTest,
-                    level: e.target.value,
-                  });
-                }}
-                id="level"
-                type="text"
-                placeholder="Điền level bài học..."
-                className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
-              />
-            </div>
-            <div className=" flex gap-5 items-center w-full">
-              <label
-                className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
-                htmlFor="lesson"
-              >
-                lesson :
-              </label>
-              <input
-                value={lessonTest.lesson}
-                onChange={(e) => {
-                  setLessonTest({
-                    ...lessonTest,
-                    lesson: e.target.value,
-                  });
-                }}
-                id="lesson"
-                type="text"
-                placeholder="Điền tên bài học..."
-                className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
-              />
-            </div>
-            <div className=" flex gap-5 items-center w-full">
-              <label
-                className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
-                htmlFor="time"
-              >
-                time :
-              </label>
-              <input
-                value={lessonTest.time}
-                onChange={(e) => {
-                  setLessonTest({
-                    ...lessonTest,
-                    time: e.target.value,
-                  });
-                }}
-                id="time"
-                type="text"
-                placeholder="Điền thời gian bài test..."
-                className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
-              />
-            </div>
-            <div className=" flex gap-5 items-center w-full">
-              <label
-                className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
-                htmlFor="audio"
-              >
-                audio :
-              </label>
-              <input
-                value={lessonTest.audio}
-                onChange={(e) => {
-                  setLessonTest({
-                    ...lessonTest,
-                    audio: e.target.value,
-                  });
-                }}
-                id="audio"
-                type="text"
-                placeholder="Điền file audio..."
-                className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
-              />
-            </div>
-            <div className=" flex gap-5 items-center w-full">
-              <label
-                className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
-                htmlFor="html"
-              >
-                html :
-              </label>
-              <input
-                value={lessonTest.html}
-                onChange={(e) => {
-                  setLessonTest({
-                    ...lessonTest,
-                    html: e.target.value,
-                  });
-                }}
-                id="html"
-                type="text"
-                placeholder="Điền file html..."
-                className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
-              />
-            </div>
-            <div className=" flex gap-5 items-center w-full">
-              <label
-                className="w-[10rem] border-b-4 font-bold border-[red] px-2 py-2"
-                htmlFor="question"
-              >
-                question :
-              </label>
-              <input
-                value={lessonTest.question}
-                onChange={(e) => {
-                  setLessonTest({
-                    ...lessonTest,
-                    question: e.target.value,
-                  });
-                }}
-                id="question"
-                type="text"
-                placeholder="Điền tổng số câu hỏi..."
-                className=" w-[80%] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
-              />
-            </div>
+            <InputFc
+              course={lessonTest}
+              field={"name"}
+              handle={setLessonTest}
+              text={"tên bài học..."}
+            />
+            <InputFc
+              course={lessonTest}
+              field={"level"}
+              handle={setLessonTest}
+              text={"level bài học..."}
+            />
+            <InputFc
+              course={lessonTest}
+              field={"lesson"}
+              handle={setLessonTest}
+              text={" bài học..."}
+            />
+            <InputFc
+              course={lessonTest}
+              type="number"
+              field={"time"}
+              handle={setLessonTest}
+              text={"thời gian bài học..."}
+            />
+            <InputFc
+              course={lessonTest}
+              field={"audio"}
+              handle={setLessonTest}
+              text={"audio..."}
+            />{" "}
+            <InputFc
+              course={lessonTest}
+              field={"html"}
+              handle={setLessonTest}
+              text={"link html-doc..."}
+            />
+            <InputFc
+              type="number"
+              course={lessonTest}
+              field={"question"}
+              handle={setLessonTest}
+              text={"số câu hỏi..."}
+            />
           </div>
           <div className="w-[500px] bg-slate-50 flex flex-col p-[2rem] ">
             <div

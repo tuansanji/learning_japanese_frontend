@@ -4,7 +4,7 @@ import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-function CourseItemPage({ img, lesson, hour, state, hourLearn, title, level }) {
+function CourseItemPage({ img, title, level }) {
   const user = useSelector((state) => {
     return state.auth.login?.currentUser;
   });
@@ -15,22 +15,12 @@ function CourseItemPage({ img, lesson, hour, state, hourLearn, title, level }) {
           <img src={img} alt="" />
         </div>
         <div className=" flex flex-col justify-center items-start flex-1  text-[1.7rem] xl:text-[1.3rem] sm:hidden ">
-          {title.map((item) => (
-            <p className=" text-[#333] "> {item}</p>
+          {title.map((item, index) => (
+            <p className=" text-[#333] " key={index}>
+              {" "}
+              {item}
+            </p>
           ))}
-
-          {/* <div className="w-[100%] h-[100%] m-auto items-center flex  md:flex md:justify-center ">
-            <span className="text-[red] mr-5">{lesson}</span> bài học
-          </div>
-          <div className="w-[100%] h-[100%]  m-auto items-center flex  md:flex md:justify-center ">
-            <span className="text-[red] mr-5">{state}</span> bài giảng
-          </div>
-          <div className="w-[100%] h-[100%]  m-auto items-center flex  md:flex md:justify-center ">
-            <span className="text-[red] mr-5">{hour}</span> giờ học
-          </div>
-          <div className="w-[100%] h-[100%]  m-auto items-center flex  md:flex md:justify-center  ">
-            <span className="text-[red] mr-5">{hourLearn}</span> giờ luyện thi
-          </div> */}
         </div>
         <div className="flex flex-2 justify-center items-center flex-col gap-3 sm:w-[80%] ">
           <Link className="pt-[2rem]" to={`/courses/${level}`}>

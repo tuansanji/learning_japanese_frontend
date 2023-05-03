@@ -29,16 +29,10 @@ function HomeWork({ url }) {
         let bodyContent = bodyMatch ? bodyMatch[1] : "";
         let styleContent = bodyMatch ? styleMatch[1] : "";
 
-        // let bodyRegex = /<body.*?>([\s\S]*)<\/body>/i;
-        // let bodyMatch = result.data.match(bodyRegex);
-        // let response = bodyMatch ? bodyMatch[1] : "";
-        // let index = response.data.body.indexOf("<table");
-        // let index2 = response.data.body.indexOf("回答");
         let index = bodyContent.indexOf("<table");
         let index2 = bodyContent.indexOf("回答");
 
         if (index > 1) {
-          console.log("đây là doc");
           setDocx(false);
           setHaveResult(true);
 
@@ -101,10 +95,6 @@ function HomeWork({ url }) {
             /src=['"](.*?)['"]/g,
             "src='" + path + "/" + "$1'"
           );
-          // bodyContent = bodyContent.replace(
-          //   "回答",
-          //   "<div className='flex w-full justify-center gap-[10rem] sm:gap-[6rem] h-[8rem] text-[3rem] pb-[4rem] ' aria-label='button-combination' > <span className='hidden' id='text-result'>回答</span> <button  id='btn_checked' className='inline-flex items-center justify-center px-8 py-2 font-sans font-semibold tracking-wide text-white bg-red-500 rounded-lg h-[40px] md:h-[7rem] md:text-[2rem] md:w-[14rem]'>Kiểm tra </button> <button className='inline-flex items-center justify-center px-8 py-2 font-sans font-semibold tracking-wide text-blue-500 border border-blue-500 rounded-lg h-[40px] md:h-[7rem] md:text-[2rem] shadow-desc' id='btn_viewResult'>Xem kết quả</button></div>"
-          // );
 
           const jsx = parse(bodyContent);
           setHtml(jsx);
@@ -112,7 +102,6 @@ function HomeWork({ url }) {
           setHaveResult(true);
 
           setDocx(true);
-          console.log("đây là docX");
 
           setHtmlContent(`
   <html>
@@ -125,7 +114,7 @@ function HomeWork({ url }) {
 `);
         } else if (index < 1 && index2 < 1) {
           setDocx(true);
-          console.log("đây là bài tập không có kết quả");
+
           setHaveResult(false);
           if (styleContent) {
             setHtmlContent(`
@@ -163,10 +152,8 @@ function HomeWork({ url }) {
         countas = 0,
         st = true;
       const elements = document.querySelectorAll(".t");
-      let countA = 0,
-        countB = 0,
-        countC = 0,
-        countD = 0;
+      let countA = -1;
+
       for (let i = 0; i < elements.length; i++) {
         const element = elements[i];
         let text = "";
@@ -177,41 +164,40 @@ function HomeWork({ url }) {
           }
         }
         if (text.includes(answerA) && st) {
+          ++countA;
+
           element.insertAdjacentHTML(
             "afterbegin",
             ' <label ><input class="input_homeWork" type="radio" name="' +
               countA +
               '" value="a"></ label>'
           );
-          countA++;
         }
         if (text.includes(answerB) && st) {
           element.insertAdjacentHTML(
             "afterbegin",
             ' <label ><input class="input_homeWork " type="radio" name="' +
-              countB +
+              countA +
               '" value="b"> </label >'
           );
-          countB++;
         }
         if (text.includes(answerC) && st) {
           element.insertAdjacentHTML(
             "afterbegin",
             ' <label ><input class="input_homeWork" type="radio" name="' +
-              countC +
+              countA +
               '" value="c"> </label >'
           );
-          countC++;
         }
         if (text.includes(answerD) && st) {
           element.insertAdjacentHTML(
             "afterbegin",
             ' <label ><input class="input_homeWork" type="radio" name="' +
-              countD +
+              countA +
               '" value="d"> </label >'
           );
-          countD++;
         }
+
         if (
           text.includes(kekkaA) ||
           text.includes(kekkaB) ||
@@ -228,7 +214,6 @@ function HomeWork({ url }) {
       As.forEach((element) => setArrResult2((result) => [...result, element]));
       setLoadDataDoc(false);
     } else if (url && !docX && isDocXNew) {
-      console.log("đây là docx new");
       const answerA = "a.",
         answerB = "b.",
         answerC = "c.",
@@ -236,51 +221,47 @@ function HomeWork({ url }) {
 
       const elements = document.querySelectorAll(".answer-span");
 
-      let countA = 0,
-        countB = 0,
-        countC = 0,
-        countD = 0;
+      let countA = -1;
 
       for (let i = 0; i < elements.length; i++) {
         const element = elements[i];
 
         if (element.innerText === answerA) {
+          ++countA;
+
           element.insertAdjacentHTML(
             "afterbegin",
             ' <label ><input class="cursor-pointer scale-150 " type="radio" name="' +
               countA +
               '" value="a"></ label>'
           );
-          countA++;
         }
         if (element.innerText === answerB) {
           element.insertAdjacentHTML(
             "afterbegin",
             ' <label ><input class="cursor-pointer scale-150  " type="radio" name="' +
-              countB +
+              countA +
               '" value="b"> </label >'
           );
-          countB++;
         }
         if (element.innerText === answerC) {
           element.insertAdjacentHTML(
             "afterbegin",
             ' <label ><input class="cursor-pointer scale-150 " type="radio" name="' +
-              countC +
+              countA +
               '" value="c"> </label >'
           );
-          countC++;
         }
         if (element.innerText === answerD) {
           element.insertAdjacentHTML(
             "afterbegin",
             ' <label ><input class="cursor-pointer scale-150 " type="radio" name="' +
-              countD +
+              countA +
               '" value="d"> </label >'
           );
-          countD++;
         }
       }
+
       let tables = document.querySelectorAll(".table-result");
       let arrTable = [];
       tables.forEach((table) => {
@@ -466,7 +447,6 @@ function HomeWork({ url }) {
         );
       }
     } else if (isDocXNew) {
-      console.log(333);
       let arrResult = [];
       let arrInput = [];
       let number = Number(0);
@@ -494,7 +474,7 @@ function HomeWork({ url }) {
         );
       }
     }
-  }, []);
+  }, [url, docX, isDocXNew]);
 
   const handleResult = useCallback(() => {
     if (docX) {
@@ -555,7 +535,7 @@ function HomeWork({ url }) {
                 paragraph.textContent.trim()[
                   paragraph.textContent.trim().length - 1
                 ];
-              console.log(paragraph.textContent);
+
               paragraph.textContent = `${arrInput[i]} -> ${paragraph.textContent}`;
             }
           }
@@ -679,7 +659,7 @@ function HomeWork({ url }) {
                   paragraph.textContent.trim()[
                     paragraph.textContent.trim().length - 1
                   ];
-                console.log(paragraph.textContent);
+
                 paragraph.textContent = `${arrInput[i]} -> ${paragraph.textContent}`;
               }
             }
@@ -742,15 +722,13 @@ function HomeWork({ url }) {
                     paragraph.textContent.trim()[
                       paragraph.textContent.trim().length - 1
                     ];
-                  console.log(paragraph.textContent);
+
                   paragraph.textContent = `${arrInput[i]} -> ${paragraph.textContent}`;
                 }
               }
             });
           }
         }
-
-        // const tb = document.querySelectorAll("table");
       }
     } else if (isDocXNew) {
       let arrResult = [];
@@ -797,7 +775,7 @@ function HomeWork({ url }) {
         }
       });
     }
-  }, []);
+  }, [url, docX, isDocXNew]);
 
   return (
     <div className="mb-[20rem] relative">

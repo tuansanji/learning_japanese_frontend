@@ -69,8 +69,11 @@ function ScrollableTabsButtonAuto({
           JSON.parse(localStorage.getItem(audioOrVideo ? "audio" : "video"))
             .stage
         );
+
       if (stageCurrent >= 0) {
         setValue(stageCurrent);
+      } else {
+        setValue(0);
       }
     } else {
       setValue(0);

@@ -253,7 +253,7 @@ export const getStageCourse = async (dispatch, level, way, stage) => {
     const courses = await axios.get(
       `${process.env.REACT_APP_BACKEND_URL}/courses/${level}/${way}/${stage}`
     );
-    console.log(stage);
+
     let arr = [];
     courses.data.forEach((way) => way && arr.push(way.lesson));
 

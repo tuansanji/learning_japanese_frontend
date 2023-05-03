@@ -6,20 +6,23 @@ import CloseIcon from "@material-ui/icons/Close";
 import ErrorIcon from "@material-ui/icons/Error";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { toastErr, toastSuccess } from "../../redux/slice/toastSlice";
+import { toastSuccess } from "../../redux/slice/toastSlice";
 function ErrorPage({ setError, lessonCurrent }) {
-  const [state, setState] = React.useState([]);
+  const [state, setState] = useState([]);
   const [text, setText] = useState("");
   const dispatch = useDispatch();
-  const handleChange = useCallback((event) => {
-    const isChecked = event.target.checked;
-    const value = event.target.value;
-    if (isChecked) {
-      setState([...state, value]);
-    } else {
-      setState(state.filter((item) => item !== value));
-    }
-  }, []);
+  const handleChange = useCallback(
+    (event) => {
+      const isChecked = event.target.checked;
+      const value = event.target.value;
+      if (isChecked) {
+        setState([...state, value]);
+      } else {
+        setState(state.filter((item) => item !== value));
+      }
+    },
+    [state]
+  );
   const handleSendError = useCallback(() => {
     axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/courses/errMsg`, {
@@ -35,7 +38,7 @@ function ErrorPage({ setError, lessonCurrent }) {
         console.log(err);
         // dispatch(toastErr(err.response.data));
       });
-  }, []);
+  }, [lessonCurrent]);
   return (
     <div className="fixed z-[6666] top-1/2  w-[50rem] md:w-[90%] pb-10  shadow-desc bg-slate-50 translate-y-[-50%] translate-x-[-50%]  left-1/2 transition-all">
       <CloseIcon

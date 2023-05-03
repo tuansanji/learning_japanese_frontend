@@ -6,8 +6,8 @@ import PauseIcon from "@material-ui/icons/Pause";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import RepeatOneIcon from "@material-ui/icons/RepeatOne";
 import gsap from "gsap";
-
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+
 import {
   getCurrentIndex,
   getLessonCurrent,
@@ -56,8 +56,7 @@ function MusicPage({
     setLoading(false);
     setDuration(audioRef.current.duration);
     if (play) audioRef.current.play();
-  }, []);
-
+  }, [audioRef.current, play]);
   //thêm thời gian video
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -81,33 +80,36 @@ function MusicPage({
       audio.addEventListener("loadeddata", () => {
         // Set isLoading to false when audio has finished loading
       });
-
-      // Clean up event listener on component unmount
       return () => {
         audio.removeEventListener("loadeddata", handleLoadedData);
       };
     }
   }, [lessonCurrent]);
   //xử lí input bài hát
-  const handleSeek = useCallback((e) => {
-    const seekTime = Number((e.target.value / 100) * audioRef.current.duration);
-    audioRef.current.currentTime = seekTime;
-    setProgress(e.target.value);
-    if (!play) {
-      setPlay(true);
-      audioRef.current.play();
-    }
-  }, []);
+  const handleSeek = useCallback(
+    (e) => {
+      const seekTime = Number(
+        (e.target.value / 100) * audioRef.current.duration
+      );
+      audioRef.current.currentTime = seekTime;
+      setProgress(e.target.value);
+      if (!play) {
+        setPlay(true);
+        audioRef.current.play();
+      }
+    },
+    [audioRef.current, play]
+  );
   // phát lại bài hát
   const handleRepeat = useCallback(() => {
     setRepeat(!repeat);
     setRepeatOne(false);
-  }, []);
+  }, [repeat]);
   //phát lại một bài hát
   const handleRepeatOne = useCallback(() => {
     setRepeatOne(!repeatOne);
     setRepeat(false);
-  }, []);
+  }, [repeatOne]);
   //tạm dừng và tiếp tục
   const handlePlayAndPause = useCallback(() => {
     if (play) {
@@ -117,7 +119,7 @@ function MusicPage({
     }
 
     setPlay(!play);
-  }, []);
+  }, [audioRef.current, play]);
   //next bài hát
   const handleNextLesson = useCallback(() => {
     let currentIndex = JSON.parse(localStorage.getItem("audioIndex"));
@@ -135,11 +137,13 @@ function MusicPage({
           data: currentLessonList[newIndex],
         })
       );
-
+      audioRef.current.play();
+      setPlay(true);
       const activeElement = document.querySelector(".content_2 .active");
-      activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
+      if (activeElement)
+        activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
     }
-  }, []);
+  }, [currentLessonList]);
   //lùi bài hát
   const handlePrevLesson = useCallback(() => {
     let currentIndex = JSON.parse(localStorage.getItem("audioIndex"));
@@ -160,18 +164,22 @@ function MusicPage({
       audioRef.current.play();
       setPlay(true);
       const activeElement = document.querySelector(".content_2 .active");
-      activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
+      if (activeElement)
+        activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
     }
-  }, []);
+  }, [currentLessonList, audioRef.current]);
 
-  const handleProgress = useCallback((e) => {
-    let arr = JSON.parse(localStorage.getItem("arrVideoFinished")) || [];
+  const handleProgress = useCallback(
+    (e) => {
+      let arr = JSON.parse(localStorage.getItem("arrVideoFinished")) || [];
 
-    localStorage.setItem(
-      "arrVideoFinished",
-      JSON.stringify([...new Set([...arr, lessonCurrent._id])])
-    );
-  }, []);
+      localStorage.setItem(
+        "arrVideoFinished",
+        JSON.stringify([...new Set([...arr, lessonCurrent._id])])
+      );
+    },
+    [lessonCurrent]
+  );
   //xử lí video kết thúc( xử lí repeat )
   const handleEndAudio = useCallback(() => {
     if (!repeatOne) {
@@ -208,7 +216,7 @@ function MusicPage({
       audioRef.current.play();
       setPlay(true);
     }
-  }, []);
+  }, [currentLessonList, audioRef.current, play, repeat, repeatOne]);
 
   // thêm thời gian video
   useEffect(() => {
@@ -279,7 +287,7 @@ function MusicPage({
             >
               <img
                 className=" "
-                src="https://raonhanh365.vn/pictures/detail/2022/08/16/1693332637108959744.jpg"
+                src="https://namtrieu.com.vn/public/uploads/images/Hoc%20T.Nhat/280_636705240348647506_HasThumb.png"
                 alt=""
               />
             </div>
