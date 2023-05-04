@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import PauseIcon from "@material-ui/icons/Pause";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
-import Loading from "../../component/SupportTab/Loading";
 import { Col, Row, Statistic } from "antd";
 import { useDispatch } from "react-redux";
 import { toastSuccess } from "../../redux/slice/toastSlice";

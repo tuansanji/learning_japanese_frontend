@@ -39,24 +39,24 @@ function WayPage() {
   const [isUserTest, setIsUserTest] = useState(true);
   const [menuMusic, setMenuMusic2] = useState(false);
   const [audioOrVideo, setAudioOrVideo] = useState(false);
+  const [code, setCode] = useState("");
+
   const prevBtn = useRef();
   const nextBtn = useRef();
   const video = useRef();
   const indexUserTest = 4;
+
   const lessonCurrent = useSelector(
     (state) => state.courses.lessonCurrent?.lessonCurrent
   );
-
   const stageCourseList = useSelector(
     (state) => state.courses?.listStageCurrent
   );
-
   const user = useSelector((state) => {
     return state.auth.login?.currentUser;
   });
 
-  const [code, setCode] = useState("");
-
+  // kiểm tra số khóa học đã mua của user
   useEffect(() => {
     if (user) {
       if (user.courses.includes(params.level)) {
@@ -65,6 +65,7 @@ function WayPage() {
     }
   }, [user]);
 
+  // kiêm tra xem là video hay audio
   useEffect(() => {
     if (lessonCurrent) {
       if (lessonCurrent.pathVideo === "" && lessonCurrent.audio !== "") {
@@ -116,7 +117,7 @@ function WayPage() {
       }
     }
   }, []);
-
+  //dữ liệu lần đầu vào
   const handleResetAudio = useCallback(
     (courses) => {
       if (stageCourseList && stageCourseList.length > 0) {
@@ -139,7 +140,7 @@ function WayPage() {
     },
     [stageCourseList, audioOrVideo]
   );
-
+  //dữ liệu lần đầu vào
   const handleResetVideo = useCallback(
     (courses) => {
       if (stageCourseList && stageCourseList.length > 0) {
@@ -173,24 +174,25 @@ function WayPage() {
             JSON.parse(localStorage.getItem(params.way.split("+").join(" ")))
               .lesson
         );
-
       const result = currentStage.filter(
         (item) =>
           item._id ===
           JSON.parse(localStorage.getItem(params.way.split("+").join(" ")))._id
       );
       let index = currentStage.indexOf(result[0]);
-
       localStorage.setItem(
         audioOrVideo ? "audioIndex" : "videoIndex",
         JSON.stringify(index)
       );
     }
   }, [params.way, stageCourseList]);
+
+  // thay đổi trong localstorage mỗi lần lessonCurrent thay đổi
   useEffect(() => {
     if (
       lessonCurrent &&
-      lessonCurrent.way === params.way.split("+").join(" ")
+      lessonCurrent.way === params.way.split("+").join(" ") &&
+      lessonCurrent.level === params.level
     ) {
       let index =
         JSON.parse(
@@ -203,6 +205,7 @@ function WayPage() {
     }
   }, [lessonCurrent]);
 
+  // set document
   useEffect(() => {
     if (lessonCurrent) {
       if (lessonCurrent.pdf !== "") {
@@ -215,47 +218,48 @@ function WayPage() {
     }
   }, [lessonCurrent]);
 
+  // thực hiện xử lí lần đầu và cấc lần tiếp theo vào
   useEffect(() => {
     getWayCourse(dispatch, params.level, params.way)
       .then((stage) => {
         setStageList([...new Set(stage)]);
         setLoading(false);
-
-        if (localStorage.getItem(params.way.split("+").join(" "))) {
-          if (
-            JSON.parse(localStorage.getItem(params.way.split("+").join(" ")))
-              .audio !== ""
-          ) {
-            localStorage.getItem("audio") &&
-            JSON.parse(localStorage.getItem("audio")).way ===
-              params.way.split("+").join(" ")
-              ? dispatch(
-                  getLessonCurrent({
-                    state: "audio",
-                    data: JSON.parse(localStorage.getItem("audio")),
-                  })
+        if (!localStorage.getItem(params.way.split("+").join(" "))) return;
+        if (
+          JSON.parse(localStorage.getItem(params.way.split("+").join(" ")))
+            .audio !== ""
+        ) {
+          localStorage.getItem("audio") &&
+          JSON.parse(localStorage.getItem("audio")).way ===
+            params.way.split("+").join(" ") &&
+          JSON.parse(localStorage.getItem("audio")).level === params.level
+            ? dispatch(
+                getLessonCurrent({
+                  state: "audio",
+                  data: JSON.parse(localStorage.getItem("audio")),
+                })
+              )
+            : handleResetAudio(
+                JSON.parse(
+                  localStorage.getItem(params.way.split("+").join(" "))
                 )
-              : handleResetAudio(
-                  JSON.parse(
-                    localStorage.getItem(params.way.split("+").join(" "))
-                  )
-                );
-          } else {
-            localStorage.getItem("video") &&
-            JSON.parse(localStorage.getItem("video")).way ===
-              params.way.split("+").join(" ")
-              ? dispatch(
-                  getLessonCurrent({
-                    state: "video",
-                    data: JSON.parse(localStorage.getItem("video")),
-                  })
+              );
+        } else {
+          localStorage.getItem("video") &&
+          JSON.parse(localStorage.getItem("video")).way ===
+            params.way.split("+").join(" ") &&
+          JSON.parse(localStorage.getItem("video")).level === params.level
+            ? dispatch(
+                getLessonCurrent({
+                  state: "video",
+                  data: JSON.parse(localStorage.getItem("video")),
+                })
+              )
+            : handleResetVideo(
+                JSON.parse(
+                  localStorage.getItem(params.way.split("+").join(" "))
                 )
-              : handleResetVideo(
-                  JSON.parse(
-                    localStorage.getItem(params.way.split("+").join(" "))
-                  )
-                );
-          }
+              );
         }
       })
       .catch((err) => {
@@ -263,6 +267,7 @@ function WayPage() {
       });
   }, [params.way, params.level]);
 
+  //lọc list lesson hiện tại
   useEffect(() => {
     if (lessonCurrent && stageCourseList) {
       let lessonList = stageCourseList.filter(
@@ -374,7 +379,6 @@ function WayPage() {
     let currentIndex = JSON.parse(
       localStorage.getItem(audioOrVideo ? "audioIndex" : "videoIndex")
     );
-
     if (
       currentIndex <
       (userTest && !isUserTest
@@ -397,7 +401,6 @@ function WayPage() {
         })
       );
     }
-
     if (userTest && !isUserTest) {
       if (currentIndex < indexUserTest - 1) {
         const activeElement = document.querySelector(".content_2 .active");
@@ -411,6 +414,7 @@ function WayPage() {
     }
     // }
   }, [currentLessonList, userTest, isUserTest]);
+
   // phần thêm thời gian cho video
   useEffect(() => {
     if (

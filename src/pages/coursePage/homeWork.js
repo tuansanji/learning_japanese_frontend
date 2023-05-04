@@ -16,6 +16,7 @@ function HomeWork({ url }) {
   const dispatch = useDispatch();
   const btnResultRef = useRef();
 
+  // xử lí chuỗi html
   useEffect(() => {
     axios
       .get(url, {
@@ -138,6 +139,7 @@ function HomeWork({ url }) {
       .catch((error) => console.log(error));
   }, [url]);
 
+  // thêm radio vào dom và một số logic phụ
   useEffect(() => {
     if (url && docX && loadDataDoc) {
       const answerA = "a.",
@@ -228,7 +230,6 @@ function HomeWork({ url }) {
 
         if (element.innerText === answerA) {
           ++countA;
-
           element.insertAdjacentHTML(
             "afterbegin",
             ' <label ><input class="cursor-pointer scale-150 " type="radio" name="' +
@@ -282,7 +283,7 @@ function HomeWork({ url }) {
     }
   }, [docX, isDocXNew, url, loadDataDoc]);
 
-  const handleResultTest = useCallback(() => {
+  const handleResultTest = () => {
     if (docX && btnResultRef.current) {
       let arrResult = [];
       let arrInput = [];
@@ -474,9 +475,9 @@ function HomeWork({ url }) {
         );
       }
     }
-  }, [url, docX, isDocXNew]);
+  };
 
-  const handleResult = useCallback(() => {
+  const handleResult = () => {
     if (docX) {
       let arrResult = [];
       let arrInput = [];
@@ -775,7 +776,7 @@ function HomeWork({ url }) {
         }
       });
     }
-  }, [url, docX, isDocXNew]);
+  };
 
   return (
     <div className="mb-[20rem] relative">
@@ -806,4 +807,4 @@ function HomeWork({ url }) {
     </div>
   );
 }
-export default memo(HomeWork);
+export default HomeWork;

@@ -468,10 +468,6 @@ span.MuiTypography-body1.MuiTypography-displayBlock {
     left: 0px !important;
   }
 }
-// phần css của bài thi
-.c {
-  max-height: 100px;
-}
 
 .mock_test {
   border-radius: 10px;
@@ -628,4 +624,8 @@ span.MuiTypography-body1.MuiTypography-displayBlock {
   .WordSection1 * {
     font-size: 16px !important;
   }
+}
+// phần css của bài thi
+.c {
+  max-height: 100px !important;
 }

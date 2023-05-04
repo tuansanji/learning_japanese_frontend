@@ -97,7 +97,7 @@ function Support({
           })
         );
     }
-
+    //phần UI menu bài học
     const activeElement = document.querySelector(".content_2 .active");
     setTimeout(() => {
       if (activeElement) {
@@ -133,7 +133,7 @@ function Support({
         );
     }
 
-    //
+    //phần UI menu bài học
     const content2Elements = document.querySelectorAll(".content_2");
     content2Elements.forEach((content2) => {
       const activeElement = content2.querySelector(".content_2 .active");
@@ -149,14 +149,13 @@ function Support({
       }
     });
   }, [listCurrent, stageCourse]);
-  // set khi màn hình tablet phone thì nháy bài học thì list bài học sẽ tự đóng
 
+  // set khi màn hình tablet phone thì nháy bài học thì list bài học sẽ tự đóng
   useEffect(() => {
     function handleWindowResize() {
       setWindowWidth(window.innerWidth);
     }
     window.addEventListener("resize", handleWindowResize);
-
     return () => window.removeEventListener("resize", handleWindowResize);
   }, []);
 

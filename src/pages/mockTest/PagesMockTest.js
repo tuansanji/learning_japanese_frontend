@@ -35,7 +35,6 @@ function PagesMockTest() {
       setCurrentLesson(arr[0]);
     }
   }, [params.id]);
-  // console.log(currentLesson);
 
   useEffect(() => {
     axios
@@ -49,12 +48,6 @@ function PagesMockTest() {
         let styleMatch = response.data.toString().match(styleRegex);
         let bodyContent = bodyMatch ? bodyMatch[1] : "";
         let styleContent = bodyMatch ? styleMatch[1] : "";
-
-        // let bodyRegex = /<body.*?>([\s\S]*)<\/body>/i;
-        // let bodyMatch = result.data.match(bodyRegex);
-        // let response = bodyMatch ? bodyMatch[1] : "";
-        // let index = response.data.body.indexOf("<table");
-        // let index2 = response.data.body.indexOf("回答");
         let index = bodyContent.indexOf("<table");
         let index2 = bodyContent.indexOf("回答");
 
@@ -121,18 +114,11 @@ function PagesMockTest() {
             /src=['"](.*?)['"]/g,
             "src='" + path + "/" + "$1'"
           );
-          // bodyContent = bodyContent.replace(
-          //   "回答",
-          //   "<div className='flex w-full justify-center gap-[10rem] sm:gap-[6rem] h-[8rem] text-[3rem] pb-[4rem] ' aria-label='button-combination' > <span className='hidden' id='text-result'>回答</span> <button  id='btn_checked' className='inline-flex items-center justify-center px-8 py-2 font-sans font-semibold tracking-wide text-white bg-red-500 rounded-lg h-[40px] md:h-[7rem] md:text-[2rem] md:w-[14rem]'>Kiểm tra </button> <button className='inline-flex items-center justify-center px-8 py-2 font-sans font-semibold tracking-wide text-blue-500 border border-blue-500 rounded-lg h-[40px] md:h-[7rem] md:text-[2rem] shadow-desc' id='btn_viewResult'>Xem kết quả</button></div>"
-          // );
-
           const jsx = parse(bodyContent);
           setHtml(jsx);
         } else if (index < 1 && index2 > 1) {
           setHaveResult(true);
-
           setDocx(true);
-
           setHtmlContent(`
   <html>
     <head>
@@ -140,11 +126,9 @@ function PagesMockTest() {
     </head>
     <body>${bodyContent}</body>
   </html>
-
 `);
         } else if (index < 1 && index2 < 1) {
           setDocx(true);
-
           setHaveResult(false);
           if (styleContent) {
             setHtmlContent(`
@@ -155,7 +139,6 @@ function PagesMockTest() {
     </head>
     <body>${bodyContent}</body>
   </html>
-
 `);
           } else {
             const jsx = parse(bodyContent);
@@ -243,7 +226,11 @@ function PagesMockTest() {
       }
       setArrResult2([]);
 
-      As.forEach((element) => setArrResult2((result) => [...result, element]));
+      As.forEach((element) => {
+        setArrResult2((result) => [...result, element]);
+        element.style.opacity = 0;
+      });
+
       setLoadDataDoc(false);
     } else if (url && !docX && isDocXNew) {
       const answerA = "a.",
@@ -253,7 +240,7 @@ function PagesMockTest() {
 
       const elements = document.querySelectorAll(".answer-span");
 
-      let countA = 0,
+      let countA = -1,
         countB = 0,
         countC = 0,
         countD = 0;
@@ -263,7 +250,7 @@ function PagesMockTest() {
 
         if (element.innerText === answerA) {
           countA++;
-
+          countB = countC = countD = countA;
           element.insertAdjacentHTML(
             "afterbegin",
             ' <label ><input class="cursor-pointer scale-150 " type="radio" name="' +
@@ -309,13 +296,14 @@ function PagesMockTest() {
 
       setArrResult2([]);
 
-      arrTable.forEach((element) =>
-        setArrResult2((result) => [...result, element])
-      );
+      arrTable.forEach((element) => {
+        setArrResult2((result) => [...result, element]);
+        element.style.opacity = 0;
+      });
       setLoadDataDoc(false);
     }
   }, [docX, isDocXNew, url, loadDataDoc]);
-
+  // khi người dùng nhấn btn kiểm tra
   const handleResultTest = () => {
     if (docX && btnResultRef.current) {
       let arrResult = [];
@@ -776,8 +764,6 @@ function PagesMockTest() {
             });
           }
         }
-
-        // const tb = document.querySelectorAll("table");
       }
     } else if (isDocXNew) {
       let arrResult = [];
@@ -828,22 +814,21 @@ function PagesMockTest() {
       });
     }
   };
+  // ẩn footer , btn msg
   useEffect(() => {
     const messenger = document.querySelector("#fb-root");
     const footer = document.querySelector("#footer");
     footer.style.display = "none";
-
     if (messenger) messenger.style.display = "none";
-
     return () => {
       footer.style.display = "block";
-
       if (messenger) messenger.style.display = "block";
     };
   }, []);
   const onFinish = () => {
     dispatch(toastSuccess("Bạn đã hết thời gian làm bài"));
   };
+  //xét thời gian bài thi
   useEffect(() => {
     if (currentLesson) {
       currentLesson.time

@@ -79,7 +79,7 @@ function Footer() {
 
             <div className="column column-4 ">
               <div
-                class="fb-page"
+                className="fb-page"
                 data-href="https://www.facebook.com/profile.php?id=100090524688743"
                 data-tabs="tin nh&#x1eaf;n"
                 data-width=""

@@ -62,6 +62,7 @@ function LevelPage() {
     }
   }, [user]);
 
+  //lấy danh sách chặng
   useEffect(() => {
     getCourse(dispatch, params.level);
     getLevelCourse(dispatch, params.level)
@@ -69,6 +70,7 @@ function LevelPage() {
       .catch((err) => console.log(err));
   }, [params.level]);
 
+  //lấy danh sách chặng và set bài học đầu tiên của mỗi chặng vào local storage
   useEffect(() => {
     if (wayList && wayList.length > 0) {
       for (let i = 0; i < wayList.length; i++) {
@@ -79,6 +81,18 @@ function LevelPage() {
               allCourse.allCourse.find((course) => course.way === wayList[i])
             )
           );
+        }
+        if (localStorage.getItem(wayList[i])) {
+          if (
+            JSON.parse(localStorage.getItem(wayList[i])).level !== params.level
+          ) {
+            localStorage.setItem(
+              wayList[i],
+              JSON.stringify(
+                allCourse.allCourse.find((course) => course.way === wayList[i])
+              )
+            );
+          }
         }
       }
     }

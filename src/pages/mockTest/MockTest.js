@@ -10,6 +10,7 @@ function MockTest() {
   const listLesson = useSelector((state) => state.mockTest?.list);
   const [lesson, setLesson] = useState([]);
 
+  //lấy tất cả bài thi
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/mockTest/lesson`)
@@ -20,6 +21,7 @@ function MockTest() {
         console.log(err);
       });
   }, []);
+  // cấu trúc lại từng level để hiện
   useEffect(() => {
     if (listLesson) {
       let arrGroup = [];
