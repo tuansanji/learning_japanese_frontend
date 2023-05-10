@@ -43,7 +43,7 @@ function Footer() {
                         <span>Phone :</span> 0968763455
                       </li>
                       <li>
-                        <span>Mail :</span>jlptSite@gmail.com
+                        <span>Mail :</span> jlptSite@gmail.com
                       </li>
                     </ul>
                   </div>
@@ -98,6 +98,20 @@ function Footer() {
                   </a>
                 </blockquote>
               </div>
+              <a
+                href="//www.dmca.com/Protection/Status.aspx?ID=109c2c5c-e135-4a5a-888f-e22ddb2263e9"
+                title="DMCA.com Protection Status"
+                className="dmca-badge relative top-[35px] flex justify-center"
+              >
+                {" "}
+                <img
+                  src="https://images.dmca.com/Badges/dmca_protected_sml_120n.png?ID=109c2c5c-e135-4a5a-888f-e22ddb2263e9"
+                  alt="DMCA.com Protection Status"
+                />
+              </a>{" "}
+              <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js">
+                {" "}
+              </script>
             </div>
           </div>
         </div>

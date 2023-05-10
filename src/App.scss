@@ -629,3 +629,10 @@ span.MuiTypography-body1.MuiTypography-displayBlock {
 .c {
   max-height: 100px !important;
 }
+
+@media (max-width: 700px) {
+  .modal__gpt {
+    width: 100% !important;
+    top: 70px !important;
+  }
+}

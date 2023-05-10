@@ -13,6 +13,8 @@ import { MsgAdmin, MsgUser, MsgErrAdmin } from "./msgUser";
 
 import { toastSuccess } from "../../redux/slice/toastSlice";
 import { routes } from "../../routes/routes";
+import ChatInput from "../../openAi/DemoOpenAi";
+
 export const socket = io(process.env.REACT_APP_BACKEND_URL);
 
 function Container() {
@@ -95,10 +97,18 @@ function Container() {
       >
         <NavigationIcon style={{ fontSize: "40px", color: "yellow" }} />
       </button>
+
+      <button className="fixed right-10 bottom-[40%] z-[7777] p-[6px] rounded-[50%] bg-white active:opacity-50 transition-opacity hover:bg-green-500 ">
+        <div className="flex flex-col justify-center items-center">
+          <ChatInput />
+          <span className="text-[1rem]"> Tra cứu</span>
+        </div>
+      </button>
+
       {/* btn hiện danh sách thông báo lỗi - chỉ hiện với admin */}
       {user && user.isAdmin && (
         <button
-          className="fixed right-10 bottom-[50%] z-[7777] p-4 rounded-[50%] bg-white active:opacity-50 transition-opacity hover:bg-green-500"
+          className="fixed right-10 bottom-[60%] z-[7777] p-4 rounded-[50%] bg-white active:opacity-50 transition-opacity hover:bg-green-500"
           onClick={() => {
             setMsgErr(!msgErr);
           }}

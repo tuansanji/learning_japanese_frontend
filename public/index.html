@@ -85,6 +85,19 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <div id="fb-root"></div>
+
+    <!-- Messenger Plugin chat Code -->
+
+    <!-- Your Plugin chat code -->
+    <div id="fb-customer-chat" class="fb-customerchat"></div>
+
+    <script>
+      var chatbox = document.getElementById("fb-customer-chat");
+      chatbox.setAttribute("page_id", "118002461221056");
+      chatbox.setAttribute("attribution", "biz_inbox");
+    </script>
+
+    <!-- Your SDK code -->
     <script
       async
       defer
@@ -99,18 +112,6 @@
       src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v16.0&appId=528596942527565&autoLogAppEvents=1"
       nonce="is2qcRxd"
     ></script> -->
-    <!-- Messenger Plugin chat Code -->
-
-    <!-- Your Plugin chat code -->
-    <div id="fb-customer-chat" class="fb-customerchat"></div>
-
-    <script>
-      var chatbox = document.getElementById("fb-customer-chat");
-      chatbox.setAttribute("page_id", "118002461221056");
-      chatbox.setAttribute("attribution", "biz_inbox");
-    </script>
-
-    <!-- Your SDK code -->
     <script>
       window.fbAsyncInit = function () {
         FB.init({

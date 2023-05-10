@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import { guidePages } from "../../data/guidePages/guidePages";
+import ChatInput from "../../openAi/DemoOpenAi";
 function GuidePages() {
   return (
     <div className="relative p-[2rem] mt-[3rem]  gap-[3rem] ssm:gap-[2rem] w-[80%] md:w-[90%] sm:w-full mx-auto flex flex-col">
@@ -21,7 +22,7 @@ function GuidePages() {
             <Link to={`/guide/${guide.link.split(" ").join("-")}`}>
               <img
                 src={guide.img}
-                className="h-full w-full  hover:opacity-70"
+                className="w-full h-full hover:opacity-70"
                 alt=""
               />
             </Link>

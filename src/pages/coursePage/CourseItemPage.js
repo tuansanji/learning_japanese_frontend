@@ -23,7 +23,8 @@ function CourseItemPage({ img, title, level }) {
           ))}
         </div>
         <div className="flex flex-2 justify-center items-center flex-col gap-3 sm:w-[80%] ">
-          <Link className="pt-[2rem]" to={`/courses/${level}`}>
+          {/* mở thẻ p thì nhở để pt2 cho thẻ link */}
+          <Link className="" to={`/courses/${level}`}>
             <Button
               variant="contained"
               className="h-[4rem] text-[2rem] hover:h-[4.5rem] md:w-[100px]"
@@ -32,7 +33,7 @@ function CourseItemPage({ img, title, level }) {
               Xem chi tiết khóa học
             </Button>
           </Link>
-          <p
+          {/* <p
             className={`${user && user.userTest ? "hidden" : "flex"}  ${
               user && user.courses && user.courses.includes(level)
                 ? "hidden"
@@ -45,7 +46,7 @@ function CourseItemPage({ img, title, level }) {
             <span className="text-[#f47425] text-[1.6rem] sm:text-[1.4rem]font-semibold">
               139.000đ
             </span>
-          </p>
+          </p> */}
         </div>
       </div>
     </div>
