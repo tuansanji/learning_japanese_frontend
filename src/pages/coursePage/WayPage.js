@@ -298,7 +298,7 @@ function WayPage() {
       if (btnMsg) btnMsg.style.display = "block";
     };
   }, []);
-  const handlePrevLesson = useCallback(() => {
+  const handlePrevLesson = () => {
     let currentIndex = JSON.parse(
       localStorage.getItem(audioOrVideo ? "audioIndex" : "videoIndex")
     );
@@ -316,7 +316,7 @@ function WayPage() {
       dispatch(
         getLessonCurrent({
           state: audioOrVideo ? "audio" : "video",
-          data: currentLessonList[newIndex],
+          data: currentLessonList.sort((a, b) => a.order - b.order)[newIndex],
         })
       );
     }
@@ -324,7 +324,7 @@ function WayPage() {
     const activeElement = document.querySelector(".content_2 .active");
     if (activeElement)
       activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
-  }, [currentLessonList, audioOrVideo]);
+  };
 
   //  xác đình đã học xong bái hay chưa và thêm nó vào localStorage. sau này sẽ thêm nó vào db của user
   let isPosted = false;
@@ -397,7 +397,7 @@ function WayPage() {
       dispatch(
         getLessonCurrent({
           state: audioOrVideo ? "audio" : "video",
-          data: currentLessonList[newIndex],
+          data: currentLessonList.sort((a, b) => a.order - b.order)[newIndex],
         })
       );
     }
@@ -435,7 +435,12 @@ function WayPage() {
         });
     }
   }, [lessonCurrent]);
-
+  // phần thêm views cho video
+  const handlePlay = () => {
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/courses/views`, {
+      id: lessonCurrent._id,
+    });
+  };
   return (
     <>
       <div className="flex w-full course-page md:flex-col md:items-center ">
@@ -458,6 +463,7 @@ function WayPage() {
                     : ""
                 }
                 onProgress={handleProgress}
+                onPlay={handlePlay}
                 onReady={handleReady}
                 onDuration={handleDuration}
                 playing
@@ -540,6 +546,7 @@ function WayPage() {
                   style={{ fontSize: "2rem" }}
                 />
               </button>
+
               {err && (
                 <ErrorPage setError={setError} lessonCurrent={lessonCurrent} />
               )}
@@ -562,7 +569,6 @@ function WayPage() {
             </div>
           </div>
         </div>
-
         <ScrollableTabsButtonAuto
           isUserTest={isUserTest}
           userTest={userTest}

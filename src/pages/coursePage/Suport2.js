@@ -79,10 +79,16 @@ function ScrollableTabsButtonAuto({
       setValue(0);
     }
   }, [stage]);
+
   useEffect(() => {
     if (stage.length > 0) {
       let arr = [];
-      stageCourse && stageCourse.forEach((way) => way && arr.push(way.lesson));
+
+      const sortedStageCourse =
+        stageCourse && [...stageCourse].sort((a, b) => a.order - b.order);
+      sortedStageCourse &&
+        sortedStageCourse.forEach((way) => way && arr.push(way.lesson));
+
       setListCurrent([...new Set(arr)]);
     }
   }, [stageCourse, value, stage]);

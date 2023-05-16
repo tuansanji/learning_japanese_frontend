@@ -72,6 +72,27 @@ function CoursePage() {
         ]}
       />
       <div className=" w-[960px] h-[200px] md:h-[300px] top-[95px] border border-[#000000] rounded-[10px] text-[12px] mx-auto my-[4rem] sm:my-[2rem] overflow-hidden xl:w-[90%] md:w-[90%]  ">
+        <div className="flex gap-[1rem] h-[100%]  p-5 sm:p-0   overflow-hidden">
+          <div className="flex flex-1  justify-center items-center flex-col gap-3  movies__course">
+            <div className="flex flex-row md:flex-col gap-5 h-full  mx-auto w-full p-[2rem] leading-4 shadow-desc text-[1.6rem]">
+              <div className="flex items-center justify-center flex-1">
+                <Link className="" to={`/movies`}>
+                  <Button
+                    variant="contained"
+                    className="h-[6rem]  hover:right-2 relative md:w-[300px]  shadow-2xl"
+                    color="primary"
+                    style={{ fontSize: "1.4rem", textTransform: "capitalize" }}
+                  >
+                    Học Tiếng Nhật Qua Phim
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* phần bài thi */}
+      <div className=" w-[960px] h-[200px] md:h-[300px] top-[95px] border border-[#000000] rounded-[10px] text-[12px] mx-auto my-[4rem] sm:my-[2rem] overflow-hidden xl:w-[90%] md:w-[90%]  ">
         <div className="flex gap-[1rem] h-[100%]  p-5 sm:p-0  bg-[#ded7e1] overflow-hidden">
           <div className="overflow-hidden rounded-2xl shadow-desc md:hidden ">
             <img

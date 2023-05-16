@@ -78,7 +78,7 @@ function Container() {
   }, [user]);
 
   return (
-    <div className="container_main md:mt-[7rem]">
+    <main className="container_main md:mt-[7rem]">
       <Routes>
         {routes.map((route) => (
           <Route key={route.path} path={route.path} element={route.element} />
@@ -163,7 +163,7 @@ function Container() {
       {openMsgAdmin && (
         <MsgAdmin setOpenMsgAdmin={setOpenMsgAdmin} setMsg={setMsg} />
       )}
-    </div>
+    </main>
   );
 }
 

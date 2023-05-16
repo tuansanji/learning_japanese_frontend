@@ -21,6 +21,8 @@ import {
   ResetPassword,
   ForgotPassword,
 } from "../component/header";
+import MoviePage from "../pages/movePage/MoviePage";
+import VideoView from "../pages/movePage/MovieView";
 
 export const routes = [
   { path: "/", element: <HomePage /> },
@@ -36,6 +38,8 @@ export const routes = [
   { path: "/me/courses", element: <MyCourse /> },
   { path: "/auth/login", element: <Login /> },
   { path: "/auth/register", element: <Register /> },
+  { path: "/movies", element: <MoviePage /> },
+  { path: "/movies/:video", element: <VideoView /> },
   { path: "/user/infor", element: <UserInfor /> },
   { path: "/auth/admin", element: <ADMIN /> },
   { path: "/user/change-password/:token", element: <ResetPassword /> },

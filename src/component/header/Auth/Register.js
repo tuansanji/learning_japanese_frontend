@@ -30,18 +30,23 @@ function Register() {
   const validationSchema = yup.object().shape({
     username: yup
       .string()
-      .min(6, "Too Short!")
-      .max(18, "Too Long!")
+
+      .min(6, "Qúa ngắn!")
+      .max(18, "Qúa dài!")
+      .matches(/^[A-Za-z0-9]+$/, "Chuỗi không được chứa ký tự đặc biệt hay dấu")
       .required("Required"),
     email: yup.string().email(),
     password: yup
       .string()
-      .min(6, "Too Short!")
-      .max(18, "Too Long!")
+      .min(6, "Qúa ngắn!")
+      .max(18, "Qúa dài!")
+      .matches(/^[A-Za-z0-9]+$/, "Chuỗi không được chứa ký tự đặc biệt hay dấu")
+
       .required("Required"),
     passwordConfirmation: yup
       .string()
-      .oneOf([yup.ref("password"), null], "Passwords must match"),
+      .matches(/^[A-Za-z0-9]+$/, "Chuỗi không được chứa ký tự đặc biệt hay dấu")
+      .oneOf([yup.ref("password"), null], "Mật khẩu không khớp"),
   });
   const formik = useFormik({
     initialValues: {
@@ -56,6 +61,12 @@ function Register() {
     },
     validationSchema: validationSchema,
   });
+
+  const handleKeyDown = (e) => {
+    if (e.key === " " || e.key === "Spacebar") {
+      e.preventDefault();
+    }
+  };
   return (
     <div className="flex justify-center mt-[4rem] mx-[2rem] rounded-2xl overflow-hidden">
       {isLoading && (
@@ -76,6 +87,7 @@ function Register() {
             Tên đăng nhập
           </label>
           <input
+            onKeyDown={handleKeyDown}
             onChange={formik.handleChange}
             value={formik.values.username}
             id="username"
@@ -115,6 +127,7 @@ function Register() {
             Mật khẩu
           </label>
           <input
+            onKeyDown={handleKeyDown}
             onChange={formik.handleChange}
             value={formik.values.password}
             id="password"
@@ -134,6 +147,7 @@ function Register() {
             Nhập lại mật khẩu
           </label>
           <input
+            onKeyDown={handleKeyDown}
             onChange={formik.handleChange}
             value={formik.values.passwordConfirmation}
             id="passwordConfirmation"

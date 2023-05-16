@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
@@ -21,7 +21,9 @@ function Support({
   setAudioOrVideo,
 }) {
   const dispatch = useDispatch();
-
+  const user = useSelector((state) => {
+    return state.auth.login?.currentUser;
+  });
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const handleGetLesson = (lesson, index) => {
     if (lesson) {
@@ -170,6 +172,7 @@ function Support({
     }
   }, []);
 
+  // console.log(listCurrent.sort(compareChapters));
   return (
     <div className="wrapper  bg-[#FFFFFF] h-[74vh] top-0 bottom-0 mt-0 w-full z-[99] border-l-[1px] border-[#e7e7e7]">
       <div className="children bg-[#ffff] flex flex-col h-full w-full">
@@ -206,11 +209,11 @@ function Support({
                 <div className="content_2 ">
                   {stageCourse &&
                     stageCourse
-
                       .filter((stage) => stage.lesson === item)
                       .sort((a, b) => a.order - b.order)
                       .map((lesson, index) => {
-                        if (!userTest || isUserTest) {
+                        // if (!userTest || isUserTest) {
+                        if (user) {
                           return (
                             <div
                               key={lesson._id}

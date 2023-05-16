@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, memo } from "react";
 import * as pdfjs from "pdfjs-dist";
 import Loading from "../../component/SupportTab/Loading";
+import { Button } from "antd";
 
 const PDFViewer = ({ url }) => {
   const canvasRef = useRef();
@@ -73,6 +74,9 @@ const PDFViewer = ({ url }) => {
     <div>
       <canvas ref={canvasRef} className="pdf-canvas h-[2rem]" />
       {loading && <Loading />}
+      <a href={url} download className="ml-[2rem]">
+        <Button>Tải tài liệu</Button>
+      </a>
       <div className="w-[80%] md:w-[95%] sm:W-full flex flex-col justify-center items-center mx-auto">
         {!loading &&
           imagesRef.current

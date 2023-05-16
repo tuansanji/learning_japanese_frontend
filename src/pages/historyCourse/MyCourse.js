@@ -64,7 +64,7 @@ function MyCourse({ setOpenMyCourse }) {
   return (
     <div
       ref={myCourseEl}
-      className=" my-course fixed z-[7777] w-[37rem] h-[57rem] xl:right-[1rem] bg-[#FFFFFF] top-[6rem] shadow-desc overflow-y-auto md:relative md:w-[90%] md:mx-auto md:h-full md:right-0 md:mb-[4rem]"
+      className=" my-course fixed md:z-[1000] z-[7777] w-[37rem] h-[57rem] xl:right-[1rem] bg-[#FFFFFF] top-[6rem] shadow-desc overflow-y-auto md:relative md:w-[90%] md:mx-auto md:h-full md:right-0 md:mb-[4rem]"
     >
       <div className="tablet:hidden w-full ml-5 mt-3">
         <h1 className=" relative  text-[2rem] animate-charcter">

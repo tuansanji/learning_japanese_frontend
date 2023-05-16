@@ -6,36 +6,36 @@ import CoursePage from "../coursePage/CoursePage";
 import Time from "./Time";
 
 function HomePage() {
-  useEffect(() => {
-    if (!localStorage.getItem("userTest")) {
-      let currentTime = Date.now();
-      let twoDaysInMilliseconds = 2 * 24 * 60 * 60 * 1000;
-      localStorage.setItem(
-        "userTest",
-        JSON.stringify({
-          status: true,
-          time: currentTime + twoDaysInMilliseconds,
-        })
-      );
-    } else {
-      let currentTime = Date.now();
-      if (currentTime >= JSON.parse(localStorage.getItem("userTest")).time) {
-        localStorage.setItem(
-          "userTest",
-          JSON.stringify({
-            status: false,
-            time: Date.now(),
-          })
-        );
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!localStorage.getItem("userTest")) {
+  //     let currentTime = Date.now();
+  //     let twoDaysInMilliseconds = 4 * 24 * 60 * 60 * 1000;
+  //     localStorage.setItem(
+  //       "userTest",
+  //       JSON.stringify({
+  //         status: true,
+  //         time: currentTime + twoDaysInMilliseconds,
+  //       })
+  //     );
+  //   } else {
+  //     let currentTime = Date.now();
+  //     if (currentTime >= JSON.parse(localStorage.getItem("userTest")).time) {
+  //       localStorage.setItem(
+  //         "userTest",
+  //         JSON.stringify({
+  //           status: false,
+  //           time: Date.now(),
+  //         })
+  //       );
+  //     }
+  //   }
+  // }, []);
 
   return (
     <>
-      <div className="absolute  md:relative left-[2rem]">
+      {/* <div className="absolute  md:relative left-[2rem]">
         <Time />
-      </div>
+      </div> */}
       <CoursePage />
 
       {courseHomePage.map((course, index) => (

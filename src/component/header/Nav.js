@@ -9,7 +9,7 @@ import MyCourse from "../../pages/historyCourse/MyCourse";
 function Nav() {
   const [openMyCourse, setOpenMyCourse] = useState(false);
   return (
-    <div className="nav-menu w-[100%] h-[66px] items-center bg-[#fff] border-b border-[#e8ebed] flex text-[1.4rem] top-0 px-7 sticky right-0 z-20 md:fixed md:z-[9998]">
+    <nav className="nav-menu w-[100%] h-[66px] items-center bg-[#fff] border-b border-[#e8ebed] flex text-[1.4rem] top-0 px-7 sticky right-0 z-20 md:fixed md:z-[9998]">
       <div className="nav_logo max-h-[100%]  flex flex-1 items-center md:hidden ">
         <a href="/">
           <img src={logo} className="w-[66px] " alt="" />
@@ -43,7 +43,7 @@ function Nav() {
           <Auth></Auth>
         </div>
       </div>
-    </div>
+    </nav>
   );
 }
 

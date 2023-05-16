@@ -6,14 +6,21 @@ import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import InforWay from "../../component/content/inforWay/InforWay";
 import Loading from "../../component/SupportTab/Loading";
 import { getCourse, getLevelCourse } from "../../redux/apiRequest";
+import axios from "axios";
+import Search from "antd/es/input/Search";
+import { toastErr, toastSuccess } from "../../redux/slice/toastSlice";
+import { Button } from "antd";
 
 function LevelPage() {
   const dispatch = useDispatch();
   const params = useParams();
   const [wayList, setWayList] = useState([]);
   const [buyCourse, setBuyCourse] = useState(false);
-  const [lessonBefore, setLessonBefore] = useState({});
+  const [lessonBefore, setLessonBefore] = useState(null);
   const [isUserTest, setIsUserTest] = useState(true);
+  const [editTip, setEditTip] = useState(false);
+  const [countTip, setCountTip] = useState(1);
+  const [tipMsg, setTipMsg] = useState("");
   const isLoading = useSelector(
     (state) => state.courses[params.level].isFetching
   );
@@ -23,11 +30,18 @@ function LevelPage() {
     return state.auth.login?.currentUser;
   });
 
+  //lấy thông báo từ admin
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_URL}/tip/tipAdmin`)
+      .then((res) => setTipMsg(res.data.message));
+  }, [user, countTip]);
+
   // cho người dùng test 2 ngày
   useEffect(() => {
     if (!localStorage.getItem("userTest")) {
       let currentTime = Date.now();
-      let twoDaysInMilliseconds = 2 * 24 * 60 * 60 * 1000;
+      let twoDaysInMilliseconds = 4 * 24 * 60 * 60 * 1000;
       localStorage.setItem(
         "userTest",
         JSON.stringify({
@@ -109,7 +123,29 @@ function LevelPage() {
       }
     }
   }, [allCourse]);
-
+  //chỉnh sửa tip msg
+  const handleSubmit = (value) => {
+    axios
+      .post(
+        `${process.env.REACT_APP_BACKEND_URL}/tip/tipAdmin`,
+        {
+          message: value,
+        },
+        {
+          headers: {
+            token: `Bearer ${user.accessToken}`,
+          },
+        }
+      )
+      .then((res) => {
+        dispatch(toastSuccess(res.data));
+        setCountTip((prev) => prev + 1);
+        setEditTip(false);
+      })
+      .catch((err) => {
+        dispatch(toastErr(err.response.data));
+      });
+  };
   return (
     <div className="bg-no-repeat bg-cover waypages">
       <div className="trial_study w-full ssm:px-[1rem] h-[600px] sm:h-[500px] ssm:h-[450px] bg-[rgb(13,16,24)] flex flex-col justify-center items-center md:px-[2rem] ">
@@ -127,7 +163,7 @@ function LevelPage() {
             className="flex items-center gap-x-7"
             aria-label="button-combination"
           >
-            {!buyCourse ? (
+            {/* {!buyCourse ? (
               <>
                 <Link
                   to={
@@ -170,18 +206,73 @@ function LevelPage() {
                   </span>
                 </button>
               </Link>
-            )}
+            )} */}
+            <Link
+              to={
+                lessonBefore &&
+                `/courses/${lessonBefore?.level}/${lessonBefore?.way
+                  .split(" ")
+                  .join("+")}`
+              }
+            >
+              <button className="way_button inline-flex items-center justify-center px-8 py-4 font-sans font-bold tracking-wide text-white bg-blue-500 rounded-2xl h-[55px] text-[1.6rem] ssm:text-[1.2rem] hover:opacity-75 active:opacity-30">
+                Đi tới bài học gần đây nhất
+                <span className="relative flex items-center pl-3 ">
+                  <ArrowForwardIosIcon style={{ fontSize: "2rem" }} />
+                </span>
+              </button>
+            </Link>
           </div>
         </div>
+      </div>{" "}
+      <div className="min-h-[4rem]  md:p-5 font-bold bg-[#d6cdfb] flex justify-center items-center md:text-[1.5rem] text-[1.8rem]">
+        {user && user.isAdmin && editTip ? (
+          <>
+            <Search
+              defaultValue={tipMsg}
+              width={400}
+              placeholder="Chỉnh sử thông báo chung.."
+              allowClear
+              enterButton={
+                <button
+                  className={`p-[12px] ml-[2px] rounded-sm bg-blue-500 text-white 
+                
+                  `}
+                >
+                  Chỉnh sửa
+                </button>
+              }
+              size="large"
+              onSearch={handleSubmit}
+              onBlur={() => {
+                setEditTip(false);
+              }}
+            />
+          </>
+        ) : (
+          <p className="flex items-center gap-5">
+            {tipMsg || "Có vấn đề gì mọi người chat trực tiếp vào fanpage nha!"}
+            {user && user.isAdmin && (
+              <button
+                className="inline-flex items-center justify-center px-8 py-4 font-sans font-semibold tracking-wide text-white bg-blue-500 rounded-lg h-[30px]"
+                onClick={() => setEditTip(true)}
+              >
+                Edit
+              </button>
+            )}
+          </p>
+        )}
       </div>
-
       {isLoading ? (
         <Loading />
       ) : (
+        // <div
+        //   className={`flex flex-wrap  py-[6rem] ssm:py-[1rem] mx-auto menu_way ${
+        //     !isUserTest && !buyCourse ? "opacity-20" : ""
+        //   }`}
+        // >
         <div
-          className={`flex flex-wrap  py-[6rem] ssm:py-[1rem] mx-auto menu_way ${
-            !isUserTest && !buyCourse ? "opacity-20" : ""
-          }`}
+          className={`flex flex-wrap  py-[6rem] ssm:py-[1rem] mx-auto menu_way `}
         >
           {wayList &&
             wayList.map((way, index) => (
@@ -190,15 +281,15 @@ function LevelPage() {
                 className="w-[25%] lg:w-[28rem] md:w-[24rem] sm:w-[50%] px-[2.5rem] mt-[3rem] "
               >
                 <div className="relative mb-8">
-                  <div
+                  {/* <div
                     className={`shadow-2xl   w-full  overflow-hidden rounded-[13px] 
                     transition-all relative ${
                       isUserTest || buyCourse
                         ? "hover:bottom-6"
                         : "hover:bottom-0"
                     }`}
-                  >
-                    <Link
+                  > */}
+                  {/* <Link
                       to={`${
                         !buyCourse && !isUserTest
                           ? `/courses/${params.level}`
@@ -206,6 +297,17 @@ function LevelPage() {
                               .split(" ")
                               .join("+")}`
                       }`}
+                    > */}
+                  <div
+                    className={`shadow-2xl   w-full  overflow-hidden rounded-[13px] 
+                    transition-all relative hover:bottom-6
+                       
+                    `}
+                  >
+                    <Link
+                      to={`/courses/${params.level}/${way
+                        .split(" ")
+                        .join("+")}`}
                     >
                       <img
                         src="https://jlpt.site/files/img/hoc-tieng-nhat-moi-ngay.jpg"

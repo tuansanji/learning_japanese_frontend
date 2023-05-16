@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Configuration, OpenAIApi } from "openai";
 import CHATICON from "../assets/img/open-book.svg";
 import { Input, Modal, Skeleton } from "antd";
+import parse from "html-react-parser";
 
 import Loading from "../component/SupportTab/Loading";
 import { useSelector } from "react-redux";
@@ -63,7 +64,10 @@ Một số câu với từ "${value}" trong tiếng nhật là :
           stream: false,
         });
         setLoading(false);
-        setResponse(completion.data.choices[0].text);
+        setResponse(
+          completion.data.choices[0].text.substring(3).replace(/\n/g, "<br>")
+        );
+
         setResponse2("");
       } catch (error) {
         if (error.response) {
@@ -100,7 +104,9 @@ Một số câu với từ "${value}" trong tiếng nhật là :
             stream: false,
           });
 
-          setResponse2(completion.data.choices[0].text);
+          setResponse2(
+            completion.data.choices[0].text.substring(2).replace(/\n/g, "<br>")
+          );
         } catch (error) {
           if (error.response) {
             console.log(error.response.status);
@@ -164,10 +170,10 @@ Một số câu với từ "${value}" trong tiếng nhật là :
             {loading && <Loading />}
             {response && !loading && (
               <div className="flex-1">
-                {response}
+                {parse(response)}
                 <div className="flex flex-col pt-5 gap-4">
                   <h2 className="font-bold">Một số câu liên quan</h2>
-                  {response2 ? <p>{response2}</p> : <Skeleton active />}
+                  {response2 ? <p>{parse(response2)}</p> : <Skeleton active />}
                 </div>
               </div>
             )}
