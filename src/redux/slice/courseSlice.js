@@ -27,6 +27,11 @@ export const courseSlice = createSlice({
       isFetching: false,
       error: false,
     },
+    tokutei: {
+      allCourse: [],
+      isFetching: false,
+      error: false,
+    },
     currentSection: {
       name: null,
       data: null,
@@ -62,7 +67,6 @@ export const courseSlice = createSlice({
         action.payload.state,
         JSON.stringify(action.payload.data)
       );
-
       state.lessonCurrent.lessonCurrent = action.payload.data;
     },
     getCurrentIndex: (state, action) => {
@@ -82,6 +86,18 @@ export const courseSlice = createSlice({
     getAllCourseSuccess: (state, action) => {
       state.listStageCurrent.error = false;
     },
+    addCourseNew: (state, action) => {
+      if (!state[action.payload]) {
+        state = {
+          ...state,
+          [action.payload]: {
+            allCourse: [],
+            isFetching: false,
+            error: false,
+          },
+        };
+      }
+    },
   },
 });
 
@@ -96,4 +112,5 @@ export const {
   getCurrentStage,
   getCurrentStageList,
   getAllCourseSuccess,
+  addCourseNew,
 } = courseSlice.actions;

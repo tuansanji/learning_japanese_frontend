@@ -11,7 +11,7 @@ function CourseItemPage({ img, title, level }) {
   return (
     <div className=" w-[960px] h-[145px] top-[95px] border border-[#000000] rounded-[10px] text-[12px] mx-auto my-[4rem] sm:my-[2rem] overflow-hidden xl:w-[90%] md:w-[90%]">
       <div className="flex gap-[5rem] h-[100%] px-[5rem] sm:px-[3rem] sm:pr-0 sm:gap-[2rem] bg-[#ded7e1] overflow-hidden">
-        <div className=" justify-center items-center flex">
+        <div className="max-w-[30rem] justify-center items-center flex">
           <img src={img} alt="" />
         </div>
         <div className=" flex flex-col justify-center items-start flex-1  text-[1.7rem] xl:text-[1.3rem] sm:hidden ">

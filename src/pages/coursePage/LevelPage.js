@@ -22,12 +22,12 @@ function LevelPage() {
   const [countTip, setCountTip] = useState(1);
   const [tipMsg, setTipMsg] = useState("");
   const isLoading = useSelector(
-    (state) => state.courses[params.level].isFetching
+    (state) => state.courses?.[params.level]?.isFetching
   );
-  const allCourse = useSelector((state) => state.courses[params.level]);
+  const allCourse = useSelector((state) => state.courses?.[params.level]);
 
   const user = useSelector((state) => {
-    return state.auth.login?.currentUser;
+    return state.auth?.login?.currentUser;
   });
 
   //lấy thông báo từ admin

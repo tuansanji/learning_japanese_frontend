@@ -67,6 +67,10 @@ export default function SwipeableTemporaryDrawer() {
             name: "Hướng dẫn",
             link: "/guide",
           },
+          {
+            name: "Blog",
+            link: "/blogs",
+          },
         ].map((text, index) => (
           <Link to={text.link} key={index} button className="">
             <ListItem>

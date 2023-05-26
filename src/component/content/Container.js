@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { MessageOutlined } from "@ant-design/icons";
@@ -14,6 +14,10 @@ import { MsgAdmin, MsgUser, MsgErrAdmin } from "./msgUser";
 import { toastSuccess } from "../../redux/slice/toastSlice";
 import { routes } from "../../routes/routes";
 import ChatInput from "../../openAi/DemoOpenAi";
+import { createAxios } from "../../redux/createInstance";
+import { logOutSuccess } from "../../redux/slice/authSlice";
+import { logOutUser } from "../../redux/apiRequest";
+import { addCourseNew } from "../../redux/slice/courseSlice";
 
 export const socket = io(process.env.REACT_APP_BACKEND_URL);
 
@@ -25,9 +29,11 @@ function Container() {
   const [msgErr, setMsgErr] = useState(false);
   const dispatch = useDispatch();
 
-  const user = useSelector((state) => {
-    return state.auth.login.currentUser;
-  });
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.login?.currentUser);
+  let axiosJWT = createAxios(user, dispatch, logOutSuccess);
+
+  const courses = useSelector((state) => state.courses);
   const { pathname } = useLocation();
 
   // Sử dụng useLayoutEffect để cuộn lên đầu trang khi component được render lại
@@ -76,6 +82,12 @@ function Container() {
       socket.removeListener("notification");
     };
   }, [user]);
+
+  // useEffect(() => {
+  //   if (courses) {
+  //     dispatch(addCourseNew("tokutei"));
+  //   }
+  // }, [courses]);
 
   return (
     <main className="container_main md:mt-[7rem]">

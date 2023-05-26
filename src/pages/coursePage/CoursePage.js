@@ -103,7 +103,6 @@ function CoursePage() {
               className="object-cover h-full overflow-hidden"
             />
           </div>
-
           <div className="flex flex-1  justify-center items-center flex-col gap-3 bg-[#fff]">
             <div className="flex flex-row md:flex-col gap-5 h-full  mx-auto w-full p-[2rem] leading-4 shadow-desc text-[1.6rem]">
               <div className="">
@@ -137,6 +136,46 @@ function CoursePage() {
                     style={{ fontSize: "1.4rem", textTransform: "capitalize" }}
                   >
                     Vào thi ngay
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className=" w-[960px] h-[200px] md:h-[300px] top-[95px] border border-[#000000] rounded-[10px] text-[12px] mx-auto my-[4rem] sm:my-[2rem] overflow-hidden xl:w-[90%] md:w-[90%]  ">
+        <div className="flex gap-[1rem] h-[100%]  p-5 sm:p-0  bg-[#ded7e1] overflow-hidden">
+          <div className="overflow-hidden rounded-2xl shadow-desc md:hidden tablet:w-[308px] ">
+            <img
+              src={
+                "https://duhocminhkhang.com/wp-content/uploads/2019/09/Visa-tokutei-ginou-tai-nhat.jpg"
+              }
+              alt=""
+              className="object-cover h-full w-full overflow-hidden"
+            />
+          </div>
+          <div className="flex flex-1  justify-center items-center flex-col gap-3 bg-[#fff]">
+            <div className="flex flex-row md:flex-col gap-5 h-full  mx-auto w-full p-[2rem] leading-4 shadow-desc text-[1.6rem]">
+              <div className="  md:flex-1 tablet:w-[380px]">
+                <span className="text-[#333] font-bold  text-[1.8rem] ml-4 leading-10">
+                  Tokutei là gì – Visa tokutei là gì?
+                </span>
+                <br />
+                <span className="text-[#333] font-medium leading-10">
+                  » Tháng 4/2019 Nhật Bản chính thức đưa ra chương trình Visa
+                  Tokutei. Chương trình này mở rộng đến tất cả các đối tượng đủ
+                  độ tuổi trên 18, đủ sức khỏe và mong muốn sang Nhật Bản làm
+                  việc
+                </span>
+              </div>
+              <div className="flex items-center justify-center flex-1">
+                <Link className="" to={`/courses/tokutei`}>
+                  <Button
+                    variant="contained"
+                    className="h-[4rem] text-[2rem] hover:h-[4.5rem] md:w-[200px] sm:flex-1"
+                    color="secondary"
+                  >
+                    Xem chi tiết khóa học
                   </Button>
                 </Link>
               </div>

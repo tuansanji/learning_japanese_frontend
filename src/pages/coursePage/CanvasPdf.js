@@ -3,12 +3,12 @@ import * as pdfjs from "pdfjs-dist";
 import Loading from "../../component/SupportTab/Loading";
 import { Button } from "antd";
 
-const PDFViewer = ({ url }) => {
+const PDFViewer = ({ url, lessonCurrent }) => {
   const canvasRef = useRef();
   const imagesRef = useRef([]);
   const [numImages, setNumImages] = useState(0);
   const [loading, setLoading] = useState(true);
-
+  const [pixels, setPixels] = useState(1.5);
   useEffect(() => {
     imagesRef.current = [];
     setNumImages(0);
@@ -28,7 +28,7 @@ const PDFViewer = ({ url }) => {
         for (let i = 1; i <= numPages; i++) {
           pdf.getPage(i).then((page) => {
             const viewport = page.getViewport({
-              scale: 1.5,
+              scale: pixels,
             });
             const canvas = document.createElement("canvas");
             canvas.width = viewport.width; // Tăng độ phân giải lên gấp đôi
@@ -68,15 +68,22 @@ const PDFViewer = ({ url }) => {
         console.error("Lỗi khi load tài liệu");
       }
     );
-  }, [url]);
-
+  }, [url, pixels]);
+  const handleIncreasePX = () => {
+    setPixels(3);
+  };
   return (
     <div>
       <canvas ref={canvasRef} className="pdf-canvas h-[2rem]" />
       {loading && <Loading />}
-      <a href={url} download className="ml-[2rem]">
-        <Button>Tải tài liệu</Button>
-      </a>
+      {lessonCurrent && lessonCurrent.level !== "tokutei" && (
+        <a href={url} download className="ml-[2rem]">
+          <Button>Tải tài liệu</Button>
+        </a>
+      )}
+      <Button className="ml-[2rem]" onClick={handleIncreasePX}>
+        Nhấn vào đây để làm nét nếu thấy tài liệu mờ
+      </Button>
       <div className="w-[80%] md:w-[95%] sm:W-full flex flex-col justify-center items-center mx-auto">
         {!loading &&
           imagesRef.current

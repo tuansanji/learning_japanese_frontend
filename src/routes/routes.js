@@ -12,6 +12,8 @@ import {
   MockTest,
   LessonTest,
   PagesMockTest,
+  BlogsPage,
+  Blog,
 } from "../pages";
 
 import {
@@ -38,6 +40,8 @@ export const routes = [
   { path: "/me/courses", element: <MyCourse /> },
   { path: "/auth/login", element: <Login /> },
   { path: "/auth/register", element: <Register /> },
+  { path: "/blogs", element: <BlogsPage /> },
+  { path: "/blogs/:id", element: <Blog /> },
   { path: "/movies", element: <MoviePage /> },
   { path: "/movies/:video", element: <VideoView /> },
   { path: "/user/infor", element: <UserInfor /> },

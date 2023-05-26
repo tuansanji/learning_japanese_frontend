@@ -488,11 +488,16 @@ function WayPage() {
               setMenuMusic2={setMenuMusic2}
             />
           )}
-          <div className={`${menuMusic ? "pt-[15rem]" : "py-4"}`}>
+          <div
+            className={`${menuMusic ? "pt-[15rem]" : "py-4"} flex flex-col `}
+          >
             <p className="animate-charcter text-[3rem] md:text-[2rem] text-center ">
               {lessonCurrent &&
                 `${lessonCurrent.name} - ${lessonCurrent.stage}`}
             </p>
+            {user && user.isAdmin && lessonCurrent && (
+              <span>lượt xem: {lessonCurrent?.views || 0}</span>
+            )}
           </div>
 
           <div

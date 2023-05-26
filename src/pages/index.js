@@ -14,3 +14,5 @@ export { default as NotFoundPage } from "./NotFoundPage/NotFoundPage";
 export { default as MockTest } from "./mockTest/MockTest";
 export { default as LessonTest } from "./mockTest/LessonTest";
 export { default as PagesMockTest } from "./mockTest/PagesMockTest";
+export { default as BlogsPage } from "./blogsPage/BlogsPage";
+export { default as Blog } from "./blogsPage/Blog";

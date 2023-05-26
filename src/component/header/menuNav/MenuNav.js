@@ -37,6 +37,10 @@ function MenuNav() {
           label: "N5",
           key: "n5",
         },
+        {
+          label: "Ôn Thi Tokutei",
+          key: "tokutei",
+        },
       ],
     },
 
@@ -70,28 +74,27 @@ function MenuNav() {
       icon: <MailOutlined />,
     },
     {
-      disabled: true,
-      label: (
-        <span target="_blank" rel="noopener noreferrer" disabled>
-          ADMIN
-        </span>
-      ),
-      key: "admin",
+      label: "Blog",
+      key: "blogs",
+      icon: <BookOutlined />,
     },
   ];
   const [current, setCurrent] = useState("");
   const onClick = (e) => {
     setCurrent(e.key);
-    if (e.key !== "contact" && e.key !== "admin") {
+    if (e.key !== "contact" && e.key !== "blogs") {
       navigate(`/${e.keyPath[1]}/${e.keyPath[0]}`);
       window.scrollTo({
         top: 0,
         behavior: `smooth`,
       });
+    } else if (e.key === "blogs") {
+      navigate(`/${e.key}`);
     }
   };
   return (
     <Menu
+      style={{ width: "100%" }}
       onClick={onClick}
       selectedKeys={[current]}
       mode="horizontal"
