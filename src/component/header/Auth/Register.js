@@ -4,9 +4,10 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+
 import { registerUser } from "../../../redux/apiRequest";
 import { resetMsg } from "../../../redux/slice/authSlice";
-import { Buffer } from "buffer";
+
 function Register() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -19,18 +20,23 @@ function Register() {
   const isLoading = useSelector((state) => {
     return state.auth.login?.isFetching;
   });
+
+  // xóa toastSlice
   useEffect(() => {
     dispatch(resetMsg());
   }, []);
+
+  // có user sẽ chuyển hướng sang trang thông tin
   useEffect(() => {
     if (user) {
       navigate("/user/infor");
     }
   }, [user]);
+
+  // phần validation form
   const validationSchema = yup.object().shape({
     username: yup
       .string()
-
       .min(6, "Qúa ngắn!")
       .max(18, "Qúa dài!")
       .matches(/^[A-Za-z0-9]+$/, "Chuỗi không được chứa ký tự đặc biệt hay dấu")
@@ -41,13 +47,14 @@ function Register() {
       .min(6, "Qúa ngắn!")
       .max(18, "Qúa dài!")
       .matches(/^[A-Za-z0-9]+$/, "Chuỗi không được chứa ký tự đặc biệt hay dấu")
-
       .required("Required"),
     passwordConfirmation: yup
       .string()
       .matches(/^[A-Za-z0-9]+$/, "Chuỗi không được chứa ký tự đặc biệt hay dấu")
       .oneOf([yup.ref("password"), null], "Mật khẩu không khớp"),
   });
+
+  // phần thông tin chính và quản lí với formik
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -55,13 +62,13 @@ function Register() {
       passwordConfirmation: "",
       email: "",
     },
-
     onSubmit: (user) => {
       registerUser(user, dispatch, navigate);
     },
     validationSchema: validationSchema,
   });
 
+  // phàn require input
   const handleKeyDown = (e) => {
     if (e.key === " " || e.key === "Spacebar") {
       e.preventDefault();

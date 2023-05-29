@@ -26,7 +26,7 @@ function NotFoundPage() {
   }, []);
 
   return (
-    <div>
+    <div style={{ padding: "20px" }}>
       <Link to="/" className="flex justify-center">
         <div className="container">
           <div className="row">

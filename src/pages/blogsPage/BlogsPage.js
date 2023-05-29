@@ -106,11 +106,11 @@ const BlogsPage = () => {
             </div>
             <div className="w-full h-full overflow-hidden ">
               <Link to={`/blogs/${item?._id}`}>
-                <h1 className="text-[2rem] font-bold hover:text-[red]">
+                <h1 className="text-[2rem] md:text-[rem] sm:text-[1.5rem] font-bold hover:text-[red]">
                   {item?.title}
                 </h1>
               </Link>
-              <p className="overflow-ellipsis">{item?.des}</p>
+              <p className="">{item?.des}...</p>
             </div>
             {user && user.isAdmin && (
               <Popconfirm

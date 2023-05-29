@@ -4,10 +4,11 @@ import React, { useEffect, useRef, useState } from "react";
 
 const TinyMce = ({ setContent, content, blogData }) => {
   const tinyRef = useRef(null);
+  // set value
   function handleEditorChange(value) {
     setContent(value);
   }
-
+  // set default value
   useEffect(() => {
     if (blogData) {
       setContent(blogData?.content);

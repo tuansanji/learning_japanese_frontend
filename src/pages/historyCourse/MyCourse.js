@@ -28,6 +28,7 @@ function MyCourse({ setOpenMyCourse }) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [myCourseEl]);
+
   //lấy số lượng khóa học
   useEffect(() => {
     if (user) {

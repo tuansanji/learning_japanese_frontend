@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { toastErr, toastSuccess } from "../../../redux/slice/toastSlice";
 import { makeStyles } from "@material-ui/core/styles";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -10,6 +9,8 @@ import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { v4 as uuid } from "uuid";
 import moment from "moment";
+
+import { toastErr, toastSuccess } from "../../../redux/slice/toastSlice";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,6 +54,7 @@ function MsgErrAdmin() {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
 
+  // lấy all thông báo lỗi
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/courses/errMsg`, {
@@ -62,6 +64,7 @@ function MsgErrAdmin() {
       .catch((err) => dispatch(toastErr(err.response.data)));
   }, [user, success]);
 
+  // phẩn mở rộng tab thông báo
   const handleChange = (panel) => (event, isExpanded) => {
     if (
       event.target instanceof HTMLElement &&
@@ -72,6 +75,7 @@ function MsgErrAdmin() {
     }
   };
 
+  // thay đổi dữ liệu công việc chỉnh sủa đã hoàn thành hay chưa
   const handleChangeCheckbox = (e) => {
     axios
       .post(

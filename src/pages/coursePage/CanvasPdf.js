@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect, memo } from "react";
 import * as pdfjs from "pdfjs-dist";
-import Loading from "../../component/SupportTab/Loading";
 import { Button } from "antd";
+
+import Loading from "../../component/SupportTab/Loading";
 
 const PDFViewer = ({ url, lessonCurrent }) => {
   const canvasRef = useRef();
@@ -9,11 +10,13 @@ const PDFViewer = ({ url, lessonCurrent }) => {
   const [numImages, setNumImages] = useState(0);
   const [loading, setLoading] = useState(true);
   const [pixels, setPixels] = useState(1.5);
+
+  // phần xửu lí chính
+  // chuyển từ file pdf sang img
   useEffect(() => {
     imagesRef.current = [];
     setNumImages(0);
     setLoading(true);
-
     // Tải tài liệu PDF
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
     const loadingTask = pdfjs.getDocument(url);
@@ -37,7 +40,6 @@ const PDFViewer = ({ url, lessonCurrent }) => {
             canvas.style.height = `${viewport.height}px`;
             canvas.style.imageRendering = "pixelated";
             const ctx = canvas.getContext("2d");
-
             page
               .render({
                 canvasContext: ctx,
@@ -48,15 +50,12 @@ const PDFViewer = ({ url, lessonCurrent }) => {
                 const img = new Image();
                 img.width = viewport.width;
                 img.height = viewport.height;
-
                 // Lấy số thứ tự trang hiện tại và gán ảnh vào mảng lưu trữ ảnh
                 const currentPage = page.pageNumber;
                 imagesRef.current[currentPage - 1] = img;
-
                 img.onload = function () {
                   setNumImages(imagesRef.current.filter(Boolean).length);
                 };
-
                 img.src = pngData;
               });
           });
@@ -69,6 +68,8 @@ const PDFViewer = ({ url, lessonCurrent }) => {
       }
     );
   }, [url, pixels]);
+
+  // phần cho ng dùng tăng độ nét của img
   const handleIncreasePX = () => {
     setPixels(3);
   };

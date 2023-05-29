@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { Configuration, OpenAIApi } from "openai";
-import CHATICON from "../assets/img/open-book.svg";
 import { Input, Modal, Skeleton } from "antd";
+import { useSelector } from "react-redux";
 import parse from "html-react-parser";
 
+import CHATICON from "../assets/img/open-book.svg";
 import Loading from "../component/SupportTab/Loading";
-import { useSelector } from "react-redux";
+
 const { Search } = Input;
 const ChatInput = () => {
   const [openChatBox, setOpenChatBox] = useState(false);
-  const [response, setResponse] = useState("");
-  const [response2, setResponse2] = useState("");
+  const [question1, setQuestion1] = useState("");
+  const [question2, setQuestion2] = useState("");
   const [loading, setLoading] = useState(false);
   const user = useSelector((state) => {
     return state.auth.login.currentUser;
   });
+
+  // phần gửi câu hỏi
   const handleSubmit = async (value) => {
     if (value) {
       if (localStorage.getItem("gpt-count")) {
@@ -32,67 +35,63 @@ const ChatInput = () => {
             return;
           }
         }
-
         let nextCount =
           Number(JSON.parse(localStorage.getItem("gpt-count"))) + 1;
         localStorage.setItem("gpt-count", JSON.stringify(nextCount));
       } else {
         localStorage.setItem("gpt-count", JSON.stringify(0));
       }
-      setResponse2("");
+      setQuestion2("");
       setLoading(true);
       const configuration = new Configuration({
         apiKey: process.env.REACT_APP_TKGPT,
       });
       const openai = new OpenAIApi(configuration);
-
+      // 2 mẫu câu hỏi vs từ ng dùng nhập vào
       let baseText = `
 trả lời dùm tôi theo form:
 chuyển từ "${value}" trong tiếng nhật là  :
 Một số câu với từ "${value}" trong tiếng nhật là :
 `;
-
       let base2 = `Từ "${value}" trong tiếng nhật có là gì? Đặt câu ví dụ với từ "${value}" trong tiếng nhật`;
-
       try {
         const completion = await openai.createCompletion({
           model: "text-davinci-003",
           prompt: base2,
           temperature: 0.6,
-          max_tokens: 1000, // Thêm tham số max_tokens tại đ
+          max_tokens: 1000, //  tham số max_tokens
           n: 1,
           stream: false,
         });
         setLoading(false);
-        setResponse(
+        setQuestion1(
           completion.data.choices[0].text.substring(3).replace(/\n/g, "<br>")
         );
 
-        setResponse2("");
+        setQuestion2("");
       } catch (error) {
         if (error.response) {
           setLoading(false);
-          console.log(error.response.status);
-          console.log(error.response.data);
-          setResponse2("");
+          setQuestion2("");
         } else {
           setLoading(false);
-          console.log(error.message);
-          setResponse2("");
+          setQuestion2("");
         }
       }
     }
   };
+
+  //từ ng dùng điền vào và tự động tạo thêm một câu liên quan để hiện thị ở tab "câu hỏi liên quan"
   useEffect(() => {
-    if (response) {
-      setResponse2("");
+    if (question1) {
+      setQuestion2("");
       (async () => {
         const configuration = new Configuration({
           apiKey: process.env.REACT_APP_TKGPT,
         });
         const openai = new OpenAIApi(configuration);
 
-        let base2 = `Thêm một số câu nói thêm về ${response} đi `;
+        let base2 = `Thêm một số câu nói thêm về ${question1} đi `;
 
         try {
           const completion = await openai.createCompletion({
@@ -103,23 +102,23 @@ Một số câu với từ "${value}" trong tiếng nhật là :
             n: 1,
             stream: false,
           });
-
-          setResponse2(
+          setQuestion2(
             completion.data.choices[0].text.substring(2).replace(/\n/g, "<br>")
           );
         } catch (error) {
           if (error.response) {
             console.log(error.response.status);
             console.log(error.response.data);
-            setResponse2("");
+            setQuestion2("");
           } else {
             console.log(error.message);
-            setResponse2("");
+            setQuestion2("");
           }
         }
       })();
     }
-  }, [response]);
+  }, [question1]);
+
   const handleCancel = () => {
     setOpenChatBox(false);
   };
@@ -168,12 +167,12 @@ Một số câu với từ "${value}" trong tiếng nhật là :
               onSearch={handleSubmit}
             />
             {loading && <Loading />}
-            {response && !loading && (
+            {question1 && !loading && (
               <div className="flex-1">
-                {parse(response)}
+                {parse(question1)}
                 <div className="flex flex-col pt-5 gap-4">
                   <h2 className="font-bold">Một số câu liên quan</h2>
-                  {response2 ? <p>{parse(response2)}</p> : <Skeleton active />}
+                  {question2 ? <p>{parse(question2)}</p> : <Skeleton active />}
                 </div>
               </div>
             )}

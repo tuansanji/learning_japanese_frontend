@@ -9,6 +9,8 @@ const ResetPassword = ({ match }) => {
   const [msg, setMsg] = useState("");
   const params = useParams();
   const navigate = useNavigate();
+
+  // phần thay đổi mật khẩu
   const handleResetPassword = async (password) => {
     await axios
       .patch(
@@ -23,16 +25,16 @@ const ResetPassword = ({ match }) => {
       })
       .catch((err) => setMsg(err.response.data.message));
   };
-
+  // phần validation mật khẩu
   const validationSchema = yup.object().shape({
     password: yup
       .string()
-      .min(6, "Too Short!")
-      .max(18, "Too Long!")
+      .min(6, "Quá ngắn!")
+      .max(18, "Quá dài!")
       .required("Required"),
     passwordConfirmation: yup
       .string()
-      .oneOf([yup.ref("password"), null], "Passwords must match"),
+      .oneOf([yup.ref("password"), null], "Mật khẩu không trùng"),
   });
   const formik = useFormik({
     initialValues: {

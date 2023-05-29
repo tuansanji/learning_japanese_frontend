@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../../../redux/apiRequest";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
+import { loginUser } from "../../../redux/apiRequest";
 import { resetMsg } from "../../../redux/slice/authSlice";
 function Login() {
   const dispatch = useDispatch();
@@ -18,9 +18,13 @@ function Login() {
   const isLoading = useSelector((state) => {
     return state.auth.login?.isFetching;
   });
+
+  //phần reset toastSlice
   useEffect(() => {
     dispatch(resetMsg());
   }, []);
+
+  //chuyển hướng nếu đã có user
   useEffect(() => {
     if (user) {
       navigate("/user/infor");
@@ -30,16 +34,17 @@ function Login() {
   const validationSchema = yup.object().shape({
     username: yup
       .string()
-      .min(6, "Too Short!")
-      .max(18, "Too Long!")
+      .min(6, "Quá ngắn!")
+      .max(18, "Quá dài!")
       .required("Required"),
     password: yup
       .string()
-      .min(6, "Too Short!")
-      .max(18, "Too Long!")
+      .min(6, "Quá ngắn!")
+      .max(18, "Quá dài!")
       .required("Required"),
   });
 
+  // phần quản lì form
   const formik = useFormik({
     initialValues: {
       username: "",

@@ -12,6 +12,7 @@ const Time = () => {
     return state.auth.login?.currentUser;
   });
 
+  // phần thời gian test của ng dùng
   useEffect(() => {
     if (!user) {
       if (localStorage.getItem("userTest")) {
@@ -38,15 +39,12 @@ const Time = () => {
     }
   }, []);
 
+  // hàm khi ng dùng hết thời gian
   const onFinish = () => {
     setUserTest(false);
     dispatch(toastSuccess("Bạn đã hết thời gian test"));
   };
-  const onChange = (val) => {
-    if (typeof val === "number" && 4.95 * 1000 < val && val < 5 * 1000) {
-      console.log("changed!");
-    }
-  };
+
   return (
     <>
       {userTest && (

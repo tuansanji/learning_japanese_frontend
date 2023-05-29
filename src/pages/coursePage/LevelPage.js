@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
+import { Button } from "antd";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
+import Search from "antd/es/input/Search";
+import axios from "axios";
 
 import InforWay from "../../component/content/inforWay/InforWay";
 import Loading from "../../component/SupportTab/Loading";
 import { getCourse, getLevelCourse } from "../../redux/apiRequest";
-import axios from "axios";
-import Search from "antd/es/input/Search";
 import { toastErr, toastSuccess } from "../../redux/slice/toastSlice";
-import { Button } from "antd";
 
 function LevelPage() {
   const dispatch = useDispatch();
@@ -68,6 +68,7 @@ function LevelPage() {
     }
   }, []);
 
+  // phần xác định ng dùng đã mua khóa học đó hay chưa
   useEffect(() => {
     if (user && user.courses) {
       if (user.courses.includes(params.level)) {

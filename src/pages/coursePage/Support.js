@@ -25,6 +25,8 @@ function Support({
     return state.auth.login?.currentUser;
   });
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  //phần lựa chọn bài
   const handleGetLesson = (lesson, index) => {
     if (lesson) {
       if (lesson.pathVideo === "" && lesson.audio !== "") {
@@ -76,6 +78,8 @@ function Support({
     icon.classList.toggle("up");
     element.nextElementSibling.classList.toggle("hidden");
   }, []);
+
+  // xác định bài cho lần đầu tiên vào
   useEffect(() => {
     if (
       stageCourse &&
@@ -111,6 +115,8 @@ function Support({
       }
     }, 100);
   }, []);
+
+  // xác định  bài cho các lần tiếp theo
   useEffect(() => {
     if (
       stageCourse &&
@@ -161,6 +167,7 @@ function Support({
     return () => window.removeEventListener("resize", handleWindowResize);
   }, []);
 
+  // phần đóng mở menu
   useEffect(() => {
     if (
       windowWidth < 800 &&

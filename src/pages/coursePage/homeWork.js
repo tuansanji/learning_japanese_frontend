@@ -2,8 +2,10 @@ import parse from "html-react-parser";
 import { useEffect, useRef, useState, memo, useCallback } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
+
 import { toastErr, toastSuccess } from "../../redux/slice/toastSlice";
 import Loading from "../../component/SupportTab/Loading";
+
 function HomeWork({ url }) {
   const [html, setHtml] = useState(null);
   const [docX, setDocx] = useState(false);
@@ -283,6 +285,7 @@ function HomeWork({ url }) {
     }
   }, [docX, isDocXNew, url, loadDataDoc]);
 
+  // xử lí test kết quả
   const handleResultTest = () => {
     if (docX && btnResultRef.current) {
       let arrResult = [];
@@ -476,7 +479,7 @@ function HomeWork({ url }) {
       }
     }
   };
-
+  // xem kết quả
   const handleResult = () => {
     if (docX) {
       let arrResult = [];

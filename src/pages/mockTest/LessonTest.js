@@ -7,6 +7,8 @@ function LessonTest() {
   const params = useParams();
   const listLesson = useSelector((state) => state.mockTest?.list);
   const [listName, setListName] = useState([]);
+
+  // lấy danh sách bài thi  và chuyển đổi dữ liệu nó cho phù hợp với ui hiện ra
   useEffect(() => {
     if (listLesson) {
       let arr = [];
@@ -15,7 +17,6 @@ function LessonTest() {
           arr.push(item);
         }
       });
-
       const items = arr.map((name, index) => ({
         key: index,
         title: (

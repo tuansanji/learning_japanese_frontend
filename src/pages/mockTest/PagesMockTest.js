@@ -1,13 +1,13 @@
 import parse from "html-react-parser";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-
 import axios from "axios";
+import { Col, Row, Statistic } from "antd";
 import { useDispatch, useSelector } from "react-redux";
+
 import { toastErr, toastSuccess } from "../../redux/slice/toastSlice";
 import Loading from "../../component/SupportTab/Loading";
 import AudioTest from "./AudioTest";
-import { Col, Row, Statistic } from "antd";
 const { Countdown } = Statistic;
 
 function PagesMockTest() {
@@ -28,14 +28,16 @@ function PagesMockTest() {
   const listLesson = useSelector((state) => state.mockTest?.list);
 
   const url = `http://localhost:9000/courses/html`;
+
+  // bài thi hiện taok
   useEffect(() => {
     if (listLesson) {
       let arr = listLesson.filter((item) => item._id === params.id);
-
       setCurrentLesson(arr[0]);
     }
   }, [params.id]);
 
+  // chuyển doc , docx sang html
   useEffect(() => {
     axios
       .get(currentLesson && currentLesson.html, {
@@ -151,6 +153,7 @@ function PagesMockTest() {
       .catch((error) => console.log(error));
   }, [currentLesson]);
 
+  // xử lí câu hỏi trong file html
   useEffect(() => {
     if (url && docX && loadDataDoc) {
       const answerA = "a.",
@@ -303,6 +306,7 @@ function PagesMockTest() {
       setLoadDataDoc(false);
     }
   }, [docX, isDocXNew, url, loadDataDoc]);
+
   // khi người dùng nhấn btn kiểm tra
   const handleResultTest = () => {
     if (docX && btnResultRef.current) {
@@ -497,7 +501,7 @@ function PagesMockTest() {
       }
     }
   };
-
+// khi ng dùng nhấn xem kết quả
   const handleResult = () => {
     if (docX) {
       let arrResult = [];
@@ -825,6 +829,7 @@ function PagesMockTest() {
       if (messenger) messenger.style.display = "block";
     };
   }, []);
+  // hết thời gian thi
   const onFinish = () => {
     dispatch(toastSuccess("Bạn đã hết thời gian làm bài"));
   };

@@ -4,6 +4,7 @@ import { Form, Table, Button, Descriptions, Select } from "antd";
 import { Input } from "antd";
 import { useEffect, useState, memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 
 import {
   deleteCourse,
@@ -15,7 +16,6 @@ import {
 import { toastErr, toastSuccess } from "../../../../redux/slice/toastSlice";
 import Loading from "../../../SupportTab/Loading";
 import { createAxios } from "../../../../redux/createInstance";
-import axios from "axios";
 import MockTest from "./MockTest";
 import InputFc from "./InputFc";
 
@@ -79,6 +79,7 @@ const MenuCourses = ({ currentUser }) => {
   });
   let axiosJWT = createAxios(currentUser, dispatch);
 
+  // lấy all khóa học
   useEffect(() => {
     getAllCourses(currentUser.accessToken, axiosJWT)
       .then((courses) => {
@@ -88,6 +89,7 @@ const MenuCourses = ({ currentUser }) => {
       .catch((err) => console.log(err));
   }, [reRender]);
 
+  // dữ liệu bảng
   const columns = [
     {
       title: "Name",
@@ -182,12 +184,13 @@ const MenuCourses = ({ currentUser }) => {
       });
   };
 
+  // phần filter kết hợp ô search
   const filteredData = listCourses.filter((item) => {
     return item[searchSelector]
       .toLowerCase()
       .includes(inputSearch.toLowerCase());
   });
-
+  // dữ liệu khóa học cho bảng
   const data = [];
   if (filteredData) {
     filteredData.forEach((course, indexCourse) => {
@@ -435,7 +438,6 @@ const MenuCourses = ({ currentUser }) => {
   // Phần xử lí khi người dùng nháy vào phần mở rộng
   const handleExpand = (expanded, record) => {
     // "expanded" (boolean) và "record" (đối tượng dữ liệu của hàng được mở rộng)
-
     setNewCourseEdit({
       id: record.id,
       name: record.name,
@@ -453,9 +455,11 @@ const MenuCourses = ({ currentUser }) => {
     });
     setSelectedRecord(expanded ? record : null);
   };
+  // phần xác định nháy vào phần mở rộng nào
   const isRecordSelected = (record) => {
     return selectedRecord && selectedRecord.id === record.id;
   };
+  // thêm class vào phần mở rộng để csss
   const getRowClassName = (record, index) => {
     return isRecordSelected(record) ? "userAdmin__active" : "";
   };
@@ -464,6 +468,7 @@ const MenuCourses = ({ currentUser }) => {
     .filter((record, index) => selectedRowKeys.includes(index))
     .map((record) => record.id);
 
+  // footer của bảng dữ liệu
   const defaultFooter = () => {
     return (
       <div>

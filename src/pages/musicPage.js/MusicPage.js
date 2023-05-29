@@ -7,14 +7,14 @@ import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import RepeatOneIcon from "@material-ui/icons/RepeatOne";
 import gsap from "gsap";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import { useDispatch } from "react-redux";
+import axios from "axios";
 
 import {
   getCurrentIndex,
   getLessonCurrent,
 } from "../../redux/slice/courseSlice";
-import { useDispatch } from "react-redux";
 import Loading from "../../component/SupportTab/Loading";
-import axios from "axios";
 function MusicPage({
   lessonCurrent,
   currentLessonList,
@@ -33,6 +33,7 @@ function MusicPage({
   const [menuMusic, setMenuMusic] = useState(false);
   const dispatch = useDispatch();
 
+  // xử lí ảnh CD quay
   useEffect(() => {
     const cdMove = gsap.to(cdRef.current, {
       rotation: "360",
@@ -57,7 +58,8 @@ function MusicPage({
     setDuration(audioRef.current.duration);
     if (play) audioRef.current.play();
   }, [audioRef.current, play]);
-  //thêm thời gian video
+
+  //thêm thời gian audi
   useEffect(() => {
     const intervalId = setInterval(() => {
       const currentTime = audioRef.current.currentTime;
@@ -70,13 +72,12 @@ function MusicPage({
     }, 100);
     return () => clearInterval(intervalId);
   }, []);
+
   useEffect(() => {
     // Set isLoading to true when component mounts or the audio src changes
     if (lessonCurrent) {
       setLoading(true);
-
       const audio = new Audio(lessonCurrent.audio);
-
       audio.addEventListener("loadeddata", () => {
         // Set isLoading to false when audio has finished loading
       });
@@ -85,6 +86,7 @@ function MusicPage({
       };
     }
   }, [lessonCurrent]);
+
   //xử lí input bài hát
   const handleSeek = useCallback(
     (e) => {
@@ -100,16 +102,19 @@ function MusicPage({
     },
     [audioRef.current, play]
   );
+
   // phát lại bài hát
   const handleRepeat = useCallback(() => {
     setRepeat(!repeat);
     setRepeatOne(false);
   }, [repeat]);
+
   //phát lại một bài hát
   const handleRepeatOne = useCallback(() => {
     setRepeatOne(!repeatOne);
     setRepeat(false);
   }, [repeatOne]);
+
   //tạm dừng và tiếp tục
   const handlePlayAndPause = useCallback(() => {
     if (play) {
@@ -120,6 +125,7 @@ function MusicPage({
 
     setPlay(!play);
   }, [audioRef.current, play]);
+
   //next bài hát
   const handleNextLesson = useCallback(() => {
     let currentIndex = JSON.parse(localStorage.getItem("audioIndex"));
@@ -144,6 +150,7 @@ function MusicPage({
         activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }, [currentLessonList]);
+
   //lùi bài hát
   const handlePrevLesson = useCallback(() => {
     let currentIndex = JSON.parse(localStorage.getItem("audioIndex"));
@@ -169,6 +176,7 @@ function MusicPage({
     }
   }, [currentLessonList, audioRef.current]);
 
+  // hàm thêm vào lịch sử hoàn thành khi học xong
   const handleProgress = useCallback(
     (e) => {
       let arr = JSON.parse(localStorage.getItem("arrVideoFinished")) || [];

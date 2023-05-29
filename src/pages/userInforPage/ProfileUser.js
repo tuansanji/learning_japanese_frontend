@@ -30,6 +30,7 @@ function UserInfor() {
     }
   }, [user]);
 
+  // xử lí ảnh preview
   const handleImagePreview = (e) => {
     if (e.target.files && e.target.files[0]) {
       const reader = new FileReader();
@@ -73,16 +74,15 @@ function UserInfor() {
     return new Blob([u8arr], { type: mime });
   }
 
+  // hàm xử lí up load ảnh
   const handleUploadImage = async () => {
     if (!imagePreview) {
       console.log("No image selected.");
       return;
     }
-
     const formData = new FormData();
     const imgBlob = dataURLtoBlob(imagePreview);
     formData.append("avatar", imgBlob);
-
     axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/auth/user/edit`, formData, {
         headers: {
@@ -101,9 +101,12 @@ function UserInfor() {
         dispatch(toastErr(err.response.data));
       });
   };
+
+  // khi ng dùng đăng xuất
   const handleLogOutUser = () => {
     logOutUser(user.accessToken, user._id, dispatch, navigate, axiosJWT);
   };
+
   return (
     <>
       {user && (

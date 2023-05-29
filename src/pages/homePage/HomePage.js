@@ -6,6 +6,8 @@ import CoursePage from "../coursePage/CoursePage";
 import Time from "./Time";
 
 function HomePage() {
+  // Hiện tại mở hết mọi chức năng
+
   // useEffect(() => {
   //   if (!localStorage.getItem("userTest")) {
   //     let currentTime = Date.now();

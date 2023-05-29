@@ -7,8 +7,9 @@ function ForgotPassword() {
   const [msg, setMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const [inputFocused, setInputFocused] = useState(false);
+
+  // phần gửi email đến ng dùng
   const handleSendEmail = () => {
-    console.log(123);
     setLoading(true);
     axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/user/forgot-password`, {

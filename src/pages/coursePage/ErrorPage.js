@@ -11,6 +11,7 @@ function ErrorPage({ setError, lessonCurrent }) {
   const [state, setState] = useState([]);
   const [text, setText] = useState("");
   const dispatch = useDispatch();
+  // handle change lựa chọn lỗi
   const handleChange = (event) => {
     const isChecked = event.target.checked;
     const value = event.target.value;
@@ -20,6 +21,7 @@ function ErrorPage({ setError, lessonCurrent }) {
       setState(state.filter((item) => item !== value));
     }
   };
+  //phần gửi thông báo lỗi
   const handleSendError = () => {
     axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/courses/errMsg`, {

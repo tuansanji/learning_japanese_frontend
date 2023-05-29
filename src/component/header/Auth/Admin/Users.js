@@ -1,5 +1,4 @@
 import moment from "moment";
-
 import { useEffect, useState, memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -12,6 +11,7 @@ import {
   Select,
 } from "antd";
 import { Input } from "antd";
+
 import {
   deleteManyUser,
   deleteUser,
@@ -19,7 +19,6 @@ import {
   getAllUsers,
 } from "../../../../redux/apiRequest";
 import Loading from "../../../SupportTab/Loading";
-
 import { createAxios } from "../../../../redux/createInstance";
 import { getAllUsersSuccess } from "../../../../redux/slice/userSlice";
 import axios from "axios";
@@ -52,6 +51,7 @@ const MenuUser = ({ currentUser }) => {
   const dispatch = useDispatch();
   let axiosJWT = createAxios(user, dispatch, getAllUsersSuccess);
   const [userTest, setUserTest] = useState("");
+
   // lấy dữ liệu số người đang online từ server
   // useEffect(() => {
   //   socket.on("userCount", (count) => {
@@ -63,14 +63,17 @@ const MenuUser = ({ currentUser }) => {
   //   };
   // }, []);
 
+  const { TextArea } = Input;
+
+  // lấy danh sách tài khoản đã đăng kí
   useEffect(() => {
     getAllUsers(user?.accessToken, dispatch, axiosJWT).then((users) => {
       setIsLoading(false);
       setListUsers(users);
     });
   }, [updatedUser]);
-  const { TextArea } = Input;
 
+  // thông tin table
   const columns = [
     {
       title: "Name",
@@ -146,12 +149,14 @@ const MenuUser = ({ currentUser }) => {
     message.info("Sửa thành công");
   };
 
+  // filter kết hợp tìm kiếm
   const filteredData = listUsers.filter((item) => {
     return item[searchSelector]
       .toLowerCase()
       .includes(inputSearch.toLowerCase());
   });
 
+  // data cho table
   const data = [];
   if (filteredData) {
     filteredData.forEach((user, index) => {
@@ -343,7 +348,6 @@ const MenuUser = ({ currentUser }) => {
   // Phần xử lí khi người dùng nháy vào phần mở rộng
   const handleExpand = (expanded, record) => {
     // "expanded" (boolean) và "record" (đối tượng dữ liệu của hàng được mở rộng)
-
     setEditUser(false);
     setNewUserEdit({
       id: record.id,
@@ -354,15 +358,17 @@ const MenuUser = ({ currentUser }) => {
     });
     setSelectedRecord(expanded ? record : null);
   };
+
+  // phần xác định và thêm class cho thẻ mở rộng
   const isRecordSelected = (record) => {
     return selectedRecord && selectedRecord.id === record.id;
   };
+  // phần xác định và thêm class cho thẻ mở rộng
   const getRowClassName = (record, index) => {
     return isRecordSelected(record) ? "userAdmin__active" : "";
   };
 
   //phần xét tài khoản test
-
   const handleSetUserTest = () => {
     axios
       .post(

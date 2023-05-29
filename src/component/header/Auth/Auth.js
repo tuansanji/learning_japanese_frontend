@@ -17,6 +17,7 @@ function Auth() {
   let axiosJWT = createAxios(user, dispatch, logOutSuccess);
   const keyImg = useSelector((state) => state.users.inforUser?.keyImg);
 
+  // dropdown thông tin user
   const items = [
     {
       key: "1",

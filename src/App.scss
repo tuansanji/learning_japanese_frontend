@@ -10,7 +10,7 @@ body {
   background-color: #fff;
   overflow-x: hidden;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  line-height: 1.42857143;
+  // line-height: 1.42857143;
 }
 * {
   padding: 0;
@@ -476,6 +476,7 @@ span.MuiTypography-body1.MuiTypography-displayBlock {
   overflow: hidden;
   background: #fff;
   padding: 15px 15px;
+
   margin-bottom: 30px;
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
@@ -634,5 +635,29 @@ span.MuiTypography-body1.MuiTypography-displayBlock {
   .modal__gpt {
     width: 100% !important;
     top: 70px !important;
+  }
+}
+
+//phần text editor (tinymce)
+.main__tinymce {
+  ul,
+  ol {
+    list-style: inside;
+  }
+  a {
+    text-decoration: underline;
+    color: #008aff;
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+  img {
+    display: initial;
+    vertical-align: middle;
+  }
+  img,
+  video,
+  iframe {
+    max-width: 100%;
   }
 }

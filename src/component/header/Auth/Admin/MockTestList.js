@@ -1,5 +1,4 @@
 import moment from "moment";
-
 import { useEffect, useState, memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -28,9 +27,12 @@ const MockTestList = () => {
   const [mockTest, setMockTest] = useState(false);
 
   const [count, setCount] = useState(1);
+
   const increaseCount = () => {
     setCount((prev) => (prev += 1));
   };
+
+  // lấy danh sách bài thi
   useEffect(() => {
     setIsLoading(true);
     axios
@@ -44,6 +46,8 @@ const MockTestList = () => {
         setIsLoading(false);
       });
   }, [count]);
+
+  // thông tin table
   const columns = [
     {
       title: "Name",
@@ -127,6 +131,8 @@ const MockTestList = () => {
         dispatch(toastErr(err?.response.data));
       });
   };
+
+  // data để đièn vào bảng
   const data = [];
   if (listMockTest) {
     listMockTest.forEach((mockTest, index) => {

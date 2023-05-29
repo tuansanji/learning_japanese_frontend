@@ -25,7 +25,6 @@ const Blog = () => {
       .get(`${process.env.REACT_APP_BACKEND_URL}/blog/${params?.id}`)
       .then((response) => {
         setLoading(false);
-
         setBlog(response?.data);
       });
   }, [params, count]);
@@ -79,9 +78,7 @@ const Blog = () => {
           {blog.title}
         </h1>
 
-        <div className="my-[3rem] flex flex-col gap-[2rem] md:my-[2rem]">
-          {parse(blog.content)}
-        </div>
+        <div className="main__tinymce">{parse(blog.content)}</div>
       </div>
     </div>
   ) : (

@@ -15,6 +15,7 @@ function MsgAdmin({ setOpenMsgAdmin, setMsg }) {
     return state.auth.login.currentUser;
   });
 
+  // lấy hết dữ liệu all room
   useEffect(() => {
     if (user && user.isAdmin) {
       axios

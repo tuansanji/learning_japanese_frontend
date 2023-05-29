@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import CloseIcon from "@material-ui/icons/Close";
-import { UploadOutlined } from "@ant-design/icons";
-import { Button, Upload } from "antd";
-import msgSvg from "../../../assets/img/msg.svg";
 import io from "socket.io-client";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+
+import msgSvg from "../../../assets/img/msg.svg";
 
 const socket = io(process.env.REACT_APP_BACKEND_URL);
 
@@ -20,6 +19,7 @@ function MsgUser({ setOpenMsg, idRoom, setMsg }) {
   const user = useSelector((state) => {
     return state.auth.login.currentUser;
   });
+  // vào phòng và lấy dữ liệu tin nhắn từ phòng
   useEffect(() => {
     if (user) {
       socket.emit("joinRoom", idRoom || user._id);
@@ -35,7 +35,6 @@ function MsgUser({ setOpenMsg, idRoom, setMsg }) {
         .catch((err) => {
           console.log(err);
         });
-
       socket.on("message", (data) => {
         setMessages((prevMessages) => [...prevMessages, data]);
       });
@@ -47,15 +46,16 @@ function MsgUser({ setOpenMsg, idRoom, setMsg }) {
     };
   }, [user, idRoom]);
 
+  // scroll tin nhắn
   useEffect(() => {
     msgRef.current && msgRef.current.focus();
-
     newMsgRef.current &&
       newMsgRef.current.scrollIntoView({
         // behavior: "smooth",
       });
   }, [messages]);
 
+  //hàm gửi tin nhắn
   const sendMessage = () => {
     const messageData = {
       username: user.isAdmin ? "Admin" : username,
@@ -65,11 +65,11 @@ function MsgUser({ setOpenMsg, idRoom, setMsg }) {
     };
     // setMessages([...messages, messageData]);
     socket.emit("message", messageData);
-
     setMessage("");
     msgRef.current.focus();
   };
 
+  //phần xét là user thường hay admin
   useEffect(() => {
     if (user && user.isAdmin) {
       setUsername("Admin");
@@ -78,14 +78,6 @@ function MsgUser({ setOpenMsg, idRoom, setMsg }) {
     }
   }, [user]);
 
-  // const props = {
-  //   action: "",
-  //   onChange({ file, fileList }) {
-  //     if (file.status !== "uploading") {
-  //       console.log(file, fileList);
-  //     }
-  //   },
-  // };
   return (
     <div className="fixed flex flex-col justify-between overflow-hidden w-[34rem] sm:w-[30rem] sm:bottom-[9rem] h-[48rem] bottom-[3rem] right-[2rem] z-[7778] bg-[#FFFFFF] rounded-2xl shadow-desc">
       <div className="h-[10rem] bg-[brown] text-[#ffff] flex flex-col justify-center items-center px-[3rem] relative transition-all">

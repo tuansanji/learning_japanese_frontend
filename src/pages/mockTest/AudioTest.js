@@ -16,6 +16,7 @@ function AudioTest({ audio, timeLine }) {
   const [loading, setLoading] = useState(true);
   const [time, setTime] = useState(0);
 
+  // xác định progress
   useEffect(() => {
     const intervalId = setInterval(() => {
       const currentTime = audioRef.current.currentTime;
@@ -30,11 +31,14 @@ function AudioTest({ audio, timeLine }) {
     return () => clearInterval(intervalId);
   }, [audioRef.current]);
 
+  //phần thời gian của bài thi
   useEffect(() => {
     timeLine
       ? setTime(Date.now() + timeLine * 60 * 1000)
       : setTime(Date.now() + 30 * 60 * 1000);
   }, []);
+
+  // phần tạm dừng hoặc tiếp tục
   const handlePlayAndPause = () => {
     if (audioRef && !isPlay) {
       audioRef.current.play();
@@ -43,6 +47,7 @@ function AudioTest({ audio, timeLine }) {
     }
     setIsPlay(!isPlay);
   };
+  // phần tua
   const handleSeek = (e) => {
     const seekTime = Number((e.target.value / 100) * audioRef.current.duration);
     audioRef.current.currentTime = seekTime;
@@ -55,16 +60,11 @@ function AudioTest({ audio, timeLine }) {
   //load data
   const handleLoadedData = () => {
     setLoading(false);
-
     setDuration(audioRef.current.duration);
   };
+  // hàm xử lí khi ng dùng hết thời gian
   const onFinish = () => {
     dispatch(toastSuccess("Bạn đã hết thời gian làm bài"));
-  };
-  const onChange = (val) => {
-    if (typeof val === "number" && 4.95 * 1000 < val && val < 5 * 1000) {
-      console.log("changed!");
-    }
   };
 
   return (

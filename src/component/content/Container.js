@@ -10,7 +10,6 @@ import NavigationIcon from "@material-ui/icons/Navigation";
 import axios from "axios";
 
 import { MsgAdmin, MsgUser, MsgErrAdmin } from "./msgUser";
-
 import { toastSuccess } from "../../redux/slice/toastSlice";
 import { routes } from "../../routes/routes";
 import ChatInput from "../../openAi/DemoOpenAi";
@@ -31,9 +30,9 @@ function Container() {
 
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.login?.currentUser);
+  const courses = useSelector((state) => state.courses);
   let axiosJWT = createAxios(user, dispatch, logOutSuccess);
 
-  const courses = useSelector((state) => state.courses);
   const { pathname } = useLocation();
 
   // Sử dụng useLayoutEffect để cuộn lên đầu trang khi component được render lại

@@ -10,6 +10,8 @@ import { useState } from "react";
 
 function MenuNav() {
   const navigate = useNavigate();
+  const [current, setCurrent] = useState("");
+
   const items = [
     {
       label: "Khóa học",
@@ -79,7 +81,8 @@ function MenuNav() {
       icon: <BookOutlined />,
     },
   ];
-  const [current, setCurrent] = useState("");
+
+  // phần chuyển trang khi ng dùng nháy vào menu
   const onClick = (e) => {
     setCurrent(e.key);
     if (e.key !== "contact" && e.key !== "blogs") {

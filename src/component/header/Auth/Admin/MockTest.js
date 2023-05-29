@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import CloseIcon from "@material-ui/icons/Close";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+
 import { toastErr, toastSuccess } from "../../../../redux/slice/toastSlice";
 import InputFc from "./InputFc";
 
@@ -19,6 +20,7 @@ function MockTest({ mockTest, setMockTest, increaseCount }) {
   const user = useSelector((state) => {
     return state.auth.login.currentUser;
   });
+  // phần đăng bài thi
   const handlePostMockTest = () => {
     if (
       !lessonTest.level ||

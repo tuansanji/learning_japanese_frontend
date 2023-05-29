@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ReactPlayer from "react-player";
 import axios from "axios";
-
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import SyncAltIcon from "@material-ui/icons/SyncAlt";
@@ -18,9 +17,7 @@ import {
 } from "../../redux/slice/courseSlice";
 import { getWayCourse } from "../../redux/apiRequest";
 import PDFViewer from "./CanvasPdf";
-
 import HomeWork from "./homeWork";
-
 import ErrorPage from "./ErrorPage";
 
 function WayPage() {
