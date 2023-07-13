@@ -12,6 +12,8 @@
 # production
 /build
 
+/src/component/header/Auth
+
 # misc
 .history
 .DS_Store

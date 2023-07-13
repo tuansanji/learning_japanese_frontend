@@ -1,21 +1,40 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { PoweroffOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Button } from "antd";
+import {
+  PoweroffOutlined,
+  DeleteOutlined,
+  MailFilled,
+} from "@ant-design/icons";
+import { Button, Input } from "antd";
 import axios from "axios";
 import moment from "moment";
 
-import { getAllUsers, logOutUser } from "../../redux/apiRequest";
+import {
+  getAllUsers,
+  logOutUser,
+  logOutUserNoRefresh,
+} from "../../redux/apiRequest";
 import { createAxios } from "../../redux/createInstance";
 import { logOutSuccess } from "../../redux/slice/authSlice";
 import { toastErr, toastSuccess } from "../../redux/slice/toastSlice";
 import { resetImg } from "../../redux/slice/userSlice";
+import DrawerApp from "../../component/SupportTab/Drawer";
+import { sampleMail } from "../../const/mail";
+
+const { TextArea } = Input;
+
 function UserInfor() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [openDrawer, setOpenDrawer] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
+  const [contentMail, setContentMail] = useState({
+    title: "Thông báo về sự trở lại của trang web",
+    content: sampleMail,
+  });
+
   const user = useSelector((state) => {
     return state.auth.login?.currentUser;
   });
@@ -104,7 +123,31 @@ function UserInfor() {
 
   // khi ng dùng đăng xuất
   const handleLogOutUser = () => {
-    logOutUser(user.accessToken, user._id, dispatch, navigate, axiosJWT);
+    // hàm trêm có sử dụng refresh token
+    // logOutUser(user.accessToken, user._id, dispatch, navigate, axiosJWT);
+    logOutUserNoRefresh(dispatch, navigate);
+  };
+
+  // phần gửi mail
+  const handleSendMail = () => {
+    if (contentMail) {
+      axios
+        .post(
+          `${process.env.REACT_APP_BACKEND_URL}/user/sendMail`,
+          contentMail,
+          {
+            headers: {
+              token: `Bearer ${user.accessToken}`,
+            },
+          }
+        )
+        .then((res) => {
+          dispatch(toastSuccess(res?.data?.message));
+        })
+        .catch((err) => {
+          dispatch(toastSuccess(err?.response?.data?.message));
+        });
+    }
   };
 
   return (
@@ -162,12 +205,13 @@ function UserInfor() {
                   <h6 className="text-[#0062CC] ">
                     {user.isAdmin ? "Chủ trang(ADMIN)" : "Học viên"}
                   </h6>
-                  <p className="mt-10 text-[2rem] flex items-center">
+                  {/* <p className="mt-10 text-[2rem] flex items-center">
                     Tổng số xu hiện có :
-                    <span className="text-[red] text-[3rem] ml-8">
-                      {user.money}
+                    <span className="text-[red] text-[3rem] ml-8 flex gap-1 items-center">
+                      {user.money}{" "}
+                      <span className="text-[1.6rem]"> (Đang thử nghiệm)</span>
                     </span>
-                  </p>
+                  </p> */}
                 </div>
               </div>
             </div>
@@ -210,21 +254,68 @@ function UserInfor() {
                       </div>
                     </div>
 
-                    <div className="row flex my-[1rem] items-center ">
+                    <div className="row flex flex-col my-[1rem] items-start">
                       <div className="">
                         <label className="font-bold">Khóa học đã mua :</label>
                       </div>
-                      <div className=" ml-6 mr-5">
-                        <p className="text-[red]">{user.courses.length}</p>
+                      <div className="w-full ml-6 mr-5">
+                        <p className="text-[red]">
+                          {!user.courses
+                            ? "chưa có khóa học nào..."
+                            : Object.keys(user.courses).map((course, index) => (
+                                <div
+                                  key={index}
+                                  className="w-full row flex my-[1rem]"
+                                >
+                                  <div className="">
+                                    <label className="font-bold">
+                                      {course} :
+                                    </label>
+                                  </div>
+                                  <div className=" ml-6">
+                                    <p className="text-[#0062CC] font-bold w-full flex">
+                                      Thời hạn :{" "}
+                                      {moment(
+                                        user.courses[course]?.time
+                                      ).format("DD/MM/YYYY HH:mm")}{" "}
+                                      {new Date(user?.courses[course].time) <
+                                        Date.now() && (
+                                        <p className="ml-2 text-red-500">
+                                          (Hết hạn)
+                                        </p>
+                                      )}
+                                    </p>
+                                  </div>
+                                </div>
+                              ))}
+                        </p>
                       </div>
                     </div>
                     <div className=" flex my-[1rem]">
                       <div className="">
-                        <label className="font-bold">Thời gian gia nhập </label>
+                        <label className="font-bold">
+                          Thời gian gia nhập :
+                        </label>
                       </div>
                       <div className=" ml-6">
                         {moment(user.createdAt).format("DD/MM/YYYY HH:mm")}
                       </div>
+                    </div>
+                    <div className="  my-[1rem]">
+                      <p className=" text-[1.6rem] gap-5  py-2">
+                        Ủng hộ cho bọn em một ít kinh phí duy trì web
+                        <Link
+                          to="/donate"
+                          className="text-blue-500 font-bold pl-1 hover:text-green-500"
+                        >
+                          Tại đây
+                        </Link>
+                        . Dù là
+                        <span className="text-blue-500 font-bold"> 1k </span>
+                        <span className="text-blue-500 font-bold">2k</span> cũng
+                        cám ơn mọi người 😊. Sự ủng hộ của các bạn là động lực
+                        để nhóm em tiếp tục phát triển trang web ạ ❤️
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -258,6 +349,54 @@ function UserInfor() {
                 </Button>
               </Link>
             )}
+            {user.isAdmin && (
+              <Button
+                className="bg-green-500 flex items-center  mx-[1rem]"
+                type="primary"
+                icon={<MailFilled />}
+                onClick={() => setOpenDrawer(true)}
+              >
+                Send Mail
+              </Button>
+            )}
+            <DrawerApp
+              title="Gửi mai cho người dùng"
+              openDrawer={openDrawer}
+              setOpenDrawer={setOpenDrawer}
+            >
+              <span className="py-2"> Tiêu đề :</span>
+              <Input
+                value={contentMail.title}
+                placeholder="Điền tiêu đề tin nhắn"
+                onChange={(e) =>
+                  setContentMail({
+                    ...contentMail,
+                    title: e.target.value,
+                  })
+                }
+              ></Input>
+              <span className="py-2"> Nội dung :</span>
+              <TextArea
+                rows={13}
+                placeholder="Điền tin nhắn gửi cho user"
+                value={contentMail.content}
+                onChange={(e) => {
+                  setContentMail({
+                    ...contentMail,
+                    content: e.target.value,
+                  });
+                }}
+              />
+              <Button
+                type="primary"
+                className="
+              mt-6
+              mx-auto bg-red-500 "
+                onClick={handleSendMail}
+              >
+                Xác nhận gửi
+              </Button>
+            </DrawerApp>
           </div>
         </div>
       )}

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, memo, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ReactPlayer from "react-player";
 import axios from "axios";
@@ -54,13 +54,13 @@ function WayPage() {
   });
 
   // kiểm tra số khóa học đã mua của user
-  useEffect(() => {
-    if (user) {
-      if (user.courses.includes(params.level)) {
-        setUserTest(false);
-      }
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user && user.courses) {
+  //     if (Object.keys(user.courses).includes(params?.level)) {
+  //       setUserTest(false);
+  //     }
+  //   }
+  // }, [user]);
 
   // kiêm tra xem là video hay audio
   useEffect(() => {
@@ -503,7 +503,7 @@ function WayPage() {
             }`}
           >
             <div
-              className="flex pl-[4rem] md:pl-0 md:justify-center py-[2rem] md:py-[1rem] pt-0 items-center gap-[3rem] border-b-[1px] border-dashed border-b-[#333] "
+              className="flex flex-wrap pl-[4rem] md:pl-0 md:justify-center py-[2rem] md:py-[1rem] pt-0 items-center gap-[3rem] ssm:gap-[1rem] border-b-[1px] border-dashed border-b-[#333] "
               aria-label="button-combination"
             >
               <button
@@ -548,7 +548,16 @@ function WayPage() {
                   style={{ fontSize: "2rem" }}
                 />
               </button>
-
+              <Link to="/donate">
+                <button
+                  className="inline-flex items-center justify-center px-8 py-4 gap-2 font-sans font-semibold tracking-wide text-white bg-green-500 rounded-lg h-[40px]"
+                  onClick={() => {
+                    setError(!err);
+                  }}
+                >
+                  Donate
+                </button>
+              </Link>
               {err && (
                 <ErrorPage setError={setError} lessonCurrent={lessonCurrent} />
               )}
@@ -670,4 +679,4 @@ function WayPage() {
   );
 }
 
-export default memo(WayPage);
+export default WayPage;

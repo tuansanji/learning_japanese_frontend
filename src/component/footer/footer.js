@@ -98,7 +98,7 @@ function Footer() {
                   </a>
                 </blockquote>
               </div>
-              <a
+              {/* <a
                 href="//www.dmca.com/Protection/Status.aspx?ID=109c2c5c-e135-4a5a-888f-e22ddb2263e9"
                 title="DMCA.com Protection Status"
                 className="dmca-badge relative top-[35px] flex justify-center"
@@ -111,7 +111,7 @@ function Footer() {
               </a>{" "}
               <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js">
                 {" "}
-              </script>
+              </script> */}
             </div>
           </div>
         </div>

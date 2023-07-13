@@ -114,12 +114,14 @@ export const editUserRequest = async (accessToken, user, axiosJWT) => {
         headers: { token: `Bearer ${accessToken}` },
       }
     );
+
     return res.data;
   } catch (error) {
     console.log("edit user error");
   }
 };
 
+// log out để phục vụ việc refresh token
 export const logOutUser = async (
   accessToken,
   id,
@@ -141,6 +143,22 @@ export const logOutUser = async (
   } catch (error) {
     dispatch(logOutFail());
     dispatch(toastErr(error.response.data));
+  }
+};
+
+// log out không sử dụng token để
+
+export const logOutUserNoRefresh = (dispatch, navigate) => {
+  dispatch(logOutStart());
+  try {
+    dispatch(logOutSuccess());
+    dispatch(toastSuccess("Đăng xuất thành công"));
+    setTimeout(() => {
+      navigate("/auth/login");
+    }, 500);
+  } catch (error) {
+    dispatch(logOutFail());
+    dispatch(toastErr("Đăng xuất thất bại"));
   }
 };
 

@@ -16,3 +16,4 @@ export { default as LessonTest } from "./mockTest/LessonTest";
 export { default as PagesMockTest } from "./mockTest/PagesMockTest";
 export { default as BlogsPage } from "./blogsPage/BlogsPage";
 export { default as Blog } from "./blogsPage/Blog";
+export { default as Donate } from "./coursePage/Donate";

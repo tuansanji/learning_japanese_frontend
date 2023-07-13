@@ -14,6 +14,7 @@ import {
   PagesMockTest,
   BlogsPage,
   Blog,
+  Donate,
 } from "../pages";
 
 import {
@@ -28,6 +29,7 @@ import VideoView from "../pages/movePage/MovieView";
 
 export const routes = [
   { path: "/", element: <HomePage /> },
+  { path: "/donate", element: <Donate /> },
   { path: "/guide", element: <GuidePages /> },
   { path: "/guide/:question", element: <GuidePage /> },
   { path: "/courses", element: <CoursePage /> },
@@ -44,8 +46,8 @@ export const routes = [
   { path: "/blogs/:id", element: <Blog /> },
   { path: "/movies", element: <MoviePage /> },
   { path: "/movies/:video", element: <VideoView /> },
-  { path: "/user/infor", element: <UserInfor /> },
   { path: "/auth/admin", element: <ADMIN /> },
+  { path: "/user/infor", element: <UserInfor /> },
   { path: "/user/change-password/:token", element: <ResetPassword /> },
   { path: "/user/forgot-password", element: <ForgotPassword /> },
   { path: "*", element: <NotFoundPage /> },

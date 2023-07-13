@@ -10,6 +10,7 @@ import {
   getLessonCurrent,
 } from "../../redux/slice/courseSlice";
 import { useCallback, useEffect, memo, useState, useMemo } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 function Support({
   userTest,
   listCurrent,
@@ -24,6 +25,8 @@ function Support({
   const user = useSelector((state) => {
     return state.auth.login?.currentUser;
   });
+  const params = useParams();
+  const navigate = useNavigate();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   //phần lựa chọn bài
@@ -180,6 +183,8 @@ function Support({
   }, []);
 
   // console.log(listCurrent.sort(compareChapters));
+
+  // console.log(new Date(user?.courses[params?.level]));
   return (
     <div className="wrapper  bg-[#FFFFFF] h-[74vh] top-0 bottom-0 mt-0 w-full z-[99] border-l-[1px] border-[#e7e7e7]">
       <div className="children bg-[#ffff] flex flex-col h-full w-full">
@@ -220,7 +225,13 @@ function Support({
                       .sort((a, b) => a.order - b.order)
                       .map((lesson, index) => {
                         // if (!userTest || isUserTest) {
-                        if (user) {
+                        if (
+                          user &&
+                          user?.courses &&
+                          Object.keys(user?.courses).includes(params?.level) &&
+                          new Date(user?.courses[params?.level].time) >
+                            Date.now()
+                        ) {
                           return (
                             <div
                               key={lesson._id}
@@ -344,6 +355,11 @@ function Support({
                               <div
                                 key={uuid()}
                                 className="bg-[#FFFFFF] hover:bg-slate-200 flex flex-row py-[10px] pr-0 pl-[2px] relative "
+                                onClick={() => {
+                                  if (user) {
+                                    navigate(`/courses/buy/${params?.level}`);
+                                  }
+                                }}
                               >
                                 <div className="relative flex-1 ml-7">
                                   <h3 className="text-[#333] text-[1.4rem] font-normal leading-[1.4] relative top-[-2px]">
@@ -351,7 +367,13 @@ function Support({
                                   </h3>
                                   <p className="flex items-center gap-2 text-[1.1rem] mb-0">
                                     <PlayCircleFilledIcon />
-                                    <span>đăng nhập để xem</span>
+                                    {user ? (
+                                      <span>
+                                        Mua khóa học để xem (29k / tháng)
+                                      </span>
+                                    ) : (
+                                      <span>đăng nhập để xem</span>
+                                    )}
                                   </p>
                                 </div>
                                 <div

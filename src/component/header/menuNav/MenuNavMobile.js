@@ -90,6 +90,10 @@ export default function SwipeableTemporaryDrawer() {
             link: "/user/infor",
           },
           {
+            name: "Donate",
+            link: "/donate",
+          },
+          {
             name: "Liên hệ",
             link: "mailto:hoangtuansanji@gmail.com",
           },

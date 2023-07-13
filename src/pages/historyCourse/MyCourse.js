@@ -73,8 +73,8 @@ function MyCourse({ setOpenMyCourse }) {
         </h1>
       </div>
       <div className="">
-        {user && user?.courses.length > 0 ? (
-          user?.courses.map((item, index) => (
+        {user && user?.courses ? (
+          Object.keys(user?.courses).map((item, index) => (
             <Link
               onClick={() => {
                 setOpenMyCourse(false);

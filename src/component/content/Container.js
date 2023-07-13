@@ -21,6 +21,7 @@ import { addCourseNew } from "../../redux/slice/courseSlice";
 export const socket = io(process.env.REACT_APP_BACKEND_URL);
 
 function Container() {
+  const [openChatBox, setOpenChatBox] = useState(false);
   const [openMsg, setOpenMsg] = useState(false);
   const [reload, setReload] = useState(false);
   const [openMsgAdmin, setOpenMsgAdmin] = useState(false);
@@ -97,7 +98,7 @@ function Container() {
       </Routes>
       {/* btn back to top */}
       <button
-        className="fixed bottom-[6rem] right-10 border rounded-[50%] z-[7777] "
+        className="fixed bottom-[3rem] right-10  rounded-[50%] z-[7777] "
         id="btn_BackToTop"
         onClick={() => {
           window.scrollTo({
@@ -106,20 +107,28 @@ function Container() {
           });
         }}
       >
-        <NavigationIcon style={{ fontSize: "40px", color: "yellow" }} />
+        <NavigationIcon style={{ fontSize: "30px", color: "yellow" }} />
       </button>
 
-      <button className="fixed right-10 bottom-[40%] z-[7777] p-[6px] rounded-[50%] bg-white active:opacity-50 transition-opacity hover:bg-green-500 ">
+      <button
+        className="fixed right-[2rem] bottom-[35%] z-[7777] p-[1rem] px-[1.3rem] sm:p-0 sm:bg-transparent rounded-[50%] bg-white active:opacity-50 hover:p-[1.5rem] transition-all"
+        onClick={() => {
+          setOpenChatBox(!openChatBox);
+        }}
+      >
         <div className="flex flex-col justify-center items-center">
-          <ChatInput />
-          <span className="text-[1rem]"> Tra cứu</span>
+          <ChatInput
+            openChatBox={openChatBox}
+            setOpenChatBox={setOpenChatBox}
+          />
+          <span className="text-[1rem] font-bold">Tra cứu</span>
         </div>
       </button>
 
       {/* btn hiện danh sách thông báo lỗi - chỉ hiện với admin */}
       {user && user.isAdmin && (
         <button
-          className="fixed right-10 bottom-[60%] z-[7777] p-4 rounded-[50%] bg-white active:opacity-50 transition-opacity hover:bg-green-500"
+          className="fixed right-10 bottom-[70%] z-[7777] p-4 rounded-[50%] bg-white active:opacity-50 transition-opacity hover:bg-green-500"
           onClick={() => {
             setMsgErr(!msgErr);
           }}
@@ -135,7 +144,7 @@ function Container() {
             setOpenMsg(true);
           }}
           id="btn-msg"
-          className="fixed right-[2rem] bottom-[15rem] rounded-[50%] p-[1rem] sm:p-0 z-[7777] bg-[#4747ef] hover:p-[1.5rem] transition-all hover:bg-[green]"
+          className="fixed right-[2rem] bottom-[15rem] rounded-[50%] p-[1rem] sm:p-0 z-[7777] bg-[#4747ef] hover:p-[1.5rem] transition-all "
         >
           <MessageOutlined
             style={{

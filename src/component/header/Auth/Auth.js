@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { DownOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
 
-import { logOutUser } from "../../../redux/apiRequest";
+import { logOutUser, logOutUserNoRefresh } from "../../../redux/apiRequest";
 import { createAxios } from "../../../redux/createInstance";
 import { logOutSuccess } from "../../../redux/slice/authSlice";
 import axios from "axios";
@@ -30,13 +30,17 @@ function Auth() {
       label: (
         <Link
           onClick={() => {
-            logOutUser(
-              user.accessToken,
-              user._id,
-              dispatch,
-              navigate,
-              axiosJWT
-            );
+            // ĐOẠN CODE SAU CÓ SỬ DỤNG REFRESH TOKEN
+            // logOutUser(
+            //   user.accessToken,
+            //   user._id,
+            //   dispatch,
+            //   navigate,
+            //   axiosJWT
+            // );
+
+            //ĐOẠN CODE SAU KHÔNG SỬ DỤNG REFRESH TOKEN
+            logOutUserNoRefresh(dispatch, navigate);
           }}
         >
           Đăng xuất

@@ -8,8 +8,7 @@ import CHATICON from "../assets/img/open-book.svg";
 import Loading from "../component/SupportTab/Loading";
 
 const { Search } = Input;
-const ChatInput = () => {
-  const [openChatBox, setOpenChatBox] = useState(false);
+const ChatInput = ({ openChatBox, setOpenChatBox }) => {
   const [question1, setQuestion1] = useState("");
   const [question2, setQuestion2] = useState("");
   const [loading, setLoading] = useState(false);
@@ -72,9 +71,22 @@ Một số câu với từ "${value}" trong tiếng nhật là :
       } catch (error) {
         if (error.response) {
           setLoading(false);
+          setQuestion1(
+            `<strong style="color:red">Do không đủ kinh phí duy trì key nên chức năng này sẽ tạm dừng. Mong mọi người thông cảm! Mọi người có thể ủng hộ cho bọn em một ít kinh phí <a href="/donate" className="text-blue-500">Tại đây</a>. Dù là <span className="text-blue-500 font-bold">1k</span>
+            <span className="text-blue-500 font-bold">2k</span> cũng cám ơn mọi
+            người 😊. Sự ủng hộ của các bạn là động lực để nhóm em tiếp tục phát
+            triển trang web ạ ❤️</strong>`
+          );
           setQuestion2("");
         } else {
           setLoading(false);
+          setQuestion1(
+            `<strong style="color:red">Do không đủ kinh phí duy trì key nên chức năng này sẽ tạm dừng. Mong mọi người thông cảm! Mọi người có thể ủng hộ cho bọn em một ít kinh phí <a href="/donate" className="text-blue-500">Tại đây</a>. Dù là <span className="text-blue-500 font-bold">1k</span>
+            <span className="text-blue-500 font-bold">2k</span> cũng cám ơn mọi
+            người 😊. Sự ủng hộ của các bạn là động lực để nhóm em tiếp tục phát
+            triển trang web ạ ❤️</strong>`
+          );
+
           setQuestion2("");
         }
       }
@@ -125,11 +137,7 @@ Một số câu với từ "${value}" trong tiếng nhật là :
   return (
     <div className="page_gpt">
       {/* <Draggable> */}
-      <div
-        onClick={() => {
-          setOpenChatBox(!openChatBox);
-        }}
-      >
+      <div>
         <div className="w-10 h-10 rounded-[9999px] flex flex-col   cursor-pointer">
           <img src={CHATICON} alt="" className="object-cover" />
         </div>

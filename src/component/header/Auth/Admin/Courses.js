@@ -556,6 +556,7 @@ const MenuCourses = ({ currentUser }) => {
   };
   // phần xư lí di chuyển của course
   const handleMoveCourse = () => {
+    console.log(moveCourse);
     if (moveCourse.courseId && moveCourse.nextCourseId) {
       axios
         .post(`${process.env.REACT_APP_BACKEND_URL}/courses/move`, moveCourse, {
@@ -617,7 +618,7 @@ const MenuCourses = ({ currentUser }) => {
           <label className="text-[red]">ID: </label>
           <InputFc
             course={moveCourse}
-            type="number"
+            type="text"
             field={"courseId"}
             handle={setMoveCourse}
             text={"id bài học"}

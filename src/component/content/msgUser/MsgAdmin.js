@@ -29,7 +29,7 @@ function MsgAdmin({ setOpenMsgAdmin, setMsg }) {
           }
         )
         .then((response) => {
-          setListRoom(response.data);
+          setListRoom(response?.data.reverse());
         });
     }
   }, [user]);
@@ -46,7 +46,7 @@ function MsgAdmin({ setOpenMsgAdmin, setMsg }) {
         className="right-2 top-2 cursor-pointer hover:opacity-50"
         style={{ position: "absolute", fontSize: "4rem" }}
       />
-      <div className="w-full flex flex-wrap gap-10">
+      <div className="w-full flex flex-wrap gap-10 overflow-y-auto">
         {listRoom?.map((room) => (
           <div
             className="cursor-pointer bg-slate-100 h-[8rem] p-4 w-[45%] hover:bg-[red] transition-all "

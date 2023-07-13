@@ -14,9 +14,11 @@ function Nav() {
         <a href="/">
           <img src={logo} className="w-[66px] " alt="" />
         </a>
-        <h4 className="text-[#000] font-[700] text-[1.4rem] ml-4   ">
-          LEARN JAPANESE
-        </h4>
+        <a href="/">
+          <h4 className="text-[#000] font-[700] text-[1.4rem] ml-4   ">
+            LEARN JAPANESE
+          </h4>
+        </a>
       </div>
       <div className="">
         <SwipeableTemporaryDrawer />

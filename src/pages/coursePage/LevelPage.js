@@ -71,11 +71,13 @@ function LevelPage() {
   // phần xác định ng dùng đã mua khóa học đó hay chưa
   useEffect(() => {
     if (user && user.courses) {
-      if (user.courses.includes(params.level)) {
+      if (Object.keys(user.courses).includes(params?.level)) {
         setBuyCourse(true);
+      } else {
+        setBuyCourse(false);
       }
     }
-  }, [user]);
+  }, [user, params.level]);
 
   //lấy danh sách chặng
   useEffect(() => {
@@ -164,7 +166,7 @@ function LevelPage() {
             className="flex items-center gap-x-7"
             aria-label="button-combination"
           >
-            {/* {!buyCourse ? (
+            {!buyCourse ? (
               <>
                 <Link
                   to={
@@ -184,7 +186,7 @@ function LevelPage() {
                 </Link>
                 <Link to={`/courses/buy/${params.level}`}>
                   <button className="way_button inline-flex items-center justify-center px-8 py-4 font-sans font-bold tracking-wide text-blue-500 border border-blue-500 rounded-2xl h-[55px] text-[1.6rem] hover:opacity-75 active:opacity-30 ssm:text-[1.2rem] ">
-                    Mua khóa học{" "}
+                    Mua khóa học (29k / Tháng)
                     <span className="relative flex items-center pl-3 ">
                       <ArrowForwardIosIcon style={{ fontSize: "2rem" }} />
                     </span>
@@ -200,15 +202,15 @@ function LevelPage() {
                     .join("+")}`
                 }
               >
-                <button className="way_button inline-flex items-center justify-center px-8 py-4 font-sans font-bold tracking-wide text-white bg-blue-500 rounded-2xl h-[55px] text-[1.6rem] ssm:text-[1.2rem] hover:opacity-75 active:opacity-30">
+                <button className="way_button inline-flex items-center justify-center px-8 py-4 font-sans font-bold tracking-wide text-white bg-blue-500 rounded-2xl h-[55px] text-[1.6rem] ssm:text-[1.2rem] hover:opacity-75 active:opacity-30 ">
                   Đi tới bài học gần đây nhất
                   <span className="relative flex items-center pl-3 ">
                     <ArrowForwardIosIcon style={{ fontSize: "2rem" }} />
                   </span>
                 </button>
               </Link>
-            )} */}
-            <Link
+            )}
+            {/* <Link
               to={
                 lessonBefore &&
                 `/courses/${lessonBefore?.level}/${lessonBefore?.way
@@ -222,7 +224,7 @@ function LevelPage() {
                   <ArrowForwardIosIcon style={{ fontSize: "2rem" }} />
                 </span>
               </button>
-            </Link>
+            </Link> */}
           </div>
         </div>
       </div>{" "}
@@ -251,7 +253,7 @@ function LevelPage() {
             />
           </>
         ) : (
-          <p className="flex items-center gap-5">
+          <p className="flex items-center gap-5 px-4 py-2">
             {tipMsg || "Có vấn đề gì mọi người chat trực tiếp vào fanpage nha!"}
             {user && user.isAdmin && (
               <button
@@ -263,6 +265,22 @@ function LevelPage() {
             )}
           </p>
         )}
+      </div>
+      <div className="min-h-[4rem]  md:p-5 font-bold bg-[#cdfbe1] flex justify-center items-center md:text-[1.5rem] text-[1.8rem] text-red-600">
+        <p className=" gap-5 px-4 py-2">
+          Ủng hộ cho bọn em một ít kinh phí duy trì web
+          <Link
+            to="/donate"
+            className="text-blue-500 font-bold pl-1 hover:text-green-500"
+          >
+            Tại đây
+          </Link>
+          . Dù là
+          <span className="text-blue-500 font-bold"> 1k </span>
+          <span className="text-blue-500 font-bold">2k</span> cũng cám ơn mọi
+          người 😊. Sự ủng hộ của các bạn là động lực để nhóm em tiếp tục phát
+          triển trang web ạ ❤️
+        </p>
       </div>
       {isLoading ? (
         <Loading />
@@ -279,7 +297,7 @@ function LevelPage() {
             wayList.map((way, index) => (
               <section
                 key={index}
-                className="w-[25%] lg:w-[28rem] md:w-[24rem] sm:w-[50%] px-[2.5rem] mt-[3rem] "
+                className="w-[25%] lg:w-[28rem] md:w-[24rem] sm:w-[50%] px-[2.5rem] ssm:px-[1.5rem] mt-[3rem] "
               >
                 <div className="relative mb-8">
                   {/* <div
@@ -310,11 +328,19 @@ function LevelPage() {
                         .split(" ")
                         .join("+")}`}
                     >
-                      <img
-                        src="https://jlpt.site/files/img/hoc-tieng-nhat-moi-ngay.jpg"
-                        alt=""
-                        className="w-full h-full align-middle"
-                      />
+                      <div className="relative">
+                        <img
+                          src="https://jlpt.site/files/img/hoc-tieng-nhat-moi-ngay.jpg"
+                          alt=""
+                          className="w-full h-full align-middle"
+                        />
+                        <Button
+                          type="default"
+                          className="mx-auto bg-red-500 text-white font-semibold text-[1.6rem] leading-6 absolute right-2 top-2"
+                        >
+                          Học ngay
+                        </Button>
+                      </div>
 
                       <p
                         className="
