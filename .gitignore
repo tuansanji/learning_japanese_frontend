@@ -12,7 +12,7 @@
 # production
 /build
 
-/src/component/header/Auth
+/src/component/header/Auth/
 
 # misc
 .history
